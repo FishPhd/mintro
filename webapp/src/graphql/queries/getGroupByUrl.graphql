@@ -1,0 +1,5 @@
+query GetGroupByUrl($url: String!) {
+  getGroupByUrl(url: $url) {
+    ...Group
+  }
+}

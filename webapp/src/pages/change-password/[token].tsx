@@ -1,0 +1,119 @@
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { InputField } from "../../components/forms/InputField";
+import Card from "../../components/general/Card";
+import {
+  MeDocument,
+  MeQuery,
+  useChangePasswordMutation,
+} from "../../generated/graphql";
+import { toErrorMap } from "../../utils/toErrorMap";
+import { usingApollo } from "../../utils/withApollo";
+
+//TODO: Turn this into a proper "Change password" section that allows for users to change password when a user KNOWS their current password
+export const ChangePassword: React.FC<{}> = () => {
+  const [changePassword] = useChangePasswordMutation();
+  const router = useRouter();
+  const [tokenError, setTokenError] = useState([""]);
+  return (
+    <Box
+      bg={useColorModeValue("gray.50", "inherit")}
+      minH="100vh"
+      py="12"
+      px={{ base: "4", lg: "8" }}
+    >
+      <Box maxW="md" mx="auto">
+        <Heading textAlign="center" size="xl" fontWeight="extrabold">
+          Mintro
+        </Heading>
+        <br></br>
+        <Heading mb={8} textAlign="center" size="xl" fontWeight="extrabold">
+          Change Password
+        </Heading>
+
+        <Card>
+          <Formik
+            initialValues={{ newPassword: "" }}
+            onSubmit={async (values, { setErrors }) => {
+              const { data } = await changePassword({
+                variables: {
+                  newPassword: values.newPassword,
+                  token:
+                    typeof router.query.token === "string"
+                      ? router.query.token
+                      : "",
+                },
+                update: (cache, { data }) => {
+                  cache.writeQuery<MeQuery>({
+                    query: MeDocument,
+                    data: {
+                      __typename: "Query",
+                      me: data?.changePassword.user,
+                    },
+                  });
+                },
+              });
+              if (data?.changePassword.errors) {
+                const errorMap = toErrorMap(data.changePassword.errors);
+                if ("token" in errorMap) {
+                  setTokenError(errorMap.token);
+                }
+                setErrors(errorMap);
+              } else if (data?.changePassword.user) {
+                router.push("/");
+              }
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Stack spacing="4">
+                  <InputField
+                    name="newPassword"
+                    placeholder="Password"
+                    label="New Password"
+                    type="password"
+                  ></InputField>
+                  {tokenError ? (
+                    <HStack>
+                      <Box>
+                        <Text color={"red.500"}>{tokenError}</Text>
+                        <NextLink href="/forgot-password">
+                          <Link colorScheme={"Mintro"}>
+                            Still need to reset password?
+                          </Link>
+                        </NextLink>
+                      </Box>
+                    </HStack>
+                  ) : null}
+                  <Button
+                    type="submit"
+                    colorScheme="teal"
+                    isLoading={isSubmitting}
+                    size="lg"
+                    fontSize="md"
+                  >
+                    Change Password
+                  </Button>
+                </Stack>
+              </Form>
+            )}
+          </Formik>
+        </Card>
+      </Box>
+    </Box>
+  );
+};
+
+export default usingApollo({ ssr: false })(ChangePassword);

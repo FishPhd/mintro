@@ -1,0 +1,5 @@
+mutation UpdateSection($id: Int!, $items: [String!]!) {
+  updateSection(id: $id, items: $items) {
+    ...SectionSnippet
+  }
+}

@@ -1,0 +1,5 @@
+query GetSection($sectionId: Int!) {
+  getSection(sectionId: $sectionId) {
+    ...SectionSnippet
+  }
+}

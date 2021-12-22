@@ -1,0 +1,12 @@
+fragment SectionTypeSnippet on SectionType {
+  id
+  name
+  type
+  itemNames
+  tagline
+  inputType
+  maxItems
+  createdAt
+  updatedAt
+  hidden
+}

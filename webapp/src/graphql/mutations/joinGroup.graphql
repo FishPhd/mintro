@@ -1,0 +1,5 @@
+mutation JoinGroup($groupId: Int!, $password: String) {
+  joinGroup(groupId: $groupId, password: $password) {
+    ...GroupResponse
+  }
+}

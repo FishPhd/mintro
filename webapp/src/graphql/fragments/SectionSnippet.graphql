@@ -1,0 +1,15 @@
+fragment SectionSnippet on Section {
+  id
+  createdAt
+  updatedAt
+  typeId
+  items
+  rank
+  creatorId
+  creator {
+    ...User
+  }
+  type {
+    ...SectionTypeSnippet
+  }
+}

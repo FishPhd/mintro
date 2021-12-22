@@ -1,0 +1,17 @@
+mutation CreateGroup(
+  $name: String!
+  $description: String!
+  $url: String!
+  $imageUrl: String
+  $password: String
+) {
+  createGroup(
+    name: $name
+    description: $description
+    url: $url
+    imageUrl: $imageUrl
+    password: $password
+  ) {
+    ...GroupResponse
+  }
+}

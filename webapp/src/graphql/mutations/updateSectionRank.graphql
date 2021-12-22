@@ -1,0 +1,8 @@
+mutation UpdateSectionRank($ranks: [String!]!, $id: Int!, $movingUp: Boolean!) {
+  updateRank(ranks: $ranks, id: $id, movingUp: $movingUp) {
+    # ...SectionSnippet TODO find out why createdAt returns null for this
+    # type
+    id
+    items
+  }
+}

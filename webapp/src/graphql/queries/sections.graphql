@@ -1,0 +1,8 @@
+query Sections($postCount: Int!, $cursor: String) {
+  sections(postCount: $postCount, cursor: $cursor) {
+    isEnd
+    sections {
+      ...SectionSnippet
+    }
+  }
+}

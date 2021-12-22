@@ -1,0 +1,21 @@
+fragment User on User {
+  id
+  username
+  createdAt
+  updatedAt
+  firstName
+  lastName
+  city
+  state
+  country
+  profileSetup
+  tagline
+  pronouns
+  homeTown
+  birthday
+  nickname
+  namePronunciation
+  phoneNumber
+  email
+  profileImageUrl
+}

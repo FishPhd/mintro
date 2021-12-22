@@ -1,0 +1,8 @@
+query GetSectionsByUser($postCount: Int!, $userId: Int!) {
+  getSectionsByUser(postCount: $postCount, userId: $userId) {
+    isEnd
+    sections {
+      ...SectionSnippet
+    }
+  }
+}

@@ -1,0 +1,5 @@
+query GetSectionType($sectionTypeId: Int!) {
+  getSectionType(sectionTypeId: $sectionTypeId) {
+    ...SectionTypeSnippet
+  }
+}

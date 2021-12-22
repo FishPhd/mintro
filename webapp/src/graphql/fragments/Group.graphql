@@ -1,0 +1,11 @@
+fragment Group on Group {
+  id
+  name
+  description
+  createdAt
+  updatedAt
+  groupImageUrl
+  creatorId
+  url
+  memberCount
+}

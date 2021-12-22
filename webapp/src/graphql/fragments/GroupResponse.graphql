@@ -1,0 +1,8 @@
+fragment GroupResponse on GroupResponse {
+  errors {
+    ...Error
+  }
+  group {
+    ...Group
+  }
+}

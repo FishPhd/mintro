@@ -1,0 +1,11 @@
+mutation CreateSection($typeId: Int!, $items: [String!]!) {
+  createSection(typeId: $typeId, items: $items) {
+    section {
+      ...SectionSnippet
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

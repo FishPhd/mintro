@@ -1,0 +1,6 @@
+query GetStatesFromCountry($countryId: Int!) {
+  getStatesFromCountry(countryId: $countryId) {
+    name
+    id
+  }
+}

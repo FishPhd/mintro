@@ -1,0 +1,5 @@
+mutation AddProfileImage($imageUrl: String!) {
+  addProfileImage(imageUrl: $imageUrl) {
+    ...UserResponse
+  }
+}

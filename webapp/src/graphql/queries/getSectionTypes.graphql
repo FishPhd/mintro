@@ -1,0 +1,5 @@
+query getSectionTypes {
+  getSectionTypes {
+    ...SectionTypeSnippet
+  }
+}

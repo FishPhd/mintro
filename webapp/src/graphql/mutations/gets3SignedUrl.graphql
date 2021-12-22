@@ -1,0 +1,10 @@
+mutation GetS3SignedUrl(
+  $filename: String!
+  $folder: String!
+  $filetype: String!
+) {
+  getS3SignedUrl(filename: $filename, folder: $folder, filetype: $filetype) {
+    signedRequest
+    url
+  }
+}

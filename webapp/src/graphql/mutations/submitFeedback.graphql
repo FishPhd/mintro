@@ -1,0 +1,13 @@
+mutation SubmitFeedback($feedback: String!) {
+  submitFeedback(feedback: $feedback) {
+    errors {
+      field
+      message
+    }
+    feedback {
+      id
+      feedback
+      userId
+    }
+  }
+}

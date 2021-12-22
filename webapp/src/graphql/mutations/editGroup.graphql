@@ -1,0 +1,21 @@
+mutation EditGroup(
+  $name: String!
+  $groupId: Int!
+  $description: String!
+  $url: String!
+  $imageUrl: String
+  $password: String
+  $passwordUpdated: Boolean!
+) {
+  editGroup(
+    name: $name
+    groupId: $groupId
+    description: $description
+    url: $url
+    imageUrl: $imageUrl
+    password: $password
+    passwordUpdated: $passwordUpdated
+  ) {
+    ...GroupResponse
+  }
+}

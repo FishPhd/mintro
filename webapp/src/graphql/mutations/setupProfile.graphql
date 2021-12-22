@@ -1,0 +1,11 @@
+mutation SetupProfile($input: UserProfileSetupInput!) {
+  setupProfile(input: $input) {
+    user {
+      ...User
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
