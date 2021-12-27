@@ -23,7 +23,7 @@ export function Hero() {
             align="flex-start"
             direction={{ base: "column", lg: "row" }}
             justify="space-between"
-            mb="20"
+            mb="10%"
           >
             <Box flex="1" maxW={{ lg: "4xl" }} pt="6">
               {/* <Heading fontSize={{ base: "3xl", md: "6xl" }}>
@@ -34,6 +34,7 @@ export function Hero() {
                 bgClip="text"
                 bgGradient="linear(to-tr, mintro.200, mintro.400)"
                 pb={2}
+                userSelect={"none"}
               >
                 Introductions...
                 <br />

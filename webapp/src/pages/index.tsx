@@ -7,6 +7,7 @@ import { TemplateHeader } from "../components/general/TemplateHeader";
 import { usingApollo } from "../utils/withApollo";
 import { FoundersList } from "../components/general/FoundersList";
 import { Footer } from "../components/general/Footer";
+import Parallax from "../components/general/parallax";
 
 export const Index: React.FC<{}> = ({}) => {
   return (
@@ -15,10 +16,11 @@ export const Index: React.FC<{}> = ({}) => {
         <title>Mintro - Home</title>
       </Head>
       <NavBar transparent />
-      <Hero />
-      <ProblemStatement />
-      <TemplateHeader />
-      <FoundersList />
+      
+      <Parallax><Hero /></Parallax>
+      <Parallax><ProblemStatement /></Parallax>
+      <Parallax><TemplateHeader /></Parallax>
+      <Parallax><FoundersList /></Parallax>
       <Footer />
     </>
   );

@@ -37,6 +37,7 @@ export const TemplateHeader = () => (
           bgGradient="linear(to-tr, mintro.200, mintro.400)"
           fontSize={{ base: "8xl", md: "9xl" }}
           textAlign="center"
+          userSelect={"none"}
         >
           Mintro
         </Heading>
@@ -50,8 +51,6 @@ export const TemplateHeader = () => (
         >
           Present the most authentic version of yourself
           <br /> Share the things you want people to know about you
-          <br />
-          Ask questions and start conversations with new people
         </Text>
         <Stack spacing={10} direction={{ base: "column", lg: "row" }}>
           <Box flex="1">
@@ -183,6 +182,7 @@ export const TemplateHeader = () => (
               fontSize={{ base: "7xl", md: "8xl" }}
               lineHeight="0.9"
               pb={2}
+              userSelect={"none"}
             >
               Sound Good?
             </Heading>
