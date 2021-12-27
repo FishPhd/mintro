@@ -31,6 +31,7 @@ import {
   useToast,
   VStack,
   Stack,
+  Avatar,
 } from "@chakra-ui/react";
 import { ErrorMessage, Form, Formik } from "formik";
 import NextLink from "next/link";
@@ -80,6 +81,8 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   const apolloClient = useApolloClient();
 
   const { data: me, loading } = useMeQuery();
+  var profile_photo = me?.me?.profileImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  profile_photo += "?tr=w-50,h-50";
   let userPane = null;
   const toast = useToast();
 
@@ -117,13 +120,13 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
         <Menu autoSelect={false} placement="bottom">
           <MenuButton role="group">
             <VStack spacing={-1}>
-              {me.me.profileImageUrl ? (
+              {/* {profile_photo ? (
                 <Img
                   alt={me.me.username + "_profile_photo"}
                   borderRadius="full"
                   boxSize={9}
                   mb={2}
-                  src={me.me.profileImageUrl}
+                  src={profile_photo}
                   _groupHover={{ filter: "opacity(85%)" }}
                 />
               ) : (
@@ -134,7 +137,14 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                   transition="ease-in 2s"
                   _groupHover={{ opacity: "85%" }}
                 />
-              )}
+              )} */}
+              <Avatar
+                boxSize={9}
+                mb={2}
+                bg="gray.300"
+                size="xl"
+                src={profile_photo ? profile_photo : undefined}
+              />
 
               <Text
                 fontSize="xs"

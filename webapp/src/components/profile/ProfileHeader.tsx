@@ -1,5 +1,6 @@
 import { EditIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
   Flex,
   Heading,
@@ -22,15 +23,6 @@ import { ShareButton } from "../buttons/ShareButton";
 import { Card } from "../general/Card";
 import { TextWithIcon } from "../general/TextWithIcon";
 
-const CircleIcon = (props: IconProps) => (
-  <Icon viewBox="0 0 200 200" {...props}>
-    <path
-      fill="currentColor"
-      d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
-    />
-  </Icon>
-);
-
 interface ProfileHeaderProps {
   user: User | undefined;
   setSetupProfile: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +37,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
+  var profile_photo = user?.profileImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  profile_photo += "?tr=w-250,h-250";
   return (
     <Box p="6">
       <Card
@@ -63,17 +57,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           w="-webkit-fill-available"
         >
           <Stack direction="row" spacing="2" w="100%">
-            {user?.profileImageUrl ? (
-              <Img
-                src={user?.profileImageUrl ? user?.profileImageUrl : undefined}
-                rounded="full"
-                h="24"
-                w="24"
-                alt={"user_profile_photo"}
-              />
-            ) : (
-              <CircleIcon alignSelf="baseline" h="24" w="24" color="gray.100" />
-            )}
+            <Avatar
+              bg="gray.300"
+              size="xl"
+              src={profile_photo ? profile_photo : undefined}
+            />
 
             <Box flex="1" px={2}>
               <HStack mb={1} align="flex-end" lineHeight="1" spacing="1">

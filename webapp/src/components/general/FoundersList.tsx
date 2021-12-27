@@ -39,9 +39,7 @@ export function FoundersList() {
           />
           <UserCard
             name="Sam"
-            img={
-              "https://webapp-profile-images.s3.amazonaws.com/20211023-3wnkc-dsc08986-jpg"
-            }
+            img={"/SamFounderPic.jpeg"}
             username="sam"
           />
         </HStack>

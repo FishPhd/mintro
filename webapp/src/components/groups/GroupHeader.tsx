@@ -41,6 +41,8 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
   isAdmin,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  var group_photo = group?.groupImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  group_photo += "?tr=w-250,h-250";
 
   return (
     <Box p="6">
@@ -73,7 +75,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
               }
               bg="gray.100"
               size="xl"
-              src={group?.groupImageUrl ? group?.groupImageUrl : undefined}
+              src={group_photo ? group_photo : undefined}
             />
 
             <Box flex="1" px={2} py={3}>

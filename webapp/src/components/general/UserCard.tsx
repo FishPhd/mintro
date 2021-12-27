@@ -20,6 +20,9 @@ interface UserCardProps {
 export function UserCard(props: UserCardProps) {
   const { name, img, username, tagline } = props;
   let src = img as string;
+
+  var user_photo = src.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  user_photo += "?tr=w-250,h-250";
   return (
     <>
       <Flex
@@ -41,7 +44,7 @@ export function UserCard(props: UserCardProps) {
           bg="mintro.300"
           roundedTop="inherit"
         />
-        <Avatar size="xl" src={src} />
+        <Avatar size="xl" src={user_photo} />
         <Text pt={2} fontSize="2xl" fontWeight="700">
           {name}
         </Text>
