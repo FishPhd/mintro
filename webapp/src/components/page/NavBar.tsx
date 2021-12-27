@@ -47,15 +47,6 @@ import {
 import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
 
-const CircleIcon = (props: IconProps) => (
-  <Icon viewBox="0 0 200 200" {...props}>
-    <path
-      fill="currentColor"
-      d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
-    />
-  </Icon>
-);
-
 const BugButton = (
   <Flex
     alignItems="center"
@@ -120,24 +111,6 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
         <Menu autoSelect={false} placement="bottom">
           <MenuButton role="group">
             <VStack spacing={-1}>
-              {/* {profile_photo ? (
-                <Img
-                  alt={me.me.username + "_profile_photo"}
-                  borderRadius="full"
-                  boxSize={9}
-                  mb={2}
-                  src={profile_photo}
-                  _groupHover={{ filter: "opacity(85%)" }}
-                />
-              ) : (
-                <CircleIcon
-                  boxSize={45}
-                  color="dark.50"
-                  id="profile-icon"
-                  transition="ease-in 2s"
-                  _groupHover={{ opacity: "85%" }}
-                />
-              )} */}
               <Avatar
                 boxSize={9}
                 mb={2}

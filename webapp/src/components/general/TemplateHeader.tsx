@@ -63,7 +63,7 @@ export const TemplateHeader = () => (
               borderTopColor={"mintro.300"}
             >
               <Stack px={5} direction={{ base: "row", lg: "row" }}>
-                <Avatar size="xl" src={"/templateProfileImage.jpeg"} />
+                <Avatar size="xl" src={"/TemplateProfilePic.webp"} />
                 <Box p="0">
                   <HStack mb={1} align="flex-end" lineHeight="1" spacing="1">
                     <Text fontSize="2xl" fontWeight="bold">

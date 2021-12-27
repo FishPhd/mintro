@@ -34,12 +34,12 @@ export function FoundersList() {
         >
           <UserCard
             name={"Aaron"}
-            img={"/AaronFounderPic.jpeg"}
+            img={"/AaronFounderPic.webp"}
             username={"aaron"}
           />
           <UserCard
             name="Sam"
-            img={"/SamFounderPic.jpeg"}
+            img={"/SamFounderPic.webp"}
             username="sam"
           />
         </HStack>
