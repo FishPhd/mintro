@@ -59,11 +59,6 @@ function MintroWebApp({ Component, pageProps }: any) {
         <meta property="og:site_name" content="Mintro" />
         {/* dont hardcode this TODO (use router) */}
         <meta property="og:url" content="mintro.page" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=auto"
-            rel="stylesheet"
-          />
       </Head>
       <Script
         id="GA-TAG1"

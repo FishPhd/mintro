@@ -7,7 +7,7 @@ import { TemplateHeader } from "../components/general/TemplateHeader";
 import { usingApollo } from "../utils/withApollo";
 import { FoundersList } from "../components/general/FoundersList";
 import { Footer } from "../components/general/Footer";
-import Parallax from "../components/general/parallax";
+import Parallax from "../components/general/Parallax";
 
 export const Index: React.FC<{}> = ({}) => {
   return (
