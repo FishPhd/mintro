@@ -30,15 +30,18 @@ export const ShareButton = (props: any) => {
       rounded="full"
       p={{ base: 2, md: 3 }}
       icon={
-        <Text>
+        <>
           <Icon
             boxSize="4"
             color="dark.500"
             mr={{ base: 2.2, sm: 1 }}
             as={IoMdShare}
           />
-          {variant}
-        </Text>
+          <Text>
+            {variant}
+          </Text> 
+        </>
+
       }
       {...props}
     >

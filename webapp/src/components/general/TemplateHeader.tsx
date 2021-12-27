@@ -188,28 +188,22 @@ export const TemplateHeader = () => (
             </Heading>
             <NextLink href="/register">
               <IconButton
-                flex="1"
                 color="dark.500"
                 variant="mintro"
-                verticalAlign="center"
                 aria-label="Create your Mintro!"
                 rounded="full"
-                p={8}
+                icon={<>
+                  <Text fontWeight="800" pl={4} pr={2}>Create your Mintro!</Text>
+
+                  <Icon
+                    pr={2}
+                    boxSize={6}
+                    color="dark.500"
+                    as={IoChevronForwardSharp}
+                  />
+                </>}
                 href={"register"}
-                icon={
-                  <Text fontWeight="800">
-                    Lets get started!&nbsp;
-                    <Icon
-                      mb={0.95}
-                      boxSize="5"
-                      color="dark.500"
-                      as={IoChevronForwardSharp}
-                    />
-                  </Text>
-                }
-              >
-                Create your mintro
-              </IconButton>
+              />
             </NextLink>
           </Box>
         </Stack>

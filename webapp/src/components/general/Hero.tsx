@@ -43,27 +43,23 @@ export function Hero() {
 
               <NextLink href="/register">
                 <IconButton
-                  flex="1"
+                  // flex="1"
                   color="dark.500"
                   variant="mintro"
                   aria-label="Create your Mintro!"
                   rounded="full"
-                  p={5}
+                  icon={<>
+                    <Text fontWeight="800" pl={4} pr={2}>Lets get started!</Text>
+
+                    <Icon
+                      pr={2}
+                      boxSize={6}
+                      color="dark.500"
+                      as={IoChevronForwardSharp}
+                    />
+                  </>}
                   href={"register"}
-                  icon={
-                    <Text fontWeight="800">
-                      Lets get started!{" "}
-                      <Icon
-                        boxSize="5"
-                        mb={0.95}
-                        color="dark.500"
-                        as={IoChevronForwardSharp}
-                      />
-                    </Text>
-                  }
-                >
-                  Create your mintro
-                </IconButton>
+                />
               </NextLink>
             </Box>
           </Flex>

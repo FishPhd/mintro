@@ -82,6 +82,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 </Text>
                 {isMyProfile && user?.profileSetup && (
                   <IconButton
+                    textAlign={"justify"}
                     variant="unstyled"
                     aria-label="Edit Section"
                     onClick={async () => {

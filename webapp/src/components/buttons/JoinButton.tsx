@@ -106,18 +106,20 @@ export const JoinButton: React.FC<JoinButtonProps> = ({
           }
         }}
         icon={
-          <Box alignSelf="center">
+          <>
             <Text _groupHover={isOwner ? { color: "red.400" } : undefined}>
               {textVariant}
-              <Icon
-                ml={1}
-                _groupHover={isOwner ? { color: "red.400" } : undefined}
-                boxSize="4"
-                color="dark.500"
-                as={buttonIcon}
-              />
             </Text>
-          </Box>
+
+            <Icon
+              ml={1}
+              mb={0.5}
+              _groupHover={isOwner ? { color: "red.400" } : undefined}
+              boxSize="4"
+              color="dark.500"
+              as={buttonIcon}
+            />
+          </>
         }
         {...props}
       >
