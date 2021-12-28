@@ -8,11 +8,11 @@ export function Footer() {
     <>
       <Box
         as="section"
-        pt="36"
+        pt={{base: "20%", md:"10%"}}
         pb="20"
         overflow="hidden"
         // bgGradient="linear(to-t, mintro.100, white)"
-        bgGradient="linear(white 65%,  mintro.100 100%)"
+        bgGradient="linear(white 65%,  mintro.50 100%)"
       >
         <Box mx="auto" maxW={{ base: "sm", md: "4xl" }}>
           <Stack alignItems="center">

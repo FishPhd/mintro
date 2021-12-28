@@ -18,8 +18,8 @@ export function FoundersList() {
       <Box mx="auto" as="section">
         <Heading
           textAlign="center"
-          pb={10}
-          fontSize={{ base: "5xl", md: "7xl" }}
+          pb={"2%"}
+          fontSize={{ base: "4xl", md: "7xl" }}
           // bgClip="text"
           // bgGradient="linear(to-tr, mintro.200, mintro.400)"
         >

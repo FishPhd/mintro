@@ -13,7 +13,7 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 export function Hero() {
   return (
     <>
-      <Box as="section" pt="10%" pb="5" mb={"10%"} overflow="hidden">
+      <Box as="section" pt={{base: "50%", md: "15%"}} pb={{base: "25%", md: "5"}} mb={"10%"} overflow="hidden">
         <Box
           maxW={{ base: "xl", md: "7xl" }}
           mx="auto"
@@ -30,7 +30,7 @@ export function Hero() {
                 Introductions...
               </Heading> */}
               <Heading
-                fontSize={{ base: "5xl", md: "8xl" }}
+                fontSize={{ base: "5xl",  md: "8xl" }}
                 bgClip="text"
                 bgGradient="linear(to-tr, mintro.200, mintro.400)"
                 pb={2}
