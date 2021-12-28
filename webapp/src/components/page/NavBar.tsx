@@ -4,61 +4,31 @@ import {
   Box,
   Button,
   Flex,
-  Heading,
   HStack,
   Icon,
-  IconButton,
-  IconProps,
-  Img,
   Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useColorModeValue,
-  ModalOverlay,
   Spacer,
   Text,
-  Textarea,
-  Tooltip,
   useDisclosure,
-  useToast,
-  VStack,
   Stack,
   Avatar,
+  VStack,
 } from "@chakra-ui/react";
-import { ErrorMessage, Form, Formik } from "formik";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-// import { isServer } from "../../utils/isServer";
 import React from "react";
-import { BiBug } from "react-icons/bi";
 import {
   useLogoutMutation,
   useMeQuery,
-  useSubmitFeedbackMutation,
 } from "../../generated/graphql";
 import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
-
-const BugButton = (
-  <Flex
-    alignItems="center"
-    bgGradient="linear(to-tr, red.200, red.300)"
-    rounded="full"
-    // boxSize={11}
-    h="9"
-    w="9"
-  >
-    <Icon color="dark.500" margin="auto" as={BiBug} />
-  </Flex>
-);
+import { FeedbackForm } from "../forms/FeedbackForm";
+import { BugReportButton } from "../buttons/BugReportButton";
 
 interface NavBarProps {
   transparent?: boolean;
@@ -66,7 +36,6 @@ interface NavBarProps {
 
 export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
-  const [submitFeedback] = useSubmitFeedbackMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const apolloClient = useApolloClient();
@@ -75,7 +44,6 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   var profile_photo = me?.me?.profileImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
   profile_photo += "?tr=w-50,h-50";
   let userPane = null;
-  const toast = useToast();
 
   if (loading) {
   } else if (!me?.me) {
@@ -119,31 +87,23 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                 src={profile_photo ? profile_photo : undefined}
               />
 
-              <Text
-                fontSize="xs"
-                pl={1}
-                fontWeight={600}
-                color={"dark.500"}
-                _groupHover={{ color: "dark.300" }}
-              >
-                You
-                <ChevronDownIcon />
-              </Text>
+              <Flex alignItems={"center"}>
+                <Text
+                  fontSize={{ base: "xs", md: "s" }}
+                  pl={1}
+                  fontWeight={600}
+                  color={"dark.500"}
+                  _groupHover={{ color: "dark.300" }}
+                >
+                  You
+                </Text>
+                <ChevronDownIcon boxSize={{ base: 4, md: 5 }} />
+              </Flex>
+
             </VStack>
           </MenuButton>
 
           <MenuList py={0} minW="-moz-min-content">
-            {/* <NextLink href={"/m/[user]"} as={"/m/" + me?.me.username}>
-              <MenuItem
-                display={{ base: "inline", sm: "none", md: "inline" }}
-                _hover={{ bg: "mintro.25" }}
-              >
-                My Mintro
-              </MenuItem>
-            </NextLink>
-            <NextLink href={"/groups"} as={"/groups"}>
-              <MenuItem _hover={{ bg: "mintro.25" }}>Groups</MenuItem>
-            </NextLink> */}
             <MenuItem
               _hover={{ bg: "red.50" }}
               onClick={async () => {
@@ -188,7 +148,6 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
             pl={{ base: "4", md: "8" }}
             as={"nav"}
             spacing={4}
-            // display={{ md: "flex" }}
             direction="column"
           >
             {me?.me && (
@@ -218,7 +177,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                         alignSelf={"center"}
                         as={RiUserFill}
                       />
-                      <Text pl={0}>{"My Mintro"}</Text>
+                      <Text fontSize={{ base: "xs", md: "md" }} pl={0}>{"Mintro"}</Text>
                     </Stack>
                   </Link>
                 </NextLink>
@@ -244,7 +203,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                         boxSize="6"
                         as={RiGroup2Fill}
                       />
-                      <Text pl={0}>{"Groups"}</Text>
+                      <Text fontSize={{ base: "xs", md: "md" }} pl={0}>{"Groups"}</Text>
                     </Stack>
                   </Link>
                 </NextLink>
@@ -254,87 +213,10 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
 
           <Spacer />
           <HStack>{userPane}</HStack>
-          <Tooltip
-            label="Report Bug"
-            colorScheme="red"
-            placement="bottom"
-            aria-label="Report Bug"
-          >
-            <IconButton
-              alignSelf={me?.me ? "self-start" : undefined}
-              pt={me?.me ? 1.5 : undefined}
-              _hover={{ opacity: "75%" }}
-              variant="unstyled"
-              aria-label="Report Bug"
-              onClick={onOpen}
-              icon={BugButton}
-            />
-          </Tooltip>
+          <BugReportButton onOpen={onOpen} me={!!me?.me} />
         </HStack>
       </Flex>
-      <Formik
-        initialValues={{ feedback: "" }}
-        onSubmit={async (values, { setErrors, resetForm }) => {
-          const { data: feedbackData } = await submitFeedback({
-            variables: {
-              feedback: values.feedback,
-            },
-          });
-          if (feedbackData?.submitFeedback.errors) {
-            setErrors({ feedback: "Please enter some feedback!" });
-          } else {
-            onClose();
-            toast({
-              title: "Thank you!",
-              status: "success",
-              duration: 3000,
-              isClosable: true,
-            });
-            resetForm();
-          }
-        }}
-      >
-        {({ setFieldValue, submitForm, values, errors }) => (
-          <Form>
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>Feedback</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Text pb={2}>Bug or Feedback:</Text>
-                  <Textarea
-                    id="feedback"
-                    name="feedback"
-                    type="feedback"
-                    onChange={async (e) => {
-                      setFieldValue("feedback", e.target.value);
-                    }}
-                  />
-
-                  <ErrorMessage name="feedback">
-                    {(msg) => (
-                      <Text pt={2} color="red.200">
-                        {msg}
-                      </Text>
-                    )}
-                  </ErrorMessage>
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    type="submit"
-                    onClick={submitForm}
-                    variant="mintro"
-                    mr={3}
-                  >
-                    Submit
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </Form>
-        )}
-      </Formik>
+      <FeedbackForm isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

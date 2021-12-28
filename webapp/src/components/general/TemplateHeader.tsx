@@ -23,6 +23,22 @@ import {
 import { MdLocationOn } from "react-icons/md";
 import { Card } from "./Card";
 import { TextWithIcon } from "./TextWithIcon";
+import { motion, Variants } from "framer-motion";
+
+const cardVariant: Variants = {
+  offscreen: {
+    y: 300
+  },
+  onscreen: {
+    y: 50,
+    rotate: -5,
+    transition: {
+      type: "spring",
+      bounce: 0.4,
+      duration: 1
+    }
+  }
+};
 
 export const TemplateHeader = () => (
   <>
@@ -52,123 +68,134 @@ export const TemplateHeader = () => (
           Present the most authentic version of yourself
           <br /> Share the things you want people to know about you
         </Text>
+
+
         <Stack spacing={10} direction={{ base: "column", lg: "row" }}>
-          <Box flex="1">
-            <Card
-              px={0}
-              py={5}
-              borderTopWidth="3px"
-              borderColor={"gray.100"}
-              borderTopColor={"mintro.300"}
-            >
-              <Stack px={5} direction={{ base: "row", lg: "row" }}>
-                <Avatar size="xl" src={"/TemplateProfilePic.webp"} />
-                <Box p="0">
-                  <HStack mb={1} align="flex-end" lineHeight="1" spacing="1">
-                    <Text fontSize="2xl" fontWeight="bold">
-                      Jessica Qiao
-                    </Text>
-                    <Text fontStyle="italic" color="dark.500" fontSize="md">
-                      Jess
-                    </Text>
-                  </HStack>
-                  <HStack>
-                    <Heading color="dark.400" size="xs">
-                      she/her/hers
-                    </Heading>
-                    <Heading color="dark.500" size="xs">
-                      Pronounced &quot;{"Ch'iao"}&quot;
-                    </Heading>
-                  </HStack>
-                  <Heading
-                    fontStyle="italic"
-                    alignSelf="flex-end"
-                    color="mintro.500"
-                    size="xs"
-                    py={2}
-                  >
-                    I am... an activist
-                  </Heading>
-                  <Stack
-                    direction={{ base: "row", md: "row" }}
-                    spacing={3}
-                    py={2}
-                  >
-                    <TextWithIcon icon={<MdLocationOn />}>
-                      Oakland, California
-                    </TextWithIcon>
-                    <TextWithIcon icon={<AiOutlineGift />}>
-                      July, 10th
-                    </TextWithIcon>
-                    <TextWithIcon icon={<AiOutlineHome />}>
-                      Shenzhen
-                    </TextWithIcon>
+          <motion.div
+            className="card-container"
+            initial="offscreen"
+            whileInView="onscreen"
+            viewport={{ once: true, amount: 0.8 }}
+          >
+            <motion.div className="card" variants={cardVariant}>
+              <Box flex="1">
+                <Card
+                  px={0}
+                  py={5}
+                  borderTopWidth="3px"
+                  borderColor={"gray.100"}
+                  borderTopColor={"mintro.300"}
+                >
+                  <Stack px={5} direction={{ base: "row", lg: "row" }}>
+                    <Avatar size="xl" src={"/templateProfileImage_300x300.webp"} />
+                    <Box p="0">
+                      <HStack mb={1} align="flex-end" lineHeight="1" spacing="1">
+                        <Text fontSize="2xl" fontWeight="bold">
+                          Jessica Qiao
+                        </Text>
+                        <Text fontStyle="italic" color="dark.500" fontSize="md">
+                          Jess
+                        </Text>
+                      </HStack>
+                      <HStack>
+                        <Heading color="dark.400" size="xs">
+                          she/her/hers
+                        </Heading>
+                        <Heading color="dark.500" size="xs">
+                          Pronounced &quot;{"Ch'iao"}&quot;
+                        </Heading>
+                      </HStack>
+                      <Heading
+                        fontStyle="italic"
+                        alignSelf="flex-end"
+                        color="mintro.500"
+                        size="xs"
+                        py={2}
+                      >
+                        I am... an activist
+                      </Heading>
+                      <Stack
+                        direction={{ base: "row", md: "row" }}
+                        spacing={3}
+                        py={2}
+                      >
+                        <TextWithIcon icon={<MdLocationOn />}>
+                          Oakland, California
+                        </TextWithIcon>
+                        <TextWithIcon icon={<AiOutlineGift />}>
+                          July, 10th
+                        </TextWithIcon>
+                        <TextWithIcon icon={<AiOutlineHome />}>
+                          Shenzhen
+                        </TextWithIcon>
+                      </Stack>
+                    </Box>
                   </Stack>
-                </Box>
-              </Stack>
-            </Card>
+                </Card>
 
-            <Card mt={4} pt={4} pb={4}>
-              <Stack spacing="0" lineHeight="1" maxW="3xl">
-                <Box
-                  color="dark.500"
-                  fontSize={{ base: "md", md: "md", lg: "nd" }}
-                >
-                  Top 3
-                </Box>
-                <Box
-                  fontWeight="800"
-                  color="dark.500"
-                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-                  pb={2}
-                >
-                  Books
-                </Box>
+                <Card mt={4} pt={4} pb={4}>
+                  <Stack spacing="0" lineHeight="1" maxW="3xl">
+                    <Box
+                      color="dark.500"
+                      fontSize={{ base: "md", md: "md", lg: "nd" }}
+                    >
+                      Top 3
+                    </Box>
+                    <Box
+                      fontWeight="800"
+                      color="dark.500"
+                      fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                      pb={2}
+                    >
+                      Books
+                    </Box>
 
-                <Wrap justify="center">
-                  <WrapItem>
-                    <Box
-                      maxW={{ base: "xs", md: "md", lg: "lg" }}
-                      fontWeight={"500"}
-                      p={8}
-                      rounded="3xl"
-                      color="dark.500"
-                      textAlign="center"
-                      bgGradient="linear(to-tr, mintro.200, mintro.300)"
-                    >
-                      The Grapes of Wrath
-                    </Box>
-                  </WrapItem>
-                  <WrapItem>
-                    <Box
-                      maxW={{ base: "xs", md: "md", lg: "lg" }}
-                      fontWeight={"500"}
-                      p={8}
-                      rounded="3xl"
-                      color="dark.500"
-                      textAlign="center"
-                      bgGradient="linear(to-tr, mintro.200, mintro.300)"
-                    >
-                      1984
-                    </Box>
-                  </WrapItem>
-                  <WrapItem>
-                    <Box
-                      maxW={{ base: "xs", md: "md", lg: "lg" }}
-                      fontWeight={"500"}
-                      p={8}
-                      rounded="3xl"
-                      color="dark.500"
-                      textAlign="center"
-                      bgGradient="linear(to-tr, mintro.200, mintro.300)"
-                    >
-                      How to Be an Antiracist
-                    </Box>
-                  </WrapItem>
-                </Wrap>
-              </Stack>
-            </Card>
-          </Box>
+                    <Wrap justify="center">
+                      <WrapItem>
+                        <Box
+                          maxW={{ base: "xs", md: "md", lg: "lg" }}
+                          fontWeight={"500"}
+                          p={8}
+                          rounded="3xl"
+                          color="dark.500"
+                          textAlign="center"
+                          bgGradient="linear(to-tr, mintro.200, mintro.300)"
+                        >
+                          The Grapes of Wrath
+                        </Box>
+                      </WrapItem>
+                      <WrapItem>
+                        <Box
+                          maxW={{ base: "xs", md: "md", lg: "lg" }}
+                          fontWeight={"500"}
+                          p={8}
+                          rounded="3xl"
+                          color="dark.500"
+                          textAlign="center"
+                          bgGradient="linear(to-tr, mintro.200, mintro.300)"
+                        >
+                          1984
+                        </Box>
+                      </WrapItem>
+                      <WrapItem>
+                        <Box
+                          maxW={{ base: "xs", md: "md", lg: "lg" }}
+                          fontWeight={"500"}
+                          p={8}
+                          rounded="3xl"
+                          color="dark.500"
+                          textAlign="center"
+                          bgGradient="linear(to-tr, mintro.200, mintro.300)"
+                        >
+                          How to Be an Antiracist
+                        </Box>
+                      </WrapItem>
+                    </Wrap>
+                  </Stack>
+                </Card>
+              </Box>
+            </motion.div>
+          </motion.div>
 
           <Box
             pl={{ base: "0", lg: "10" }}
@@ -207,6 +234,7 @@ export const TemplateHeader = () => (
             </NextLink>
           </Box>
         </Stack>
+
       </Box>
     </Box>
   </>

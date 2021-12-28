@@ -13,7 +13,7 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 export function Hero() {
   return (
     <>
-      <Box as="section" pt="24" pb="5" mb={"10%"} overflow="hidden">
+      <Box as="section" pt="10%" pb="5" mb={"10%"} overflow="hidden">
         <Box
           maxW={{ base: "xl", md: "7xl" }}
           mx="auto"
