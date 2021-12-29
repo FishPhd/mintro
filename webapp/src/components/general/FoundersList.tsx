@@ -18,31 +18,33 @@ export function FoundersList() {
       <Box mx="auto" as="section">
         <Heading
           textAlign="center"
-          pb={"2%"}
+          pb={{base: "10%", md:"2%"}}
           fontSize={{ base: "4xl", md: "7xl" }}
           // bgClip="text"
           // bgGradient="linear(to-tr, mintro.200, mintro.400)"
         >
           Meet the Founders
         </Heading>
-        <HStack
-          maxW={{ base: "xl", md: "2xl" }}
-          mx="auto"
-          spacing={{ base: "4", md: "auto" }}
-          px={{ base: "6", md: "8" }}
-          direction={{ base: "column", lg: "row" }}
+        <Stack
+          // maxW={{ base: "100%", md: "xl" }}
+          maxW={{ base: "fit-content", md: "md"}}
+          mx={"auto"}
+          spacing={{ base: "6", md: "auto" }}
+          direction="row"
         >
-          <UserCard
-            name={"Aaron"}
-            img={"/AaronFounderPic_300x300.webp"}
-            username={"aaron"}
-          />
-          <UserCard
-            name="Sam"
-            img={"/SamFounderPic_300x300.webp"}
-            username="sam"
-          />
-        </HStack>
+            <UserCard
+              name={"Aaron"}
+              img={"/AaronFounderPic_300x300.webp"}
+              username={"aaron"}
+              tagline={"CEO"}
+            />
+            <UserCard
+              name="Sam"
+              img={"/SamFounderPic_300x300.webp"}
+              tagline={"CTO"}
+              username="sam"
+            />
+        </Stack>
       </Box>
     </>
   );

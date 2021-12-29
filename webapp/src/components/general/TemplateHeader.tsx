@@ -25,17 +25,17 @@ import { MdLocationOn } from "react-icons/md";
 import { Card } from "./Card";
 import { TextWithIcon } from "./TextWithIcon";
 import { motion, Variants } from "framer-motion";
-import { usingApollo } from "../../utils/withApollo";
-import { isServer } from "../../utils/isServer";
 import { isMobile } from "is-mobile"
 import Parallax from "./Parallax";
 
 const mobileVariant: Variants = {
   offscreen: {
-    x: -600
+    x: -600,
+    opacity: 0
   },
   onscreen: {
     x: 0,
+    opacity: 1,
     transition: {
       type: "spring",
       bounce: 0.4,
@@ -46,10 +46,12 @@ const mobileVariant: Variants = {
 
 const desktopVariant: Variants = {
   offscreen: {
-    y: 300
+    y: 300,
+    opacity: 0
   },
   onscreen: {
     y: 0,
+    opacity: 1,
     rotate: -5,
     transition: {
       type: "spring",
@@ -60,7 +62,7 @@ const desktopVariant: Variants = {
 };
 
 export const TemplateHeader = () => (
-  <Box as="section" pt={{ base: "20%", md: "5%" }} mb={{ base: "20", md: "40" }}>
+  <Box as="section" px={{ base: 0, lg: "10" }} pt={{ base: "20%", md: "5%" }} mb={{ base: "20", md: "40" }}>
     <Box
       mx="auto"
       maxW={{ base: "xl", md: "6xl" }}
@@ -69,7 +71,7 @@ export const TemplateHeader = () => (
       <Heading
         bgClip="text"
         bgGradient="linear(to-tr, mintro.200, mintro.400)"
-        fontSize={{ base: "8xl", md: "9xl" }}
+        fontSize={{ base: "7xl", md: "9xl" }}
         textAlign="center"
         userSelect={"none"}
       >
@@ -77,9 +79,9 @@ export const TemplateHeader = () => (
       </Heading>
       <Text
         pt={2}
-        pb={{base: "10%", md: "5%"}}
+        pb={{ base: "10%", md: "5%" }}
         fontWeight="500"
-        fontSize={{ base: "15", md: "xl" }}
+        fontSize={{ base: "xs", md: "xl" }}
         textAlign="center"
         lineHeight="2"
       >
@@ -107,17 +109,17 @@ export const TemplateHeader = () => (
                   borderColor={"gray.100"}
                   borderTopColor={"mintro.300"}
                 >
-                  <Stack px={5} direction={{ base: "row", lg: "row" }}>
-                    <Avatar size="xl" src={"/templateProfileImage_300x300.webp"} />
+                  <Stack px={5} direction="row">
+                    <Avatar size={isMobile() ? "md" : "xl"} src={"/templateProfileImage_300x300.webp"} />
                     <Box p="0">
-                      <HStack mb={1} align="flex-end" lineHeight="1" spacing="1">
+                      <Stack mb={1} lineHeight="1" spacing="1" direction={{ base: "column", md: "row" }}>
                         <Text fontSize="2xl" fontWeight="bold">
                           Jessica Qiao
                         </Text>
-                        <Text fontStyle="italic" color="dark.500" fontSize="md">
+                        <Text pl={{ base: 0, md: 2 }} fontStyle="italic" color="dark.500" fontSize="md">
                           Jess
                         </Text>
-                      </HStack>
+                      </Stack>
                       <Stack direction={{ base: "column-reverse", lg: "row" }}>
                         <Heading color="dark.400" size="xs">
                           she/her/hers
@@ -135,22 +137,44 @@ export const TemplateHeader = () => (
                       >
                         I am... an activist
                       </Heading>
-                      <Stack
-                        direction={{ base: "row", md: "row" }}
-                        spacing={{ base: 0, md: 4 }}
-                        ml={{ base: "-45%", md: "0" }}
+                      {/* <Stack
+                        direction={{ base: "column", md: "row" }}
+                        spacing={{ base: 2, md: 4 }}
+                        ml={{ base: "-70%", md: "-5%" }}
                         pt={2}
+                        px={2}
                       >
-                        <TextWithIcon width={{ base: "35%", md: "auto" }} icon={<MdLocationOn />}>
-                          Oakland, California
+                        <TextWithIcon width={{ base: "unset", md: "35%" }} icon={<MdLocationOn />}>
+                          Oakland, CA
                         </TextWithIcon>
-                        <TextWithIcon width={{ base: "35%", md: "auto" }} icon={<AiOutlineGift />}>
+                        <TextWithIcon width={{ base: "unset", md: "30%" }} icon={<AiOutlineGift />}>
                           July, 10th
                         </TextWithIcon>
-                        <TextWithIcon width={{ base: "35%", md: "auto" }} icon={<AiOutlineHome />}>
+                        <TextWithIcon width={{ base: "unset", md: "15%" }} icon={<AiOutlineHome />}>
                           Shenzhen
                         </TextWithIcon>
-                      </Stack>
+                      </Stack> */}
+                      <Wrap justify="center" spacing={{ base: 4, md: 4 }}
+                        ml={{ base: "-70%", md: "-5%" }}
+                        pt={2}
+                        px={2}>
+                        <WrapItem key={"location"}>
+                          <TextWithIcon width="auto" icon={<MdLocationOn />}>
+                            Oakland, CA
+                          </TextWithIcon>
+                        </WrapItem>
+                        <WrapItem key={"birthday"}>
+                          <TextWithIcon width="auto" icon={<AiOutlineGift />}>
+                            July, 10th
+                          </TextWithIcon>
+                        </WrapItem>
+                        <WrapItem key={"hometown"}>
+                          <TextWithIcon width="auto" icon={<AiOutlineHome />}>
+                            Shenzhen
+                          </TextWithIcon>
+                        </WrapItem>
+
+                      </Wrap>
                     </Box>
                   </Stack>
                 </Card>

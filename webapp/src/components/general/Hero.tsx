@@ -26,11 +26,8 @@ export function Hero() {
             mb="10%"
           >
             <Box flex="1" maxW={{ lg: "4xl" }} pt="6">
-              {/* <Heading fontSize={{ base: "3xl", md: "6xl" }}>
-                Introductions...
-              </Heading> */}
               <Heading
-                fontSize={{ base: "5xl",  md: "8xl" }}
+                fontSize={{ base: "4xl",  md: "8xl" }}
                 bgClip="text"
                 bgGradient="linear(to-tr, mintro.200, mintro.400)"
                 pb={2}

@@ -33,7 +33,7 @@ export const BugReportButton: React.FC<BugReportButtonProps> = ({
       <Tooltip
         label="Report Bug"
         colorScheme="red"
-        placement="bottom"
+        placement="auto-end"
         aria-label="Report Bug"
       >
         <IconButton

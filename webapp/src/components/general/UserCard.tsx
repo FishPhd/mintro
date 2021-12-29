@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
+import { isMobile } from "is-mobile"
 
 interface UserCardProps {
   name: String;
@@ -33,27 +34,20 @@ export function UserCard(props: UserCardProps) {
         py={8}
         px={5}
         bg={"gray.50"}
-        h="100%"
-        w="3xs"
+        maxW={{base: "xs", md:"xl"}}
         shadow={{ md: "base" }}
       >
-        <Box
-          position="absolute"
-          inset="0"
-          height="20"
-          bg="mintro.300"
-          roundedTop="inherit"
-        />
-        <Avatar size="xl" src={user_photo} />
+        <Box position="absolute" top="0" left="0" right="0" height="20" bg="mintro.200" roundedTop="inherit" />
+        <Avatar size={isMobile() ? "lg" : "xl"} src={user_photo} />
         <Text pt={2} fontSize="2xl" fontWeight="700">
           {name}
         </Text>
-        <Text pb={2} color="gray.500" fontStyle="italic">
+        <Text mt="-2" pb={2} color="mintro.400" fontStyle="italic">
           {tagline}
         </Text>
         <Spacer />
         <NextLink href={`/m/${username}`}>
-          <Button variant="mintro" rounded="full">
+          <Button variant="mintro" rounded="full" fontSize={{base: "13", md: "unset"}}>
             View Mintro
           </Button>
         </NextLink>
