@@ -33,6 +33,7 @@ export function UserCard(props: UserCardProps) {
         position="relative"
         py={8}
         px={5}
+        h="100%"
         bg={"gray.50"}
         maxW={{base: "xs", md:"xl"}}
         shadow={{ md: "base" }}
