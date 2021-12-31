@@ -25,13 +25,13 @@ import { TextWithIcon } from "../general/TextWithIcon";
 
 interface ProfileHeaderProps {
   user: User | undefined;
-  setSetupProfile: React.Dispatch<React.SetStateAction<boolean>>;
+  openSetupModal: () => void;
   isMyProfile: boolean;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   user,
-  setSetupProfile,
+  openSetupModal,
   isMyProfile,
 }) => {
   const userBirthday = user?.birthday
@@ -85,9 +85,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     textAlign={"justify"}
                     variant="unstyled"
                     aria-label="Edit Section"
-                    onClick={async () => {
-                      setSetupProfile(true);
-                    }}
+                    onClick={openSetupModal}
                     icon={
                       <EditIcon
                         color="dark.500"

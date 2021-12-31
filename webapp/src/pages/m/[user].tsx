@@ -1,4 +1,4 @@
-import { Box, Heading, Progress, Spacer, Stack } from "@chakra-ui/react";
+import { Box, Heading, Progress, Spacer, Stack, useDisclosure } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -19,7 +19,8 @@ import { usingApollo } from "../../utils/withApollo";
 
 export const Profile: NextPage<{}> = () => {
   const router = useRouter();
-  const [setupProfile, setSetupProfile] = useState(false);
+  // const [setupProfile, setSetupProfile] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { data: me, loading: fetchingMe } = useMeQuery({
     notifyOnNetworkStatusChange: true,
@@ -66,15 +67,15 @@ export const Profile: NextPage<{}> = () => {
       ) : (
         <Box bg={"gray.50"} minH="100vh">
           <ProfileHeader
-            setSetupProfile={setSetupProfile}
+            openSetupModal={onOpen}
             user={user ? user : undefined}
             isMyProfile={isMyProfile}
           />
 
-          {isMyProfile && !user?.profileSetup && <UserProfileSetup />}
-          {setupProfile && user && (
-            <UserProfileSetup user={user} setSetupProfile={setSetupProfile} />
-          )}
+          {/* {isMyProfile && !user?.profileSetup && <UserProfileSetup />} */}
+          {user && ( //setupProfile && 
+            <UserProfileSetup user={user} isOpen={isOpen} onClose={onClose} />
+          )} 
 
           <Box as="section">
             <Box maxW="2xl" px={5} mx="auto">

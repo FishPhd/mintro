@@ -18,7 +18,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-// import { AnimatePresence, m, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import {
   Country,
@@ -40,7 +39,8 @@ import { UploadForm } from "../forms/UploadForm";
 
 interface UserProfileSetupProps {
   user?: User;
-  setSetupProfile?: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const pronouns = [
@@ -111,11 +111,11 @@ const SetupProfileSchemaPage2 = Yup.object().shape({
 
 // Do this on the server end
 export function upperCase(string: String) {
-  return string[0].toUpperCase() + string.substr(1);
+  return string[0].toUpperCase() + string.slice(1);
 }
 
 export function titleCase(string: String) {
-  return string[0].toUpperCase() + string.substr(1).toLowerCase();
+  return string[0].toUpperCase() + string.slice(1).toLowerCase();
 }
 
 const initialValues = {
@@ -130,21 +130,20 @@ const initialValues = {
   state: "Washington",
   country: "United States",
   birthday: new Date().toISOString(),
-  birthdayMonth: 0,
-  birthdayDay: 0,
-  birthdayYear: 0,
+  // birthdayMonth: 0,
+  // birthdayDay: 0,
+  // birthdayYear: 0,
 };
 
 export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   user,
-  setSetupProfile,
+  isOpen,
+  onClose,
 }) => {
   let userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
-  let birthdayMonth = undefined,
-    birthdayDay = undefined,
-    birthdayYear = undefined;
+  let birthdayMonth: number, birthdayDay: number, birthdayYear:number
 
   if (userBirthday) {
     birthdayMonth = userBirthday.getUTCMonth() + 1;
@@ -165,13 +164,12 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         state: user.state,
         country: user.country,
         birthday: user.birthday,
-        birthdayMonth: birthdayMonth,
-        birthdayDay: birthdayDay,
-        birthdayYear: birthdayYear,
+        // birthdayMonth: birthdayMonth,
+        // birthdayDay: birthdayDay,
+        // birthdayYear: birthdayYear,
       }
     : initialValues;
 
-  const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true });
   const [hideCities, setHideCities] = useState(false);
   const [formPage, setFormPage] = useState(1);
   const [setupProfile] = useSetupProfileMutation();
@@ -207,12 +205,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         closeOnEsc={user ? true : false}
         closeOnOverlayClick={user ? true : false}
         isOpen={isOpen}
-        onClose={async () => {
-          await onClose();
-          if (setSetupProfile) {
-            await setSetupProfile(false);
-          }
-        }}
+        onClose={onClose}
         size="2xl"
         motionPreset="slideInBottom"
         isCentered={true}
@@ -243,24 +236,12 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                 { setErrors, resetForm, validateForm }
               ) => {
                 // TODO: convert into M->O relationship instead of simply using name
-                // values.country =
-                //   countryData?.countries[parseInt(values.country) - 1].name ||
-                //   "";
+                console.log("here")
 
-                // const state = stateData?.getStatesFromCountry.find(
-                //   s => s.id === parseInt(values.state)
-                // );
-
-                // values.state = state?.name || "";
-
-                // const city = cityData?.getCitiesFromState.find(
-                //   c => c.id === parseInt(values.city)
-                // );
-                // values.city = city?.name || "";
                 const birthday = new Date(
-                  values.birthdayYear as number,
-                  (values.birthdayMonth as number) - 1,
-                  values.birthdayDay as number
+                  birthdayYear as number,
+                  (birthdayMonth as number) - 1,
+                  birthdayDay as number
                 );
                 values.birthday = birthday.toISOString();
                 values.firstName = values.firstName
@@ -277,11 +258,11 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                   ? values.namePronunciation
                   : "";
                 validateForm();
-
-                delete values["birthdayYear"];
-                delete values["birthdayMonth"];
-                delete values["birthdayDay"];
-
+                console.log("here")
+                // delete values["birthdayYear"];
+                // delete values["birthdayMonth"];
+                // delete values["birthdayDay"];
+                console.log("or here")
                 const { data: setupData } = await setupProfile({
                   variables: {
                     input: values,
@@ -295,10 +276,10 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                   setErrors(toErrorMap(setupData.setupProfile.errors));
                 }
 
-                if (user && setSetupProfile) {
-                  setSetupProfile(false);
-                }
-
+                // if (user && setSetupProfile) {
+                //   setSetupProfile(false);
+                // }
+                
                 onClose();
               }}
             >
@@ -487,12 +468,13 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                             Age is not shared!
                           </Text>
                           <Flex>
-                            <Input
-                              as={SelectField}
+                            <Select
+                              // as={SelectField}
                               placeholder="Month"
                               name="birthdayMonth"
                               w="95%"
                               type="number"
+                              defaultValue={birthdayMonth}
                               min={1}
                               max={12}
                             >
@@ -508,32 +490,30 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                                   </option>
                                 );
                               })}
-                            </Input>
+                            </Select>
                             <Input
-                              as={InputField}
                               w="95%"
                               placeholder="Day"
                               name="birthdayDay"
                               type="number"
                               min={1}
                               max={31}
-                              value={
-                                values.birthdayDay === 0
+                              defaultValue={
+                                birthdayDay === 0
                                   ? ""
-                                  : values.birthdayDay
+                                  : birthdayDay
                               }
                             />
                             <Input
-                              as={InputField}
                               w="95%"
                               placeholder="Year"
                               name="birthdayYear"
                               min={1900}
                               max={2021}
-                              value={
-                                values.birthdayYear === 0
+                              defaultValue={
+                                birthdayYear === 0
                                   ? ""
-                                  : values.birthdayYear
+                                  : birthdayYear
                               }
                               type="number"
                             />
@@ -552,6 +532,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                         isFullWidth={true}
                         colorScheme="mintro"
                         onClick={async () => {
+                          console.log("here")
                           const errors = await validateForm();
                           // If no validation errors on first page
                           if (Object.keys(errors).length === 0) {
