@@ -30,3 +30,6 @@ yarn-error.log*
 .vercel
 .env.production
 .env.example
+
+# redis
+dump.rdb
