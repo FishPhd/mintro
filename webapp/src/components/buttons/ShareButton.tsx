@@ -5,6 +5,7 @@ import {
   Text,
   useToast,
   useBreakpointValue,
+  Stack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
@@ -28,20 +29,22 @@ export const ShareButton = (props: any) => {
         });
       }}
       rounded="full"
-      p={{ base: 2, md: 3 }}
       icon={
         <>
-          <Icon
-            boxSize="4"
-            color="dark.500"
-            mr={{ base: 2.2, sm: 1 }}
-            as={IoMdShare}
-          />
-          <Text>
-            {variant}
-          </Text> 
+          <Stack direction={"row"} spacing={0}>
+            <Icon
+              ml={1}
+              boxSize="4"
+              color="dark.500"
+              mr={{ base: 2.2, sm: 1 }}
+              alignSelf={"center"}
+              as={IoMdShare}
+            />
+            <Text pl={1} pr={2}>
+              {variant}
+            </Text>
+          </Stack>
         </>
-
       }
       {...props}
     >

@@ -16,11 +16,19 @@ export const Index: React.FC<{}> = ({}) => {
         <title>Mintro - Home</title>
       </Head>
       <NavBar transparent />
-      
-      <Parallax><Hero /></Parallax>
-      <Parallax><ProblemStatement /></Parallax>
-      <Parallax><TemplateHeader /></Parallax>
-      <Parallax><FoundersList /></Parallax>
+
+      <Parallax>
+        <Hero />
+      </Parallax>
+      <Parallax>
+        <ProblemStatement />
+      </Parallax>
+      <Parallax>
+        <TemplateHeader />
+      </Parallax>
+      <Parallax>
+        <FoundersList />
+      </Parallax>
       <Footer />
     </>
   );

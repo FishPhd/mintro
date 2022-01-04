@@ -19,6 +19,7 @@ import React from "react";
 import { AiOutlineGift, AiOutlineHome } from "react-icons/ai";
 import { MdLocationOn } from "react-icons/md";
 import { User } from "../../generated/graphql";
+import { EditButton } from "../buttons/EditButton";
 import { ShareButton } from "../buttons/ShareButton";
 import { Card } from "../general/Card";
 import { TextWithIcon } from "../general/TextWithIcon";
@@ -37,7 +38,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
-  var profile_photo = user?.profileImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  var profile_photo = user?.profileImageUrl?.replace(
+    "mintro-webapp-images.s3.amazonaws.com/",
+    "ik.imagekit.io/wzbi68mgpi3/"
+  );
   profile_photo += "?tr=w-250,h-250";
   return (
     <Box p="6">
@@ -64,7 +68,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             />
 
             <Box flex="1" px={2}>
-              <HStack mb={1} align="flex-end" lineHeight="1" spacing="1">
+              <HStack mb={1} align="flex-end" lineHeight="1" spacing="2">
                 <Stack
                   spacing={{ base: "0", lg: "2" }}
                   direction={{ base: "column", lg: "row" }}
@@ -80,22 +84,31 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 <Text fontStyle="italic" color="dark.500" fontSize="md">
                   {user?.nickname}
                 </Text>
+
+                <Spacer />
                 {isMyProfile && user?.profileSetup && (
                   <IconButton
                     textAlign={"justify"}
-                    variant="unstyled"
+                    variant="mintro"
+                    bg="dark.100"
+                    rounded={"full"}
                     aria-label="Edit Section"
                     onClick={openSetupModal}
                     icon={
-                      <EditIcon
-                        color="dark.500"
-                        _hover={{ color: "mintro.400" }}
-                      />
+                      <>
+                        <Stack direction={"row"} p={4}>
+                          <EditIcon
+                            alignSelf={"center"}
+                            boxSize="4"
+                            color="dark.500"
+                          />
+                          <Text>Edit</Text>
+                        </Stack>
+                      </>
                     }
                   />
                 )}
-                <Spacer />
-                <ShareButton />
+                <ShareButton pl={2} />
               </HStack>
               <HStack>
                 <Heading color="dark.400" size="xs">

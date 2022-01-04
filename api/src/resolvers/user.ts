@@ -252,12 +252,16 @@ export class UserResolver {
       user = await getConnection()
         .createQueryBuilder()
         .update(User, {
-          firstName: input.firstName,
-          lastName: input.lastName,
+          firstName:
+            input.firstName[0].toUpperCase() +
+            input.firstName.slice(1).toLowerCase(),
+          lastName:
+            input.lastName[0].toUpperCase() +
+            input.lastName.slice(1).toLowerCase(),
           nickname: input.nickname || null,
           namePronunciation: input.namePronunciation || null,
           tagline: input.tagline,
-          homeTown: input.homeTown,
+          homeTown: input.homeTown[0].toUpperCase() + input.homeTown.slice(1),
           pronouns: input.pronouns,
           city: input.city,
           state: input.state,

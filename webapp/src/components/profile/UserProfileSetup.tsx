@@ -2,9 +2,9 @@ import {
   Box,
   Button,
   Flex,
-  FormHelperText,
   FormLabel,
-  Heading,
+  Icon,
+  IconButton,
   Input,
   Modal,
   ModalContent,
@@ -12,29 +12,23 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  Spinner,
   Stack,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { BiChevronLeft } from "react-icons/bi";
+import * as Yup from "yup";
 import {
-  Country,
-  MeDocument,
-  MeQuery,
-  RegisterMutation,
   useCountriesQuery,
-  useRegisterMutation,
-  useGetStatesFromCountryQuery,
   useGetCitiesFromStateQuery,
-  useSetupProfileMutation,
+  useGetStatesFromCountryQuery,
   User,
+  useSetupProfileMutation,
 } from "../../generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
-import * as Yup from "yup";
 import { UploadForm } from "../forms/UploadForm";
 
 interface UserProfileSetupProps {
@@ -52,7 +46,6 @@ const pronouns = [
 ];
 
 const months = [
-  undefined,
   "Jan",
   "Feb",
   "Mar",
@@ -80,7 +73,7 @@ const SetupProfileSchemaPage1 = Yup.object().shape({
   namePronunciation: Yup.string().min(2, "Too Short!").max(50, "Too Long!"),
   pronouns: Yup.string()
     .required(
-      "Please select a pronoun, if you think you are missing please reach out to 'hello@mintro.page'"
+      "Please select a pronoun, if you feel that you are missing please reach out to 'hello@mintro.page'"
     )
     .oneOf(pronouns),
   country: Yup.string().required("Please select a Country!"),
@@ -95,18 +88,6 @@ const SetupProfileSchemaPage2 = Yup.object().shape({
   homeTown: Yup.string().required(
     "People want to know where you are from, maybe you will meet some long lost friends!"
   ),
-  birthdayMonth: Yup.number()
-    .min(1, "Must be a valid month!")
-    .max(12, "Must be a valid month!")
-    .required("Select the month you were born!"),
-  birthdayDay: Yup.number()
-    .min(1, "Must be a valid day!")
-    .max(31, "Must be a valid day!")
-    .required("Select a birthday!"),
-  birthdayYear: Yup.number()
-    .min(1900, "Must be a valid year!")
-    .max(2021, "Must be a valid year!")
-    .required("Select the year you were born!"),
 });
 
 // Do this on the server end
@@ -130,9 +111,6 @@ const initialValues = {
   state: "Washington",
   country: "United States",
   birthday: new Date().toISOString(),
-  // birthdayMonth: 0,
-  // birthdayDay: 0,
-  // birthdayYear: 0,
 };
 
 export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
@@ -143,13 +121,15 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   let userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
-  let birthdayMonth: number, birthdayDay: number, birthdayYear:number
-
-  if (userBirthday) {
-    birthdayMonth = userBirthday.getUTCMonth() + 1;
-    birthdayDay = userBirthday.getUTCDate();
-    birthdayYear = userBirthday.getUTCFullYear();
-  }
+  const [birthdayMonth, setBirthdayMonth] = useState(
+    userBirthday ? userBirthday.getUTCMonth() : 0
+  );
+  const [birthdayYear, setbirthdayYear] = useState(
+    userBirthday && userBirthday.getUTCFullYear()
+  );
+  const [birthdayDay, setbirthdayDay] = useState(
+    userBirthday && userBirthday.getUTCDate()
+  );
 
   let userValues = user
     ? {
@@ -164,9 +144,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         state: user.state,
         country: user.country,
         birthday: user.birthday,
-        // birthdayMonth: birthdayMonth,
-        // birthdayDay: birthdayDay,
-        // birthdayYear: birthdayYear,
       }
     : initialValues;
 
@@ -205,14 +182,40 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         closeOnEsc={user ? true : false}
         closeOnOverlayClick={user ? true : false}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={async () => {
+          setFormPage(1);
+          onClose();
+        }}
         size="2xl"
         motionPreset="slideInBottom"
         isCentered={true}
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader textAlign="center" fontSize="3xl">
+          {formPage > 1 && (
+            <IconButton
+              variant="unstyled"
+              aria-label="Search database"
+              color="dark.500"
+              _hover={{ color: "mintro.400" }}
+              onClick={async () => {
+                setFormPage(formPage - 1);
+              }}
+              icon={
+                <>
+                  <Stack pl={5} pt={5} direction={"row"} spacing={0}>
+                    <Icon as={BiChevronLeft} />
+                    <Text fontSize={"xs"}>Back</Text>
+                  </Stack>
+                </>
+              }
+            />
+          )}
+          <ModalHeader
+            textAlign="center"
+            p={formPage > 1 ? 0 : undefined}
+            fontSize="3xl"
+          >
             {formPage == 1
               ? user
                 ? "Edit your profile!"
@@ -231,38 +234,14 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
               validateOnBlur={false}
               validateOnChange={false}
               initialValues={user ? userValues : initialValues}
-              onSubmit={async (
-                values,
-                { setErrors, resetForm, validateForm }
-              ) => {
-                // TODO: convert into M->O relationship instead of simply using name
-                console.log("here")
-
+              onSubmit={async (values, { setErrors, validateForm }) => {
                 const birthday = new Date(
                   birthdayYear as number,
-                  (birthdayMonth as number) - 1,
+                  birthdayMonth as number,
                   birthdayDay as number
                 );
                 values.birthday = birthday.toISOString();
-                values.firstName = values.firstName
-                  ? titleCase(values?.firstName)
-                  : "";
-                values.lastName = values.lastName
-                  ? titleCase(values.lastName)
-                  : "";
-                values.homeTown = values.homeTown
-                  ? upperCase(values.homeTown)
-                  : "";
-                values.nickname = values.nickname ? values.nickname : "";
-                values.namePronunciation = values.namePronunciation
-                  ? values.namePronunciation
-                  : "";
                 validateForm();
-                console.log("here")
-                // delete values["birthdayYear"];
-                // delete values["birthdayMonth"];
-                // delete values["birthdayDay"];
-                console.log("or here")
                 const { data: setupData } = await setupProfile({
                   variables: {
                     input: values,
@@ -276,10 +255,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                   setErrors(toErrorMap(setupData.setupProfile.errors));
                 }
 
-                // if (user && setSetupProfile) {
-                //   setSetupProfile(false);
-                // }
-                
                 onClose();
               }}
             >
@@ -470,18 +445,24 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                           <Flex>
                             <Select
                               // as={SelectField}
-                              placeholder="Month"
                               name="birthdayMonth"
-                              w="95%"
                               type="number"
                               defaultValue={birthdayMonth}
                               min={1}
                               max={12}
+                              required
+                              mx="1"
+                              w="75%"
+                              onChange={async (e) => {
+                                if (e.target.value) {
+                                  setBirthdayMonth(parseInt(e.target.value));
+                                }
+                              }}
                             >
                               {months.map((month, index) => {
                                 return (
                                   <option
-                                    key={month ? month : "undefined"}
+                                    key={month}
                                     disabled={!month}
                                     value={index}
                                     hidden={!month}
@@ -492,30 +473,41 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               })}
                             </Select>
                             <Input
-                              w="95%"
+                              px={2}
                               placeholder="Day"
                               name="birthdayDay"
                               type="number"
                               min={1}
                               max={31}
+                              required
+                              mx="1"
+                              w="75%"
                               defaultValue={
-                                birthdayDay === 0
-                                  ? ""
-                                  : birthdayDay
+                                birthdayDay === 0 ? "" : birthdayDay
                               }
+                              onChange={async (e) => {
+                                if (e.target.value) {
+                                  setbirthdayDay(parseInt(e.target.value));
+                                }
+                              }}
                             />
                             <Input
-                              w="95%"
                               placeholder="Year"
                               name="birthdayYear"
                               min={1900}
-                              max={2021}
+                              required
+                              mx="1"
+                              w="75%"
+                              max={new Date().getFullYear()}
                               defaultValue={
-                                birthdayYear === 0
-                                  ? ""
-                                  : birthdayYear
+                                birthdayYear === 0 ? "" : birthdayYear
                               }
                               type="number"
+                              onChange={async (e) => {
+                                if (e.target.value) {
+                                  setbirthdayYear(parseInt(e.target.value));
+                                }
+                              }}
                             />
                           </Flex>
                         </Box>
@@ -532,7 +524,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                         isFullWidth={true}
                         colorScheme="mintro"
                         onClick={async () => {
-                          console.log("here")
+                          console.log("here");
                           const errors = await validateForm();
                           // If no validation errors on first page
                           if (Object.keys(errors).length === 0) {
