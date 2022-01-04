@@ -40,7 +40,7 @@ export const ShareButton = (props: any) => {
               alignSelf={"center"}
               as={IoMdShare}
             />
-            <Text pl={1} pr={2}>
+            <Text pl={1} pr={4}>
               {variant}
             </Text>
           </Stack>
