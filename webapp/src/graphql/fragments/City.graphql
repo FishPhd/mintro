@@ -1,0 +1,14 @@
+fragment City on City {
+  id
+  name
+  stateId
+  stateCode
+  countryId
+  countryCode
+  latitude
+  longitude
+  createdAt
+  updatedAt
+  flag
+  wikiDataId
+}

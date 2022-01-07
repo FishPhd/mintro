@@ -1,5 +1,5 @@
 query GetCountry($countryId: Int!) {
   getCountry(countryId: $countryId) {
-    name
+    ...Country
   }
 }

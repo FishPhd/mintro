@@ -1,4 +1,11 @@
-import { Box, Heading, Progress, Spacer, Stack, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Progress,
+  Spacer,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -14,38 +21,45 @@ import {
   useGetSectionsByUserQuery,
   useGetUserQuery,
   useMeQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { usingApollo } from "../../utils/withApollo";
 
 export const Profile: NextPage<{}> = () => {
   const router = useRouter();
   // const [setupProfile, setSetupProfile] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { data: me, loading: fetchingMe } = useMeQuery({
+  const { data: { me: me } = {}, loading: fetchingMe } = useMeQuery({
     notifyOnNetworkStatusChange: true,
   });
-  const { data: userData, loading: userFetching } = useGetUserQuery({
-    variables: {
-      username:
-        router?.query?.user !== undefined ? (router.query?.user as string) : "",
-    },
-    notifyOnNetworkStatusChange: true,
-  });
-
-  const isMyProfile = !!(me?.me?.id === userData?.getUser?.id && me?.me?.id);
-
-  const { data: sectionsData, loading: sectionFetching } =
-    useGetSectionsByUserQuery({
+  const { data: { getUser: user } = {}, loading: userFetching } =
+    useGetUserQuery({
       variables: {
-        postCount: 10,
-        userId: userData?.getUser?.id !== undefined ? userData?.getUser?.id : 0,
+        username:
+          router?.query?.user !== undefined
+            ? (router.query?.user as string)
+            : "",
       },
       notifyOnNetworkStatusChange: true,
     });
 
-  const sections = sectionsData?.getSectionsByUser.sections;
-  const user = userData?.getUser;
+  const isMyProfile = !!(me?.id === user?.id && me?.id);
+
+  const {
+    data: { getSectionsByUser: sectionsData } = {},
+    loading: sectionFetching,
+  } = useGetSectionsByUserQuery({
+    variables: {
+      postCount: 10,
+      userId: user?.id !== undefined ? user?.id : 0,
+    },
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const sections = sectionsData?.sections;
+
+  const { isOpen, onOpen, onClose } = useDisclosure({
+    defaultIsOpen: user?.profileSetup ? false : true,
+  });
 
   return (
     <>
@@ -72,15 +86,16 @@ export const Profile: NextPage<{}> = () => {
             isMyProfile={isMyProfile}
           />
 
-          {/* {isMyProfile && !user?.profileSetup && <UserProfileSetup />} */}
-          {user && ( //setupProfile && 
+          {user && (
             <UserProfileSetup user={user} isOpen={isOpen} onClose={onClose} />
-          )} 
+          )}
 
           <Box as="section">
             <Box maxW="2xl" px={5} mx="auto">
               <Stack spacing="4">
-                {isMyProfile && <AddEditSectionTrigger sections={sections} />}
+                {isMyProfile && user?.profileSetup && (
+                  <AddEditSectionTrigger sections={sections} />
+                )}
                 {sectionFetching && (
                   <Box px={5} borderRadius="lg">
                     <Progress

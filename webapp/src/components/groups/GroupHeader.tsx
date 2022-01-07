@@ -18,7 +18,7 @@ import {
   useGroupHasPasswordQuery,
   useMeQuery,
   User,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { ShareButton } from "../buttons/ShareButton";
 import { Card } from "../general/Card";
 import { RiGroup2Fill, RiLock2Line, RiUserFill } from "react-icons/ri";
@@ -41,7 +41,10 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
   isAdmin,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  var group_photo = group?.groupImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  var group_photo = group?.groupImageUrl?.replace(
+    "mintro-webapp-images.s3.amazonaws.com/",
+    "ik.imagekit.io/wzbi68mgpi3/"
+  );
   group_photo += "?tr=w-250,h-250";
 
   return (

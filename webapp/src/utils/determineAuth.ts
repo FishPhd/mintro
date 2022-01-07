@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import router from "next/router";
 import { useEffect } from "react";
-import { useMeQuery } from "../generated/graphql";
+import { useMeQuery } from "../graphql/generated/graphql";
 import { isServer } from "./isServer";
 
 export const determineAuth = () => {

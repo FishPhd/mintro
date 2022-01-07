@@ -28,7 +28,7 @@ import {
   GroupResponse,
   JoinGroupMutation,
   useValidateGroupPasswordQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
 import { PasswordUpdateField } from "../forms/PasswordUpdateField";

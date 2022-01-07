@@ -22,7 +22,7 @@ import {
   MeQuery,
   RegisterMutation,
   useRegisterMutation,
-} from "../generated/graphql";
+} from "../graphql/generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { usingApollo } from "../utils/withApollo";
 

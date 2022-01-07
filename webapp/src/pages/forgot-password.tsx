@@ -11,7 +11,10 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { InputField } from "../components/forms/InputField";
 import NextLink from "next/link";
-import { useForgotPasswordMutation, useMeQuery } from "../generated/graphql";
+import {
+  useForgotPasswordMutation,
+  useMeQuery,
+} from "../graphql/generated/graphql";
 import { useState } from "react";
 import { usingApollo } from "../utils/withApollo";
 import NavBar from "../components/page/NavBar";

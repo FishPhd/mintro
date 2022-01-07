@@ -22,7 +22,7 @@ import {
   useGetSectionQuery,
   useGetSectionTypesQuery,
   useUpdateSectionMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";

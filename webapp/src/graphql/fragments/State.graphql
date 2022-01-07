@@ -1,0 +1,14 @@
+fragment State on State {
+  id
+  name
+  countryId
+  countryCode
+  fipsCode
+  iso2
+  latitude
+  longitude
+  createdAt
+  updatedAt
+  flag
+  wikiDataId
+}

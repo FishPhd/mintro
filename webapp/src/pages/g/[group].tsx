@@ -24,7 +24,7 @@ import {
   useGetGroupMembersQuery,
   useGroupHasPasswordQuery,
   useMeQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { usingApollo } from "../../utils/withApollo";
 
 export const Group: NextPage<{}> = () => {

@@ -15,7 +15,7 @@ import {
   Section,
   useDeleteSectionMutation,
   useUpdateSectionRankMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import AddEditSectionTrigger from "./AddEditSectionTrigger";
 
 interface UserSectionsProps {

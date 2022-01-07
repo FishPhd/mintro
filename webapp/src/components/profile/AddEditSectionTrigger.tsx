@@ -11,7 +11,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
-import { Section } from "../../generated/graphql";
+import { Section } from "../../graphql/generated/graphql";
 import { CreateSectionPopOver } from "./CreateEditSectionPopOver";
 
 interface AddEditSectionTriggerProps {

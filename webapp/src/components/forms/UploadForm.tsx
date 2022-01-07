@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { Spinner } from "@chakra-ui/react";
+import { Avatar, Icon, Spinner, Tooltip } from "@chakra-ui/react";
 
 import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
@@ -11,7 +11,8 @@ import React, { useState } from "react";
 import {
   useAddProfileImageMutation,
   useGetS3SignedUrlMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
+import { EditIcon } from "@chakra-ui/icons";
 
 export function formatFilename(filename: String) {
   const date = moment().format("YYYYMMDD");
@@ -24,15 +25,21 @@ export function formatFilename(filename: String) {
 interface UploadFormProps {
   folder: string;
   returnImage?: any;
+  currentImage?: string;
 }
 
 export const UploadForm: React.FC<UploadFormProps> = ({
   folder,
+  currentImage,
   returnImage,
 }) => {
   const [addProfileImage] = useAddProfileImageMutation();
   const [getS3Url] = useGetS3SignedUrlMutation();
   const [fileName, setFileName] = useState("Pick File");
+  var profile_photo = currentImage?.replace(
+    "mintro-webapp-images.s3.amazonaws.com/",
+    "ik.imagekit.io/wzbi68mgpi3/"
+  );
 
   const [file, setFile] = useState({} as File);
   const toast = useToast();
@@ -45,11 +52,63 @@ export const UploadForm: React.FC<UploadFormProps> = ({
         rounded="full"
         _hover={{ background: "mintro.100" }}
         htmlFor="file-upload"
-        width="min-content"
-        p={6}
         mb={0}
       >
-        {!loading ? "Upload" : <Spinner verticalAlign="middle" />}
+        {!loading ? (
+          <Box
+            bg="transparent"
+            gridTemplateColumns={"1fr"}
+            gridTemplateAreas={"overlap"}
+            gridTemplateRows={"1fr"}
+            display={"grid"}
+            role="group"
+          >
+            <Icon
+              as={EditIcon}
+              _groupHover={{ opacity: "80%" }}
+              color="dark.500"
+              boxSize={"5"}
+              zIndex={"2"}
+              gridArea={"overlap"}
+              alignSelf={"center"}
+              justifySelf={"center"}
+            />
+            <Tooltip placement="top" label="Change Image">
+              <Avatar
+                bg="gray.300"
+                opacity={"70%"}
+                gridArea={"overlap"}
+                _groupHover={{ opacity: "60%" }}
+                size="xl"
+                src={profile_photo ? profile_photo : undefined}
+                display="block"
+              />
+            </Tooltip>
+          </Box>
+        ) : (
+          <Box
+            bg="transparent"
+            gridTemplateColumns={"1fr"}
+            gridTemplateAreas={"overlap"}
+            gridTemplateRows={"1fr"}
+            display={"grid"}
+          >
+            <Avatar
+              bg="gray.300"
+              gridArea={"overlap"}
+              opacity={"90%"}
+              _hover={{ opacity: "60%" }}
+              size="xl"
+              display="block"
+            />
+            <Spinner
+              gridArea={"overlap"}
+              alignSelf={"center"}
+              justifySelf={"center"}
+              verticalAlign="middle"
+            />
+          </Box>
+        )}
         <Input
           id="file-upload"
           type="file"

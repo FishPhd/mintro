@@ -17,7 +17,7 @@ import {
   useJoinGroupMutation,
   useLeaveGroupMutation,
   useMeQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { GroupPasswordModal } from "../groups/GroupPasswordModal";
 
 interface JoinButtonProps {

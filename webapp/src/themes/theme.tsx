@@ -55,11 +55,6 @@ const mintroTheme = extendTheme({
     Popover: { baseStyle: { _focus: { boxShadow: "none" } } },
     Select: { baseStyle: { _focus: { outline: "none" } } },
   },
-  styles: {
-    global: {
-      img: { objectFit: "fill !important" },
-    },
-  },
 });
 
 const mintroMode: ThemeConfig = extendTheme({

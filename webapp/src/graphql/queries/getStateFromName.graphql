@@ -1,0 +1,5 @@
+query GetStateFromName($stateName: String!, $countryId: Int!) {
+  getStateFromName(stateName: $stateName, countryId: $countryId) {
+    ...State
+  }
+}

@@ -1,3 +1,4 @@
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -20,12 +21,16 @@ import React, { useState } from "react";
 import { BiChevronLeft } from "react-icons/bi";
 import * as Yup from "yup";
 import {
+  Country,
   useCountriesQuery,
   useGetCitiesFromStateQuery,
+  useGetCityFromNameQuery,
+  useGetCountryFromNameQuery,
+  useGetStateFromNameQuery,
   useGetStatesFromCountryQuery,
   User,
   useSetupProfileMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
@@ -90,15 +95,6 @@ const SetupProfileSchemaPage2 = Yup.object().shape({
   ),
 });
 
-// Do this on the server end
-export function upperCase(string: String) {
-  return string[0].toUpperCase() + string.slice(1);
-}
-
-export function titleCase(string: String) {
-  return string[0].toUpperCase() + string.slice(1).toLowerCase();
-}
-
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -118,6 +114,30 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   isOpen,
   onClose,
 }) => {
+  // Get users location information
+  let { data: { getCountryFromName: userCountry } = {} } =
+    useGetCountryFromNameQuery({
+      variables: {
+        countryName: user?.country ? user?.country : "United States",
+      },
+    });
+  let { data: { getCityFromName: userCity } = {} } = useGetCityFromNameQuery({
+    variables: {
+      cityName: user?.city ? user?.city : "Seattle",
+      countryId: userCountry?.id ? userCountry?.id : 233,
+    },
+  });
+
+  let { data: { getStateFromName: userState } = {} } = useGetStateFromNameQuery(
+    {
+      variables: {
+        stateName: user?.state ? user?.state : "Washington",
+        countryId: userCountry?.id ? userCountry?.id : 233,
+      },
+    }
+  );
+
+  // Get birthday of user
   let userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
@@ -131,7 +151,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
     userBirthday && userBirthday.getUTCDate()
   );
 
-  let userValues = user
+  let userValues = user?.profileSetup
     ? {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -146,7 +166,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         birthday: user.birthday,
       }
     : initialValues;
-
+  console.log(userValues);
   const [hideCities, setHideCities] = useState(false);
   const [formPage, setFormPage] = useState(1);
   const [setupProfile] = useSetupProfileMutation();
@@ -158,7 +178,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
     loading: loadingStates,
   } = useGetStatesFromCountryQuery({
     variables: {
-      countryId: 233, // USA code
+      countryId: userCountry?.id ? userCountry?.id : 233, // USA code
     },
   });
 
@@ -168,13 +188,17 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
     loading: loadingCities,
   } = useGetCitiesFromStateQuery({
     variables: {
-      stateId: 1462, // Washington code
+      stateId: userState?.id ? userState?.id : 1462, // Washington code
     },
   });
 
   const countries = countryData?.countries;
   let states = stateData?.getStatesFromCountry;
   let cities = cityData?.getCitiesFromState;
+
+  console.log(userCity);
+  console.log(userState);
+  console.log(userCountry);
 
   return (
     <Box px={20}>
@@ -217,10 +241,10 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
             fontSize="3xl"
           >
             {formPage == 1
-              ? user
+              ? user?.profileSetup
                 ? "Edit your profile!"
                 : "Get Started with Mintro!"
-              : user
+              : user?.profileSetup
               ? "Edit your profile!"
               : "Let others get to know you!"}
           </ModalHeader>
@@ -263,20 +287,22 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                   <Stack spacing="6">
                     {formPage == 1 ? (
                       <>
-                        <Box>
-                          <Text pb={2} fontWeight="semibold">
-                            Profile Image
-                          </Text>
-                          <UploadForm folder="profiles" />
-                        </Box>
-
                         <Flex>
+                          <UploadForm
+                            folder="profiles"
+                            currentImage={
+                              user?.profileImageUrl
+                                ? user.profileImageUrl + "?tr=w-250,h-250"
+                                : undefined
+                            }
+                          />
+
                           <Input
                             as={InputField}
                             focusBorderColor="mintro.400"
                             name="firstName"
                             label="First Name"
-                            w="95%"
+                            w="80%"
                           />
                           <Input
                             as={InputField}
@@ -367,6 +393,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                                   let state = states?.find(
                                     (item) => item.name == e.target.value
                                   );
+                                  console.log(state);
                                   await setFieldValue("state", state?.name);
                                   await refetchCities({
                                     stateId: state?.id,

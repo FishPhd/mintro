@@ -1,34 +1,25 @@
 import {
+  Avatar,
   Box,
-  IconButton,
-  useColorModeValue,
-  Text,
-  Icon,
+  Button,
   Flex,
+  Heading,
+  HStack,
+  Link,
   Spacer,
   Stack,
-  Heading,
-  Button,
-  Avatar,
-  Link,
-  HStack,
+  Text,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import React from "react";
-import { NavBar } from "../components/page/NavBar";
-import {
-  Group,
-  useGetUsersGroupsQuery,
-  useLoginMutation,
-} from "../generated/graphql";
-import { usingApollo } from "../utils/withApollo";
 import NextLink from "next/link";
-import { RiAddFill } from "react-icons/ri";
-import { groupCollapsed } from "console";
+import React from "react";
 import Card from "../components/general/Card";
 import { GroupSetup } from "../components/groups/GroupSetup";
+import { NavBar } from "../components/page/NavBar";
+import { Group, useGetUsersGroupsQuery } from "../graphql/generated/graphql";
+import { usingApollo } from "../utils/withApollo";
 
 export const Groups: React.FC<{}> = ({}) => {
   // const router = useRouter();

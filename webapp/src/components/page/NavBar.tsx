@@ -21,7 +21,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
 import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
 import { FeedbackForm } from "../forms/FeedbackForm";
@@ -37,8 +37,8 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   const router = useRouter();
   const apolloClient = useApolloClient();
 
-  const { data: me, loading } = useMeQuery();
-  var profile_photo = me?.me?.profileImageUrl?.replace(
+  const { data: { me: me } = {}, loading } = useMeQuery();
+  var profile_photo = me?.profileImageUrl?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );
@@ -46,7 +46,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   let userPane = null;
 
   if (loading) {
-  } else if (!me?.me) {
+  } else if (!me) {
     userPane = (
       <>
         <NextLink href="/login">
@@ -151,12 +151,12 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
             spacing={4}
             direction="column"
           >
-            {me?.me && (
+            {me && (
               <>
-                <NextLink href={"/m/[user]"} as={"/m/" + me?.me.username}>
+                <NextLink href={"/m/[user]"} as={"/m/" + me?.username}>
                   <Link
                     color={
-                      router.asPath == "/m/" + me?.me.username
+                      router.asPath == "/m/" + me?.username
                         ? "mintro.300"
                         : "dark.400"
                     }
@@ -170,7 +170,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                       <Icon
                         mr={1}
                         color={
-                          router.asPath == "/m/" + me?.me.username
+                          router.asPath == "/m/" + me?.username
                             ? "mintro.300"
                             : "dark.400"
                         }
@@ -218,7 +218,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
 
           <Spacer />
           <HStack>{userPane}</HStack>
-          <BugReportButton onOpen={onOpen} me={!!me?.me} />
+          <BugReportButton onOpen={onOpen} me={!!me} />
         </HStack>
       </Flex>
       <FeedbackForm isOpen={isOpen} onClose={onClose} />
