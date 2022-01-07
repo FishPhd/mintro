@@ -3,6 +3,7 @@ import {
   extendTheme,
   ThemeConfig,
   useColorModeValue,
+  theme,
 } from "@chakra-ui/react";
 
 const mintroTheme = extendTheme({
@@ -39,8 +40,8 @@ const mintroTheme = extendTheme({
     },
   },
   fonts: {
-    heading: "Poppins",
-    body: "Poppins",
+    heading: `'Poppins', ${theme.fonts.heading}`,
+    body: `'Poppins', ${theme.fonts.heading}`,
   },
   components: {
     Button: {
@@ -55,6 +56,11 @@ const mintroTheme = extendTheme({
     Popover: { baseStyle: { _focus: { boxShadow: "none" } } },
     Select: { baseStyle: { _focus: { outline: "none" } } },
   },
+  // styles: {
+  //   global: {
+  //     img: { objectFit: "fill !important" },
+  //   },
+  // },
 });
 
 const mintroMode: ThemeConfig = extendTheme({

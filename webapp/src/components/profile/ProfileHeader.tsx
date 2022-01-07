@@ -125,10 +125,16 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 </Heading>
                 <Stack
                   direction={{ base: "column", md: "row" }}
-                  spacing={{ base: "3", lg: "6" }}
+                  spacing={{ base: "3", lg: "3" }}
                   py={2}
                 >
-                  <TextWithIcon icon={<MdLocationOn />}>
+                  <TextWithIcon
+                    bg="mintro.200"
+                    px={3}
+                    py={2}
+                    rounded={"full"}
+                    icon={<MdLocationOn />}
+                  >
                     {user?.city ? user.city : "No City"}
                     {", "}
                     {user?.state ? user.state : "No State"}
@@ -136,7 +142,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       ? `, ${user?.country}`
                       : ""}
                   </TextWithIcon>
-                  <TextWithIcon icon={<AiOutlineGift />}>
+                  <TextWithIcon
+                    bg="mintro.200"
+                    px={3}
+                    py={2}
+                    rounded={"full"}
+                    icon={<AiOutlineGift />}
+                  >
                     {userBirthday?.toLocaleString("default", {
                       timeZone: "UTC",
                       month: "long",
@@ -147,7 +159,13 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       day: "2-digit",
                     })}
                   </TextWithIcon>
-                  <TextWithIcon icon={<AiOutlineHome />}>
+                  <TextWithIcon
+                    bg="mintro.200"
+                    px={3}
+                    py={2}
+                    rounded={"full"}
+                    icon={<AiOutlineHome />}
+                  >
                     {user?.homeTown}
                   </TextWithIcon>
                 </Stack>
