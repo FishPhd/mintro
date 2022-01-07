@@ -166,7 +166,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         birthday: user.birthday,
       }
     : initialValues;
-  console.log(userValues);
   const [hideCities, setHideCities] = useState(false);
   const [formPage, setFormPage] = useState(1);
   const [setupProfile] = useSetupProfileMutation();
@@ -196,15 +195,11 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   let states = stateData?.getStatesFromCountry;
   let cities = cityData?.getCitiesFromState;
 
-  console.log(userCity);
-  console.log(userState);
-  console.log(userCountry);
-
   return (
     <Box px={20}>
       <Modal
-        closeOnEsc={user ? true : false}
-        closeOnOverlayClick={user ? true : false}
+        closeOnEsc={user?.profileSetup ? true : false}
+        closeOnOverlayClick={user?.profileSetup ? true : false}
         isOpen={isOpen}
         onClose={async () => {
           setFormPage(1);
