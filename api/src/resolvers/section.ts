@@ -261,7 +261,12 @@ export class SectionResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: DbContext
   ): Promise<boolean> {
-    await Section.delete({ id, creatorId: req.session.userId });
+    await getConnection()
+      .createQueryBuilder()
+      .softDelete()
+      .from(Section)
+      .where({ id, creatorId: req.session.userId })
+      .execute();
     return true;
   }
 }

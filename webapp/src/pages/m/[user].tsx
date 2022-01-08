@@ -39,7 +39,7 @@ export const Profile: NextPage<{}> = () => {
             ? (router.query?.user as string)
             : "",
       },
-      notifyOnNetworkStatusChange: true,
+      // notifyOnNetworkStatusChange: true,
     });
 
   const isMyProfile = !!(me?.id === user?.id && me?.id);
@@ -57,9 +57,11 @@ export const Profile: NextPage<{}> = () => {
 
   const sections = sectionsData?.sections;
 
-  const { isOpen, onOpen, onClose } = useDisclosure({
-    defaultIsOpen: user?.profileSetup ? false : true,
-  });
+  const { isOpen, onOpen, onClose } = useDisclosure({});
+  if (!user?.profileSetup && !isOpen && !userFetching) {
+    onOpen();
+  }
+  // defaultIsOpen: user?.profileSetup ? false : true,
 
   return (
     <>

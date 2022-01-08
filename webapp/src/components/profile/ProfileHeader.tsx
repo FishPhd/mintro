@@ -31,7 +31,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
-  var profile_photo = user?.profileImageUrl?.replace(
+  let profile_photo = user?.profileImageUrl?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );
@@ -129,7 +129,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   py={2}
                 >
                   <TextWithIcon
-                    bg="mintro.200"
+                    bgGradient="linear(to-tr, mintro.200, mintro.300)"
                     px={3}
                     py={2}
                     rounded={"full"}
@@ -143,7 +143,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       : ""}
                   </TextWithIcon>
                   <TextWithIcon
-                    bg="mintro.200"
+                    bgGradient="linear(to-tr, mintro.200, mintro.300)"
                     px={3}
                     py={2}
                     rounded={"full"}
@@ -160,8 +160,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     })}
                   </TextWithIcon>
                   <TextWithIcon
-                    bg="mintro.200"
+                    bgGradient="linear(to-tr, mintro.200, mintro.300)"
                     px={3}
+                    color="black"
+                    opacity={"100%"}
                     py={2}
                     rounded={"full"}
                     icon={<AiOutlineHome />}

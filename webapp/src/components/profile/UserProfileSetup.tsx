@@ -1,4 +1,3 @@
-import { EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -21,10 +20,8 @@ import React, { useState } from "react";
 import { BiChevronLeft } from "react-icons/bi";
 import * as Yup from "yup";
 import {
-  Country,
   useCountriesQuery,
   useGetCitiesFromStateQuery,
-  useGetCityFromNameQuery,
   useGetCountryFromNameQuery,
   useGetStateFromNameQuery,
   useGetStatesFromCountryQuery,
@@ -115,30 +112,29 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   onClose,
 }) => {
   // Get users location information
-  let { data: { getCountryFromName: userCountry } = {} } =
+  const { data: { getCountryFromName: userCountry } = {} } =
     useGetCountryFromNameQuery({
       variables: {
         countryName: user?.country ? user?.country : "United States",
       },
     });
-  let { data: { getCityFromName: userCity } = {} } = useGetCityFromNameQuery({
-    variables: {
-      cityName: user?.city ? user?.city : "Seattle",
-      countryId: userCountry?.id ? userCountry?.id : 233,
-    },
-  });
+  // const { data: { getCityFromName: userCity } = {} } = useGetCityFromNameQuery({
+  //   variables: {
+  //     cityName: user?.city ? user?.city : "Seattle",
+  //     countryId: userCountry?.id ? userCountry?.id : 233,
+  //   },
+  // });
 
-  let { data: { getStateFromName: userState } = {} } = useGetStateFromNameQuery(
-    {
+  const { data: { getStateFromName: userState } = {} } =
+    useGetStateFromNameQuery({
       variables: {
         stateName: user?.state ? user?.state : "Washington",
         countryId: userCountry?.id ? userCountry?.id : 233,
       },
-    }
-  );
+    });
 
   // Get birthday of user
-  let userBirthday = user?.birthday
+  const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
   const [birthdayMonth, setBirthdayMonth] = useState(
@@ -151,7 +147,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
     userBirthday && userBirthday.getUTCDate()
   );
 
-  let userValues = user?.profileSetup
+  const userValues = user?.profileSetup
     ? {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -171,7 +167,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   const [setupProfile] = useSetupProfileMutation();
   const { data: countryData } = useCountriesQuery();
 
-  let {
+  const {
     data: stateData,
     refetch: refetchStates,
     loading: loadingStates,
@@ -181,7 +177,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
     },
   });
 
-  let {
+  const {
     data: cityData,
     refetch: refetchCities,
     loading: loadingCities,
@@ -192,8 +188,8 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   });
 
   const countries = countryData?.countries;
-  let states = stateData?.getStatesFromCountry;
-  let cities = cityData?.getCitiesFromState;
+  const states = stateData?.getStatesFromCountry;
+  const cities = cityData?.getCitiesFromState;
 
   return (
     <Box px={20}>
@@ -277,7 +273,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                 onClose();
               }}
             >
-              {({ isSubmitting, setFieldValue, values, validateForm }) => (
+              {({ isSubmitting, setFieldValue, validateForm }) => (
                 <Form>
                   <Stack spacing="6">
                     {formPage == 1 ? (
@@ -352,7 +348,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                             icon={<></>}
                             mx="1"
                             onChange={async (e) => {
-                              let country = countries?.find(
+                              const country = countries?.find(
                                 (item) => item.name == e.target.value
                               );
                               await setFieldValue("country", country?.name);
@@ -365,7 +361,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               setHideCities(true);
                             }}
                           >
-                            {countries?.map((country, index: number) => (
+                            {countries?.map((country) => (
                               <option key={country.id} value={country.name}>
                                 {country.emoji + " " + country.name}
                               </option>
@@ -385,7 +381,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               icon={<></>}
                               onChange={async (e) => {
                                 if (e.target.value) {
-                                  let state = states?.find(
+                                  const state = states?.find(
                                     (item) => item.name == e.target.value
                                   );
                                   console.log(state);
@@ -400,7 +396,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                                 }
                               }}
                             >
-                              {states?.map((state, index: number) => (
+                              {states?.map((state) => (
                                 <option key={state.id} value={state.name}>
                                   {state.name}
                                 </option>
@@ -422,7 +418,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               // autoComplete="none"
                               onChange={async (e) => {
                                 if (e.target.value) {
-                                  let city = cities?.find(
+                                  const city = cities?.find(
                                     (item) => item.name == e.target.value
                                   );
                                   // let cityId = parseInt(e.target.value);
@@ -432,7 +428,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                                 }
                               }}
                             >
-                              {cities?.map((city, index: number) => (
+                              {cities?.map((city) => (
                                 <option key={city.id} value={city.name}>
                                   {city.name}
                                 </option>

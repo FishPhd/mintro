@@ -18,12 +18,7 @@ export const TextWithIcon = (props: TextWithIconProps) => {
       <Box color={mode("dark.500", "gray.200")} aria-hidden>
         {icon}
       </Box>
-      <Text
-        fontWeight="medium"
-        fontSize="sm"
-        lineHeight="1"
-        color={mode("gray.600", "gray.400")}
-      >
+      <Text fontWeight="medium" fontSize="sm" lineHeight="1" color={"dark.500"}>
         {children}
       </Text>
     </HStack>

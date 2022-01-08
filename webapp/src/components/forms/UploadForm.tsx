@@ -1,9 +1,8 @@
-import { Button } from "@chakra-ui/button";
 import { Avatar, Icon, Spinner, Tooltip } from "@chakra-ui/react";
 
 import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Flex, Spacer } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/layout";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import moment from "moment";
@@ -14,7 +13,7 @@ import {
 } from "../../graphql/generated/graphql";
 import { EditIcon } from "@chakra-ui/icons";
 
-export function formatFilename(filename: String) {
+export function formatFilename(filename: string) {
   const date = moment().format("YYYYMMDD");
   const randomString = Math.random().toString(36).substring(2, 7);
   const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-");
@@ -24,7 +23,7 @@ export function formatFilename(filename: String) {
 
 interface UploadFormProps {
   folder: string;
-  returnImage?: any;
+  returnImage: React.Dispatch<React.SetStateAction<string>>;
   currentImage?: string;
 }
 
@@ -36,12 +35,12 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [addProfileImage] = useAddProfileImageMutation();
   const [getS3Url] = useGetS3SignedUrlMutation();
   const [fileName, setFileName] = useState("Pick File");
-  var profile_photo = currentImage?.replace(
+  const profile_photo = currentImage?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );
 
-  const [file, setFile] = useState({} as File);
+  // const [file, setFile] = useState({} as File);
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   return (
@@ -119,7 +118,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             if (e.target.files && e.target.files.length) {
               file = e.target.files[0];
               await setFileName(file.name);
-              await setFile(file);
+              // await setFile(file);
               console.log(file);
             }
 
@@ -149,7 +148,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               return;
             }
 
-            let res = await getS3Url({
+            const res = await getS3Url({
               variables: {
                 filename: formatFilename(fileName),
                 folder: folder,
@@ -166,7 +165,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               },
             };
             if (signedRequest && url) {
-              let res = await axios.put(signedRequest, file, options);
+              const res = await axios.put(signedRequest, file, options);
               if (folder == "profiles") {
                 await addProfileImage({ variables: { imageUrl: url } });
               } else if (folder == "groups") {

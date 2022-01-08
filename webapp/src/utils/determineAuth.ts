@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useMeQuery } from "../graphql/generated/graphql";
 import { isServer } from "./isServer";
 
-export const determineAuth = () => {
+export const useDetermineAuth = () => {
   const toast = useToast();
   const { data, loading } = useMeQuery();
 
@@ -17,10 +17,10 @@ export const determineAuth = () => {
       });
       // router.replace("/login?redirect=" + router.pathname);
     }
-  }, [loading, data, router, toast]);
+  }, [loading, data, toast]);
 };
 
-export const determineIfUser = (UserId: number) => {
+export const useDetermineIfUser = (UserId: number) => {
   const toast = useToast();
   const { data, loading } = useMeQuery();
 
@@ -31,5 +31,5 @@ export const determineIfUser = (UserId: number) => {
       console.log("Not authorized!");
     }
     console.log("UserId", data?.me?.id);
-  }, [loading, data, router, toast]);
+  }, [loading, data, UserId]);
 };

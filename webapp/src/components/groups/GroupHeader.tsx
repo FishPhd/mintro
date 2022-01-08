@@ -41,7 +41,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
   isAdmin,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  var group_photo = group?.groupImageUrl?.replace(
+  let group_photo = group?.groupImageUrl?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );

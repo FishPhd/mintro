@@ -45,11 +45,11 @@ const SetupGroupSchema = Yup.object().shape({
 });
 
 //TODO Do this on the server end
-export function upperCase(string: String) {
+export function upperCase(string: string) {
   return string[0].toUpperCase() + string.substr(1);
 }
 
-export function titleCase(string: String) {
+export function titleCase(string: string) {
   return string[0].toUpperCase() + string.substr(1).toLowerCase();
 }
 
@@ -73,7 +73,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
   ...props
 }) => {
   const router = useRouter();
-  const [groupImageUrl, setGroupImage] = useState(null);
+  const [groupImageUrl, setGroupImage] = useState(String);
   // const [passwordUpdated, setPasswordUpdated] = useState(false);
   const [createGroup] = useCreateGroupMutation();
   const [editGroup] = useEditGroupMutation();
@@ -82,9 +82,9 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
   const { data: hasPassword } = useGroupHasPasswordQuery({
     variables: { groupId: group?.id ? group.id : 0 },
   });
-  let groupHasPassword = hasPassword ? hasPassword.groupHasPassword : false;
+  const groupHasPassword = hasPassword ? hasPassword.groupHasPassword : false;
 
-  let groupValues = group
+  const groupValues = group
     ? {
         name: group.name ? group.name : "",
         description: group.description ? group.description : "",

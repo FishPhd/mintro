@@ -32,13 +32,13 @@ interface NavBarProps {
 }
 
 export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
-  const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const apolloClient = useApolloClient();
 
   const { data: { me: me } = {}, loading } = useMeQuery();
-  var profile_photo = me?.profileImageUrl?.replace(
+  let profile_photo = me?.profileImageUrl?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );

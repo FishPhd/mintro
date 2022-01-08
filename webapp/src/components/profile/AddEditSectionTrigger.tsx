@@ -1,6 +1,5 @@
 import { PlusSquareIcon, EditIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   IconButton,
   Popover,
@@ -25,7 +24,7 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
   sections,
 }) => (
   <Popover autoFocus={false}>
-    {({ isOpen, onClose }) => (
+    {({ onClose }) => (
       <>
         {section ? (
           <PopoverTrigger>

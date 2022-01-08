@@ -306,12 +306,24 @@ export class GroupResolver {
           );
         }
 
-        await transactionalEntityManager
-          .create(Member, {
-            groupId,
+        let existingMember = await transactionalEntityManager.find(Member, {
+          groupId: groupId,
+          userId: req.session.userId,
+        });
+
+        if (existingMember) {
+          await transactionalEntityManager.restore(Member, {
+            groupId: groupId,
             userId: req.session.userId,
-          })
-          .save();
+          });
+        } else {
+          await transactionalEntityManager
+            .create(Member, {
+              groupId,
+              userId: req.session.userId,
+            })
+            .save();
+        }
       });
     }
     return { group };
@@ -334,7 +346,7 @@ export class GroupResolver {
           );
         }
 
-        await transactionalEntityManager.delete(Member, {
+        await transactionalEntityManager.softDelete(Member, {
           groupId: groupId,
           userId: req.session.userId,
         });
@@ -408,7 +420,12 @@ export class GroupResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: DbContext
   ): Promise<boolean> {
-    await Group.delete({ id, creatorId: req.session.userId });
+    await getConnection()
+      .createQueryBuilder()
+      .softDelete()
+      .from(Group)
+      .where({ id, creatorId: req.session.userId })
+      .execute();
     return true;
   }
 }

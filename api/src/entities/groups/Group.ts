@@ -4,6 +4,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -61,4 +62,7 @@ export class Group extends BaseEntity {
   @Field()
   @Column({ default: 1 })
   memberCount: number;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
