@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
   Flex,
   FormLabel,
   Input,
@@ -15,9 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-// import { AnimatePresence, m, motion } from "framer-motion";
 import React, { useState } from "react";
-import * as Yup from "yup";
 import {
   Group,
   useCreateGroupMutation,
@@ -29,29 +26,20 @@ import { InputField } from "../forms/InputField";
 import { PasswordUpdateField } from "../forms/PasswordUpdateField";
 import { UploadForm } from "../forms/UploadForm";
 
-const SetupGroupSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  url: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  description: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-});
-
-//TODO Do this on the server end
-export function upperCase(string: string) {
-  return string[0].toUpperCase() + string.substr(1);
-}
-
-export function titleCase(string: string) {
-  return string[0].toUpperCase() + string.substr(1).toLowerCase();
-}
+// const SetupGroupSchema = Yup.object().shape({
+//   name: Yup.string()
+//     .min(2, "Too Short!")
+//     .max(50, "Too Long!")
+//     .required("Required"),
+//   url: Yup.string()
+//     .min(2, "Too Short!")
+//     .max(50, "Too Long!")
+//     .required("Required"),
+//   description: Yup.string()
+//     .min(2, "Too Short!")
+//     .max(50, "Too Long!")
+//     .required("Required"),
+// });
 
 const initialValues = {
   name: "",
@@ -74,7 +62,6 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
 }) => {
   const router = useRouter();
   const [groupImageUrl, setGroupImage] = useState(String);
-  // const [passwordUpdated, setPasswordUpdated] = useState(false);
   const [createGroup] = useCreateGroupMutation();
   const [editGroup] = useEditGroupMutation();
   const [updatePassword, setUpdatePassword] = useState(false);
@@ -117,10 +104,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
               validateOnBlur={false}
               validateOnChange={false}
               initialValues={groupValues}
-              onSubmit={async (
-                values,
-                { setErrors, resetForm, validateForm }
-              ) => {
+              onSubmit={async (values, { setErrors, validateForm }) => {
                 validateForm();
                 let imageUrl = undefined;
 
@@ -139,7 +123,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
                       password: values.password,
                       passwordUpdated: updatePassword,
                     },
-                    update: (cache: any) => {
+                    update: (cache) => {
                       cache.evict({ fieldName: "getUsersGroups" });
                       cache.evict({ fieldName: "getGroupByUrl" });
                       cache.evict({ fieldName: "groupHasPassword" });
@@ -163,7 +147,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
                       imageUrl: imageUrl,
                       password: values.password,
                     },
-                    update: (cache: any) => {
+                    update: (cache) => {
                       cache.evict({ fieldName: "getUsersGroups" });
                     },
                   });
@@ -175,7 +159,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
                 }
               }}
             >
-              {({ isSubmitting, setFieldValue, values, validateForm }) => (
+              {({ isSubmitting }) => (
                 <Form>
                   <Stack p={5}>
                     <>

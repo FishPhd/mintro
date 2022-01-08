@@ -1,10 +1,11 @@
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script";
 import React from "react";
 import { mintroMode, mintroTheme } from "../themes/theme";
 
-function MintroWebApp({ Component, pageProps }: any) {
+function MintroWebApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={mintroTheme}>
       <Head>

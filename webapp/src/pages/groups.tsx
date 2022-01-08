@@ -21,10 +21,9 @@ import { NavBar } from "../components/page/NavBar";
 import { Group, useGetUsersGroupsQuery } from "../graphql/generated/graphql";
 import { usingApollo } from "../utils/withApollo";
 
-export const Groups: React.FC<{}> = ({}) => {
+export const Groups: React.FC = ({}) => {
   // const router = useRouter();
-  const { data: userGroups, loading: loadingUserGroups } =
-    useGetUsersGroupsQuery();
+  const { data: userGroups } = useGetUsersGroupsQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -58,32 +57,30 @@ export const Groups: React.FC<{}> = ({}) => {
               </Button>
             </Flex>
             <Stack py={5} spacing="4">
-              {userGroups?.getUsersGroups?.map(
-                (group: Group, index: number) => (
-                  <NextLink key={`group_${group.url}`} href={`g/${group.url}`}>
-                    <Link _hover={{ opacity: "75%", color: "mintro.300" }}>
-                      <Card p={5}>
-                        <HStack>
-                          <Avatar
-                            size="lg"
-                            src={
-                              group.groupImageUrl
-                                ? group.groupImageUrl
-                                : undefined
-                            }
-                          />
-                          <Stack spacing={0}>
-                            <Heading>{group.name}</Heading>
-                            <Text pl={1} fontStyle="italic" color="dark.200">
-                              {group.memberCount} Members
-                            </Text>
-                          </Stack>
-                        </HStack>
-                      </Card>
-                    </Link>
-                  </NextLink>
-                )
-              )}
+              {userGroups?.getUsersGroups?.map((group: Group) => (
+                <NextLink key={`group_${group.url}`} href={`g/${group.url}`}>
+                  <Link _hover={{ opacity: "75%", color: "mintro.300" }}>
+                    <Card p={5}>
+                      <HStack>
+                        <Avatar
+                          size="lg"
+                          src={
+                            group.groupImageUrl
+                              ? group.groupImageUrl
+                              : undefined
+                          }
+                        />
+                        <Stack spacing={0}>
+                          <Heading>{group.name}</Heading>
+                          <Text pl={1} fontStyle="italic" color="dark.200">
+                            {group.memberCount} Members
+                          </Text>
+                        </Stack>
+                      </HStack>
+                    </Card>
+                  </Link>
+                </NextLink>
+              ))}
             </Stack>
           </Box>
         </Box>

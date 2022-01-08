@@ -1,16 +1,16 @@
 import {
   Icon,
-  Box,
   IconButton,
   Text,
   useToast,
   useBreakpointValue,
   Stack,
+  IconButtonProps,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { IoMdShare } from "react-icons/io";
-export const ShareButton = (props: any) => {
+export const ShareButton = (props: Omit<IconButtonProps, "aria-label">) => {
   const toast = useToast();
   const router = useRouter();
   const variant = useBreakpointValue({ md: "Share", base: "" });

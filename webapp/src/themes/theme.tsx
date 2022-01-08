@@ -1,10 +1,4 @@
-import {
-  ColorMode,
-  extendTheme,
-  ThemeConfig,
-  useColorModeValue,
-  theme,
-} from "@chakra-ui/react";
+import { ColorMode, extendTheme, ThemeConfig, theme } from "@chakra-ui/react";
 
 const mintroTheme = extendTheme({
   layerStyles: {
@@ -56,11 +50,6 @@ const mintroTheme = extendTheme({
     Popover: { baseStyle: { _focus: { boxShadow: "none" } } },
     Select: { baseStyle: { _focus: { outline: "none" } } },
   },
-  // styles: {
-  //   global: {
-  //     img: { objectFit: "fill !important" },
-  //   },
-  // },
 });
 
 const mintroMode: ThemeConfig = extendTheme({

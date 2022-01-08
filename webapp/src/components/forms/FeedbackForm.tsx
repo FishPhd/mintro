@@ -1,18 +1,17 @@
 import {
-  toast,
-  Modal,
-  Text,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Textarea,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { Formik, Form, ErrorMessage } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useSubmitFeedbackMutation } from "../../graphql/generated/graphql";
 
 interface FeedbackFormProps {
@@ -50,7 +49,7 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
         }
       }}
     >
-      {({ setFieldValue, submitForm, values, errors }) => (
+      {({ setFieldValue, submitForm }) => (
         <Form>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />

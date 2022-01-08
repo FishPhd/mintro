@@ -2,31 +2,23 @@ import {
   Avatar,
   Box,
   Heading,
-  HStack,
   Icon,
   IconButton,
-  IconProps,
   Stack,
   Text,
-  useBreakpointValue,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import NextLink from "next/link";
-import { IoChevronForwardSharp } from "react-icons/io5";
-
-import {
-  AiOutlineArrowRight,
-  AiOutlineGift,
-  AiOutlineHome,
-} from "react-icons/ai";
-import { MdLocationOn } from "react-icons/md";
-import { Card } from "./Card";
-import { TextWithIcon } from "./TextWithIcon";
 import { motion, Variants } from "framer-motion";
 import { isMobile } from "is-mobile";
+import NextLink from "next/link";
+import React from "react";
+import { AiOutlineGift, AiOutlineHome } from "react-icons/ai";
+import { IoChevronForwardSharp } from "react-icons/io5";
+import { MdLocationOn } from "react-icons/md";
+import { Card } from "./Card";
 import Parallax from "./Parallax";
+import { TextWithIcon } from "./TextWithIcon";
 
 const mobileVariant: Variants = {
   offscreen: {

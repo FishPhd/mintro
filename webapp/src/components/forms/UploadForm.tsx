@@ -23,7 +23,7 @@ export function formatFilename(filename: string) {
 
 interface UploadFormProps {
   folder: string;
-  returnImage: React.Dispatch<React.SetStateAction<string>>;
+  returnImage?: React.Dispatch<React.SetStateAction<string>>;
   currentImage?: string;
 }
 
@@ -168,7 +168,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               const res = await axios.put(signedRequest, file, options);
               if (folder == "profiles") {
                 await addProfileImage({ variables: { imageUrl: url } });
-              } else if (folder == "groups") {
+              } else if (folder == "groups" && returnImage) {
                 returnImage(url);
               }
               if (res.status == 200) {

@@ -1,8 +1,8 @@
 import { EditIcon } from "@chakra-ui/icons";
-import { IconButton, Stack, Text } from "@chakra-ui/react";
+import { IconButton, IconButtonProps, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
-export const EditButton = (props: any) => {
+export const EditButton = (props: Omit<IconButtonProps, "aria-label">) => {
   return (
     <IconButton
       textAlign={"justify"}

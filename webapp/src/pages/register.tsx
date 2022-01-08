@@ -42,9 +42,7 @@ const RegisterSchema = Yup.object().shape({
   //   .required("Required"),
 });
 
-interface registerProps {}
-
-export const Register: React.FC<registerProps> = ({}) => {
+export const Register: React.FC = () => {
   const router = useRouter();
   const [register] = useRegisterMutation();
   return (

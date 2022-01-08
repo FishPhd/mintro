@@ -9,7 +9,7 @@ import { FoundersList } from "../components/general/FoundersList";
 import { Footer } from "../components/general/Footer";
 import Parallax from "../components/general/Parallax";
 
-export const Index: React.FC<{}> = ({}) => {
+export const Index: React.FC = ({}) => {
   return (
     <>
       <Head>

@@ -1,16 +1,8 @@
-import {
-  Box,
-  Heading,
-  Progress,
-  Spacer,
-  Stack,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Heading, Progress, Stack, useDisclosure } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { ShareButton } from "../../components/buttons/ShareButton";
+import React from "react";
 import Card from "../../components/general/Card";
 import { NavBar } from "../../components/page/NavBar";
 import AddEditSectionTrigger from "../../components/profile/AddEditSectionTrigger";
@@ -24,11 +16,11 @@ import {
 } from "../../graphql/generated/graphql";
 import { usingApollo } from "../../utils/withApollo";
 
-export const Profile: NextPage<{}> = () => {
+export const Profile: NextPage = () => {
   const router = useRouter();
   // const [setupProfile, setSetupProfile] = useState(false);
 
-  const { data: { me: me } = {}, loading: fetchingMe } = useMeQuery({
+  const { data: { me: me } = {} } = useMeQuery({
     notifyOnNetworkStatusChange: true,
   });
   const { data: { getUser: user } = {}, loading: userFetching } =

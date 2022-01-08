@@ -1,4 +1,4 @@
-import { Box, Heading, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Heading, Link, Stack } from "@chakra-ui/react";
 import React from "react";
 import MintroLogo from "../svg/MintroLogo";
 import NextLink from "next/link";

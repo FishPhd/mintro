@@ -1,28 +1,20 @@
-import {
-  Box,
-  Text,
-  Button,
-  Flex,
-  Avatar,
-  HStack,
-  Spacer,
-} from "@chakra-ui/react";
-import React from "react";
-import NextLink from "next/link";
+import { Avatar, Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
 import { isMobile } from "is-mobile";
+import NextLink from "next/link";
+import React from "react";
 
 interface UserCardProps {
-  name: String;
-  img: String;
-  username: String;
-  tagline?: String;
+  name: string;
+  img: string;
+  username: string;
+  tagline?: string;
 }
 
 export function UserCard(props: UserCardProps) {
   const { name, img, username, tagline } = props;
-  let src = img as string;
+  const src = img as string;
 
-  var user_photo = src.replace(
+  let user_photo = src.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );

@@ -84,7 +84,7 @@ export const ChangePassword: React.FC = () => {
                     placeholder="Password"
                     label="New Password"
                     type="password"
-                  ></InputField>
+                  />
                   {tokenError ? (
                     <HStack>
                       <Box>

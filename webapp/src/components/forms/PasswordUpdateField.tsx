@@ -1,21 +1,15 @@
 import {
   Button,
-  ComponentWithAs,
   Flex,
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
-  HStack,
   Input,
   Spacer,
-  Stack,
   Switch,
   Textarea,
-  TextareaProps,
 } from "@chakra-ui/react";
-import { ErrorMessage, useField } from "formik";
-import { motion, useAnimation } from "framer-motion";
+import { useField } from "formik";
 import React, { InputHTMLAttributes, useState } from "react";
 
 type PasswordUpdateFieldProps = InputHTMLAttributes<
@@ -26,19 +20,18 @@ type PasswordUpdateFieldProps = InputHTMLAttributes<
   hasText?: boolean;
   helperText?: string;
   hasPassword?: boolean;
+  size: string;
   setPasswordUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const PasswordUpdateField: React.FC<PasswordUpdateFieldProps> = ({
   label,
-  size: _,
   hasText,
-  helperText,
   hasPassword,
   setPasswordUpdate,
   ...props
 }) => {
-  let InputTag = hasText ? Textarea : Input;
+  const InputTag = hasText ? Textarea : Input;
 
   const [enablePassword, setEnablePassword] = useState(hasPassword);
   const [editPassword, setEditPassword] = useState(false);

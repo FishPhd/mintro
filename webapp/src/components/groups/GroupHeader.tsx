@@ -1,3 +1,4 @@
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -10,20 +11,12 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import {
-  Group,
-  useGroupHasPasswordQuery,
-  useMeQuery,
-  User,
-} from "../../graphql/generated/graphql";
-import { ShareButton } from "../buttons/ShareButton";
-import { Card } from "../general/Card";
-import { RiGroup2Fill, RiLock2Line, RiUserFill } from "react-icons/ri";
+import { RiGroup2Fill, RiLock2Line } from "react-icons/ri";
+import { Group, User } from "../../graphql/generated/graphql";
 import { JoinButton } from "../buttons/JoinButton";
-import { EditIcon } from "@chakra-ui/icons";
+import { Card } from "../general/Card";
 import { GroupSetup } from "./GroupSetup";
 interface GroupHeaderProps {
   group: Group | undefined;
