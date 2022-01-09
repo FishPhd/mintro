@@ -61,6 +61,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
         >
           <Stack direction="row" spacing="2" w="100%">
             <Avatar
+              alt={"Group Page Picture"}
               icon={
                 <Icon
                   color="mintro.300"

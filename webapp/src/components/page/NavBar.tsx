@@ -21,7 +21,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
+import { useLogoutMutation, useMeQuery, User } from "../../graphql/generated/graphql";
 import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
 import { FeedbackForm } from "../forms/FeedbackForm";
@@ -29,28 +29,32 @@ import { BugReportButton } from "../buttons/BugReportButton";
 
 interface NavBarProps {
   transparent?: boolean;
+  me: User | undefined;
 }
 
-export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
+export const NavBar: React.FC<NavBarProps> = ({ transparent, me }) => {
   const [logout] = useLogoutMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const apolloClient = useApolloClient();
 
-  const { data: { me: me } = {}, loading } = useMeQuery();
+  // const { data: { me: me } = {}, loading } = useMeQuery();
   let profile_photo = me?.profileImageUrl?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
   );
   profile_photo += "?tr=w-50,h-50";
+
   let userPane = null;
 
-  if (loading) {
-  } else if (!me) {
+  // if (loading) {
+  // } else
+  if (!me) {
     userPane = (
       <>
         <NextLink href="/login">
           <Button
+            aria-label="login"
             rounded="full"
             as={"a"}
             fontWeight={400}
@@ -62,6 +66,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
         </NextLink>
         <NextLink href="/register">
           <Button
+            aria-label="register"
             rounded="full"
             as={"a"}
             fontWeight={600}
@@ -77,9 +82,10 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
     userPane = (
       <>
         <Menu autoSelect={false} placement="bottom">
-          <MenuButton role="group">
+          <MenuButton aria-label="Profile Button" role="group">
             <VStack spacing={-1}>
               <Avatar
+                alt={"Current User Profile Image"}
                 boxSize={9}
                 mb={2}
                 bg="gray.300"

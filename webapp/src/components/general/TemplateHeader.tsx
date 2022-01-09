@@ -105,7 +105,10 @@ export const TemplateHeader = () => (
                 >
                   <Stack px={5} direction="row">
                     <Avatar
+                      alt={"TemplateProfileImage"}
                       size={isMobile() ? "md" : "xl"}
+                      width={"300px"}
+                      height={"300px"}
                       src={"/templateProfileImage_300x300.webp"}
                     />
                     <Box p="0">

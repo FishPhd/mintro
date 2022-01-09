@@ -74,6 +74,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             />
             <Tooltip placement="top" label="Change Image">
               <Avatar
+                alt={"Profile Picture Upload"}
                 bg="gray.300"
                 opacity={"70%"}
                 gridArea={"overlap"}
@@ -93,6 +94,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             display={"grid"}
           >
             <Avatar
+              alt={"Profile Picture Placeholder"}
               bg="gray.300"
               gridArea={"overlap"}
               opacity={"90%"}

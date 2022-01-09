@@ -63,6 +63,7 @@ export const Groups: React.FC = ({}) => {
                     <Card p={5}>
                       <HStack>
                         <Avatar
+                          alt={"Group Profile Image"}
                           size="lg"
                           src={
                             group.groupImageUrl
