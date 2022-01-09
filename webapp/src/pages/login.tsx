@@ -32,7 +32,7 @@ export const Login: React.FC = ({}) => {
   return (
     <>
       <Head>
-        <title>Mintro - Login</title>
+        <title>Login | Mintro</title>
       </Head>
       <NavBar />
       <Box

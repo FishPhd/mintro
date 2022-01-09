@@ -59,8 +59,8 @@ export const Profile: NextPage = () => {
     <>
       <Head>
         <title>
-          Mintro - {user?.firstName ? user?.firstName : router?.query?.user}{" "}
-          {user?.lastName}{" "}
+          {user?.firstName ? user?.firstName : router?.query?.user}{" "}
+          {user?.lastName} | Mintro
         </title>
       </Head>
       <NavBar />

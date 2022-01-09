@@ -13,7 +13,7 @@ export const Index: React.FC = ({}) => {
   return (
     <>
       <Head>
-        <title>Mintro - Home</title>
+        <title>Home | Mintro</title>
       </Head>
       <NavBar transparent />
 
