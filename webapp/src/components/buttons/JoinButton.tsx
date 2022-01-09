@@ -1,5 +1,4 @@
 import {
-  Box,
   Icon,
   IconButton,
   Text,
@@ -8,16 +7,15 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
 import { BiExit } from "react-icons/bi";
+import { RiAddFill, RiDeleteBinLine } from "react-icons/ri";
 import {
   Group,
   useDeleteGroupMutation,
-  useGroupHasPasswordQuery,
   useJoinGroupMutation,
   useLeaveGroupMutation,
   useMeQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { GroupPasswordModal } from "../groups/GroupPasswordModal";
 
 interface JoinButtonProps {
@@ -73,10 +71,10 @@ export const JoinButton: React.FC<JoinButtonProps> = ({
         rounded="full"
         role="group"
         p={{ base: 2, md: 3 }}
-        onClick={async (e) => {
+        onClick={async () => {
           if (isOwner) {
             await deleteGroup({
-              variables: { id: group!.id },
+              variables: { id: group ? group.id : -1 },
               update: (cache) => {
                 cache.evict({ fieldName: "getUsersGroups" });
               },
@@ -84,8 +82,8 @@ export const JoinButton: React.FC<JoinButtonProps> = ({
             router.push("/groups");
           } else if (isMember) {
             await leaveGroup({
-              variables: { groupId: group!.id },
-              update: (cache, { data }) => {
+              variables: { groupId: group ? group.id : -1 },
+              update: (cache) => {
                 cache.evict({ fieldName: "getGroupMembers" });
                 cache.evict({ fieldName: "getGroupByUrl" });
                 cache.evict({ fieldName: "groupHasPassword" });
@@ -96,8 +94,8 @@ export const JoinButton: React.FC<JoinButtonProps> = ({
             await onOpen();
           } else {
             await joinGroup({
-              variables: { groupId: group!.id },
-              update: (cache, { data }) => {
+              variables: { groupId: group ? group.id : -1 },
+              update: (cache) => {
                 cache.evict({ fieldName: "getGroupMembers" });
                 cache.evict({ fieldName: "getGroupByUrl" });
                 cache.evict({ fieldName: "groupHasPassword" });
@@ -110,15 +108,16 @@ export const JoinButton: React.FC<JoinButtonProps> = ({
             <Text _groupHover={isOwner ? { color: "red.400" } : undefined}>
               {textVariant}
             </Text>
-
-            <Icon
-              ml={1}
-              mb={0.5}
-              _groupHover={isOwner ? { color: "red.400" } : undefined}
-              boxSize="4"
-              color="dark.500"
-              as={buttonIcon}
-            />
+            {textVariant != "Login to join" && (
+              <Icon
+                ml={1}
+                mb={0.5}
+                _groupHover={isOwner ? { color: "red.400" } : undefined}
+                boxSize="4"
+                color="dark.500"
+                as={buttonIcon}
+              />
+            )}
           </>
         }
         {...props}

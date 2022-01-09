@@ -244,10 +244,13 @@ export type Query = {
   getSectionType: SectionType;
   getDistinctSectionTypes: Array<SectionType>;
   cities: Array<City>;
+  getCityFromName: City;
   getCitiesFromState: Array<City>;
   countries: Array<Country>;
+  getCountryFromName: Country;
   getCountry: Country;
   states: Array<State>;
+  getStateFromName: State;
   getStatesFromCountry: Array<State>;
   validateGroupPassword: GroupResponse;
   groupHasPassword: Scalars['Boolean'];
@@ -286,13 +289,30 @@ export type QueryGetSectionTypeArgs = {
 };
 
 
+export type QueryGetCityFromNameArgs = {
+  countryId: Scalars['Int'];
+  cityName: Scalars['String'];
+};
+
+
 export type QueryGetCitiesFromStateArgs = {
   stateId: Scalars['Int'];
 };
 
 
+export type QueryGetCountryFromNameArgs = {
+  countryName: Scalars['String'];
+};
+
+
 export type QueryGetCountryArgs = {
   countryId: Scalars['Int'];
+};
+
+
+export type QueryGetStateFromNameArgs = {
+  countryId: Scalars['Int'];
+  stateName: Scalars['String'];
 };
 
 
@@ -436,6 +456,16 @@ export type UserResponse = {
   user?: Maybe<User>;
 };
 
+export type CityFragment = (
+  { __typename?: 'City' }
+  & Pick<City, 'id' | 'name' | 'stateId' | 'stateCode' | 'countryId' | 'countryCode' | 'latitude' | 'longitude' | 'createdAt' | 'updatedAt' | 'flag' | 'wikiDataId'>
+);
+
+export type CountryFragment = (
+  { __typename?: 'Country' }
+  & Pick<Country, 'id' | 'name' | 'iso3' | 'iso2' | 'phonecode' | 'capital' | 'currency' | 'currencySymbol' | 'tld' | 'native' | 'region' | 'subregion' | 'timezones' | 'translations' | 'latitude' | 'longitude' | 'emoji' | 'emojiU' | 'createdAt' | 'updatedAt' | 'flag' | 'wikiDataId'>
+);
+
 export type ErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
@@ -472,6 +502,11 @@ export type SectionSnippetFragment = (
 export type SectionTypeSnippetFragment = (
   { __typename?: 'SectionType' }
   & Pick<SectionType, 'id' | 'name' | 'type' | 'itemNames' | 'tagline' | 'inputType' | 'maxItems' | 'createdAt' | 'updatedAt' | 'hidden'>
+);
+
+export type StateFragment = (
+  { __typename?: 'State' }
+  & Pick<State, 'id' | 'name' | 'countryId' | 'countryCode' | 'fipsCode' | 'iso2' | 'latitude' | 'longitude' | 'createdAt' | 'updatedAt' | 'flag' | 'wikiDataId'>
 );
 
 export type UserFragment = (
@@ -774,6 +809,20 @@ export type GetCitiesFromStateQuery = (
   )> }
 );
 
+export type GetCityFromNameQueryVariables = Exact<{
+  cityName: Scalars['String'];
+  countryId: Scalars['Int'];
+}>;
+
+
+export type GetCityFromNameQuery = (
+  { __typename?: 'Query' }
+  & { getCityFromName: (
+    { __typename?: 'City' }
+    & CityFragment
+  ) }
+);
+
 export type GetCountryQueryVariables = Exact<{
   countryId: Scalars['Int'];
 }>;
@@ -783,7 +832,20 @@ export type GetCountryQuery = (
   { __typename?: 'Query' }
   & { getCountry: (
     { __typename?: 'Country' }
-    & Pick<Country, 'name'>
+    & CountryFragment
+  ) }
+);
+
+export type GetCountryFromNameQueryVariables = Exact<{
+  countryName: Scalars['String'];
+}>;
+
+
+export type GetCountryFromNameQuery = (
+  { __typename?: 'Query' }
+  & { getCountryFromName: (
+    { __typename?: 'Country' }
+    & CountryFragment
   ) }
 );
 
@@ -905,6 +967,20 @@ export type GetSectionsByUserQuery = (
   ) }
 );
 
+export type GetStateFromNameQueryVariables = Exact<{
+  stateName: Scalars['String'];
+  countryId: Scalars['Int'];
+}>;
+
+
+export type GetStateFromNameQuery = (
+  { __typename?: 'Query' }
+  & { getStateFromName: (
+    { __typename?: 'State' }
+    & StateFragment
+  ) }
+);
+
 export type GetStatesFromCountryQueryVariables = Exact<{
   countryId: Scalars['Int'];
 }>;
@@ -1006,6 +1082,48 @@ export type ValidateGroupPasswordQuery = (
   ) }
 );
 
+export const CityFragmentDoc = gql`
+    fragment City on City {
+  id
+  name
+  stateId
+  stateCode
+  countryId
+  countryCode
+  latitude
+  longitude
+  createdAt
+  updatedAt
+  flag
+  wikiDataId
+}
+    `;
+export const CountryFragmentDoc = gql`
+    fragment Country on Country {
+  id
+  name
+  iso3
+  iso2
+  phonecode
+  capital
+  currency
+  currencySymbol
+  tld
+  native
+  region
+  subregion
+  timezones
+  translations
+  latitude
+  longitude
+  emoji
+  emojiU
+  createdAt
+  updatedAt
+  flag
+  wikiDataId
+}
+    `;
 export const ErrorFragmentDoc = gql`
     fragment Error on FieldError {
   field
@@ -1091,6 +1209,22 @@ export const SectionSnippetFragmentDoc = gql`
 }
     ${UserFragmentDoc}
 ${SectionTypeSnippetFragmentDoc}`;
+export const StateFragmentDoc = gql`
+    fragment State on State {
+  id
+  name
+  countryId
+  countryCode
+  fipsCode
+  iso2
+  latitude
+  longitude
+  createdAt
+  updatedAt
+  flag
+  wikiDataId
+}
+    `;
 export const UserResponseFragmentDoc = gql`
     fragment UserResponse on UserResponse {
   errors {
@@ -1817,13 +1951,49 @@ export function useGetCitiesFromStateLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetCitiesFromStateQueryHookResult = ReturnType<typeof useGetCitiesFromStateQuery>;
 export type GetCitiesFromStateLazyQueryHookResult = ReturnType<typeof useGetCitiesFromStateLazyQuery>;
 export type GetCitiesFromStateQueryResult = Apollo.QueryResult<GetCitiesFromStateQuery, GetCitiesFromStateQueryVariables>;
+export const GetCityFromNameDocument = gql`
+    query GetCityFromName($cityName: String!, $countryId: Int!) {
+  getCityFromName(cityName: $cityName, countryId: $countryId) {
+    ...City
+  }
+}
+    ${CityFragmentDoc}`;
+
+/**
+ * __useGetCityFromNameQuery__
+ *
+ * To run a query within a React component, call `useGetCityFromNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCityFromNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCityFromNameQuery({
+ *   variables: {
+ *      cityName: // value for 'cityName'
+ *      countryId: // value for 'countryId'
+ *   },
+ * });
+ */
+export function useGetCityFromNameQuery(baseOptions: Apollo.QueryHookOptions<GetCityFromNameQuery, GetCityFromNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCityFromNameQuery, GetCityFromNameQueryVariables>(GetCityFromNameDocument, options);
+      }
+export function useGetCityFromNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCityFromNameQuery, GetCityFromNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCityFromNameQuery, GetCityFromNameQueryVariables>(GetCityFromNameDocument, options);
+        }
+export type GetCityFromNameQueryHookResult = ReturnType<typeof useGetCityFromNameQuery>;
+export type GetCityFromNameLazyQueryHookResult = ReturnType<typeof useGetCityFromNameLazyQuery>;
+export type GetCityFromNameQueryResult = Apollo.QueryResult<GetCityFromNameQuery, GetCityFromNameQueryVariables>;
 export const GetCountryDocument = gql`
     query GetCountry($countryId: Int!) {
   getCountry(countryId: $countryId) {
-    name
+    ...Country
   }
 }
-    `;
+    ${CountryFragmentDoc}`;
 
 /**
  * __useGetCountryQuery__
@@ -1852,6 +2022,41 @@ export function useGetCountryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetCountryQueryHookResult = ReturnType<typeof useGetCountryQuery>;
 export type GetCountryLazyQueryHookResult = ReturnType<typeof useGetCountryLazyQuery>;
 export type GetCountryQueryResult = Apollo.QueryResult<GetCountryQuery, GetCountryQueryVariables>;
+export const GetCountryFromNameDocument = gql`
+    query GetCountryFromName($countryName: String!) {
+  getCountryFromName(countryName: $countryName) {
+    ...Country
+  }
+}
+    ${CountryFragmentDoc}`;
+
+/**
+ * __useGetCountryFromNameQuery__
+ *
+ * To run a query within a React component, call `useGetCountryFromNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCountryFromNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCountryFromNameQuery({
+ *   variables: {
+ *      countryName: // value for 'countryName'
+ *   },
+ * });
+ */
+export function useGetCountryFromNameQuery(baseOptions: Apollo.QueryHookOptions<GetCountryFromNameQuery, GetCountryFromNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCountryFromNameQuery, GetCountryFromNameQueryVariables>(GetCountryFromNameDocument, options);
+      }
+export function useGetCountryFromNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCountryFromNameQuery, GetCountryFromNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCountryFromNameQuery, GetCountryFromNameQueryVariables>(GetCountryFromNameDocument, options);
+        }
+export type GetCountryFromNameQueryHookResult = ReturnType<typeof useGetCountryFromNameQuery>;
+export type GetCountryFromNameLazyQueryHookResult = ReturnType<typeof useGetCountryFromNameLazyQuery>;
+export type GetCountryFromNameQueryResult = Apollo.QueryResult<GetCountryFromNameQuery, GetCountryFromNameQueryVariables>;
 export const GetDistinctSectionTypesDocument = gql`
     query GetDistinctSectionTypes {
   getDistinctSectionTypes {
@@ -2169,6 +2374,42 @@ export function useGetSectionsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type GetSectionsByUserQueryHookResult = ReturnType<typeof useGetSectionsByUserQuery>;
 export type GetSectionsByUserLazyQueryHookResult = ReturnType<typeof useGetSectionsByUserLazyQuery>;
 export type GetSectionsByUserQueryResult = Apollo.QueryResult<GetSectionsByUserQuery, GetSectionsByUserQueryVariables>;
+export const GetStateFromNameDocument = gql`
+    query GetStateFromName($stateName: String!, $countryId: Int!) {
+  getStateFromName(stateName: $stateName, countryId: $countryId) {
+    ...State
+  }
+}
+    ${StateFragmentDoc}`;
+
+/**
+ * __useGetStateFromNameQuery__
+ *
+ * To run a query within a React component, call `useGetStateFromNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStateFromNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStateFromNameQuery({
+ *   variables: {
+ *      stateName: // value for 'stateName'
+ *      countryId: // value for 'countryId'
+ *   },
+ * });
+ */
+export function useGetStateFromNameQuery(baseOptions: Apollo.QueryHookOptions<GetStateFromNameQuery, GetStateFromNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetStateFromNameQuery, GetStateFromNameQueryVariables>(GetStateFromNameDocument, options);
+      }
+export function useGetStateFromNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetStateFromNameQuery, GetStateFromNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetStateFromNameQuery, GetStateFromNameQueryVariables>(GetStateFromNameDocument, options);
+        }
+export type GetStateFromNameQueryHookResult = ReturnType<typeof useGetStateFromNameQuery>;
+export type GetStateFromNameLazyQueryHookResult = ReturnType<typeof useGetStateFromNameLazyQuery>;
+export type GetStateFromNameQueryResult = Apollo.QueryResult<GetStateFromNameQuery, GetStateFromNameQueryVariables>;
 export const GetStatesFromCountryDocument = gql`
     query GetStatesFromCountry($countryId: Int!) {
   getStatesFromCountry(countryId: $countryId) {

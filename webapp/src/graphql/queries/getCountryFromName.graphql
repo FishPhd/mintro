@@ -1,0 +1,5 @@
+query GetCountryFromName($countryName: String!) {
+  getCountryFromName(countryName: $countryName) {
+    ...Country
+  }
+}

@@ -1,3 +1,4 @@
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -10,20 +11,12 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import {
-  Group,
-  useGroupHasPasswordQuery,
-  useMeQuery,
-  User,
-} from "../../generated/graphql";
-import { ShareButton } from "../buttons/ShareButton";
-import { Card } from "../general/Card";
-import { RiGroup2Fill, RiLock2Line, RiUserFill } from "react-icons/ri";
+import { RiGroup2Fill, RiLock2Line } from "react-icons/ri";
+import { Group, User } from "../../graphql/generated/graphql";
 import { JoinButton } from "../buttons/JoinButton";
-import { EditIcon } from "@chakra-ui/icons";
+import { Card } from "../general/Card";
 import { GroupSetup } from "./GroupSetup";
 interface GroupHeaderProps {
   group: Group | undefined;
@@ -41,7 +34,10 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
   isAdmin,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  var group_photo = group?.groupImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  let group_photo = group?.groupImageUrl?.replace(
+    "mintro-webapp-images.s3.amazonaws.com/",
+    "ik.imagekit.io/wzbi68mgpi3/"
+  );
   group_photo += "?tr=w-250,h-250";
 
   return (

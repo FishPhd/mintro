@@ -15,7 +15,7 @@ import {
   Section,
   useDeleteSectionMutation,
   useUpdateSectionRankMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import AddEditSectionTrigger from "./AddEditSectionTrigger";
 
 interface UserSectionsProps {
@@ -27,7 +27,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
   sections,
   isMyProfile,
 }) => {
-  let date_time = new Date().getTime();
+  const date_time = new Date().getTime();
   const [deleteSection] = useDeleteSectionMutation();
   const [updateRank] = useUpdateSectionRankMutation();
   return (
@@ -78,16 +78,22 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                         color="dark.500"
                         _hover={{ color: "mintro.200" }}
                         onClick={() => {
-                          let ranks;
+                          const ranks =
+                            index + 2 < sections.length
+                              ? [
+                                  sections[index + 1].rank,
+                                  sections[index + 2].rank,
+                                ]
+                              : [sections[index + 1].rank];
 
-                          if (index + 2 < sections.length) {
-                            ranks = [
-                              sections[index + 1].rank,
-                              sections[index + 2].rank,
-                            ];
-                          } else {
-                            ranks = [sections[index + 1].rank];
-                          }
+                          // if (index + 2 < sections.length) {
+                          //   ranks = [
+                          //     sections[index + 1].rank,
+                          //     sections[index + 2].rank,
+                          //   ];
+                          // } else {
+                          //   ranks = [sections[index + 1].rank];
+                          // }
 
                           // TODO: Evict only specific section to avoid refetch
                           updateRank({
@@ -112,7 +118,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                         _hover={{ color: "mintro.200" }}
                         boxShadow={undefined}
                         onClick={() => {
-                          let ranks =
+                          const ranks =
                             index - 1 > 0
                               ? [
                                   sections[index - 1].rank,

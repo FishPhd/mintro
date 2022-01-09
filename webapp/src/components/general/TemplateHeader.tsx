@@ -2,36 +2,28 @@ import {
   Avatar,
   Box,
   Heading,
-  HStack,
   Icon,
   IconButton,
-  IconProps,
   Stack,
   Text,
-  useBreakpointValue,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { motion, Variants } from "framer-motion";
+import { isMobile } from "is-mobile";
 import NextLink from "next/link";
+import React from "react";
+import { AiOutlineGift, AiOutlineHome } from "react-icons/ai";
 import { IoChevronForwardSharp } from "react-icons/io5";
-
-import {
-  AiOutlineArrowRight,
-  AiOutlineGift,
-  AiOutlineHome,
-} from "react-icons/ai";
 import { MdLocationOn } from "react-icons/md";
 import { Card } from "./Card";
-import { TextWithIcon } from "./TextWithIcon";
-import { motion, Variants } from "framer-motion";
-import { isMobile } from "is-mobile"
 import Parallax from "./Parallax";
+import { TextWithIcon } from "./TextWithIcon";
 
 const mobileVariant: Variants = {
   offscreen: {
     x: -600,
-    opacity: 0
+    opacity: 0,
   },
   onscreen: {
     x: 0,
@@ -39,15 +31,15 @@ const mobileVariant: Variants = {
     transition: {
       type: "spring",
       bounce: 0.4,
-      duration: 1
-    }
-  }
+      duration: 1,
+    },
+  },
 };
 
 const desktopVariant: Variants = {
   offscreen: {
     y: 300,
-    opacity: 0
+    opacity: 0,
   },
   onscreen: {
     y: 0,
@@ -56,18 +48,19 @@ const desktopVariant: Variants = {
     transition: {
       type: "spring",
       bounce: 0.4,
-      duration: 1
-    }
-  }
+      duration: 1,
+    },
+  },
 };
 
 export const TemplateHeader = () => (
-  <Box as="section" px={{ base: 0, lg: "10" }} pt={{ base: "20%", md: "5%" }} mb={{ base: "20", md: "40" }}>
-    <Box
-      mx="auto"
-      maxW={{ base: "xl", md: "6xl" }}
-      px={{ base: "6", md: "8" }}
-    >
+  <Box
+    as="section"
+    px={{ base: 0, lg: "10" }}
+    pt={{ base: "20%", md: "5%" }}
+    mb={{ base: "20", md: "40" }}
+  >
+    <Box mx="auto" maxW={{ base: "xl", md: "6xl" }} px={{ base: "6", md: "8" }}>
       <Heading
         bgClip="text"
         bgGradient="linear(to-tr, mintro.200, mintro.400)"
@@ -89,7 +82,6 @@ export const TemplateHeader = () => (
         <br /> Share what you want people to know about you
       </Text>
 
-
       <Stack w="100%" spacing={10} direction={{ base: "column", lg: "row" }}>
         <motion.div
           className="card-container"
@@ -97,9 +89,11 @@ export const TemplateHeader = () => (
           whileInView="onscreen"
           viewport={{ once: true, amount: 0.8 }}
         >
-          <motion.div className="card" variants={isMobile() ? mobileVariant : desktopVariant}>
+          <motion.div
+            className="card"
+            variants={isMobile() ? mobileVariant : desktopVariant}
+          >
             <Parallax>
-
               <Box flex="1">
                 <Card
                   px={0}
@@ -110,13 +104,26 @@ export const TemplateHeader = () => (
                   borderTopColor={"mintro.300"}
                 >
                   <Stack px={5} direction="row">
-                    <Avatar size={isMobile() ? "md" : "xl"} src={"/templateProfileImage_300x300.webp"} />
+                    <Avatar
+                      size={isMobile() ? "md" : "xl"}
+                      src={"/templateProfileImage_300x300.webp"}
+                    />
                     <Box p="0">
-                      <Stack mb={1} lineHeight="1" spacing="1" direction={{ base: "column", md: "row" }}>
+                      <Stack
+                        mb={1}
+                        lineHeight="1"
+                        spacing="1"
+                        direction={{ base: "column", md: "row" }}
+                      >
                         <Text fontSize="2xl" fontWeight="bold">
                           Jessica Qiao
                         </Text>
-                        <Text pl={{ base: 0, md: 2 }} fontStyle="italic" color="dark.500" fontSize="md">
+                        <Text
+                          pl={{ base: 0, md: 2 }}
+                          fontStyle="italic"
+                          color="dark.500"
+                          fontSize="md"
+                        >
                           Jess
                         </Text>
                       </Stack>
@@ -154,10 +161,13 @@ export const TemplateHeader = () => (
                           Shenzhen
                         </TextWithIcon>
                       </Stack> */}
-                      <Wrap justify="center" spacing={{ base: 4, md: 4 }}
+                      <Wrap
+                        justify="center"
+                        spacing={{ base: 4, md: 4 }}
                         ml={{ base: "-70%", md: "-5%" }}
                         pt={2}
-                        px={2}>
+                        px={2}
+                      >
                         <WrapItem key={"location"}>
                           <TextWithIcon width="auto" icon={<MdLocationOn />}>
                             Oakland, CA
@@ -173,7 +183,6 @@ export const TemplateHeader = () => (
                             Shenzhen
                           </TextWithIcon>
                         </WrapItem>
-
                       </Wrap>
                     </Box>
                   </Stack>
@@ -241,7 +250,6 @@ export const TemplateHeader = () => (
                 </Card>
               </Box>
             </Parallax>
-
           </motion.div>
         </motion.div>
 
@@ -267,22 +275,25 @@ export const TemplateHeader = () => (
               variant="mintro"
               aria-label="Create your Mintro!"
               rounded="full"
-              icon={<>
-                <Text fontWeight="800" pl={4} pr={2}>Create your Mintro!</Text>
+              icon={
+                <>
+                  <Text fontWeight="800" pl={4} pr={2}>
+                    Create your Mintro!
+                  </Text>
 
-                <Icon
-                  pr={2}
-                  boxSize={6}
-                  color="dark.500"
-                  as={IoChevronForwardSharp}
-                />
-              </>}
+                  <Icon
+                    pr={2}
+                    boxSize={6}
+                    color="dark.500"
+                    as={IoChevronForwardSharp}
+                  />
+                </>
+              }
               href={"register"}
             />
           </NextLink>
         </Box>
       </Stack>
-
     </Box>
   </Box>
 );

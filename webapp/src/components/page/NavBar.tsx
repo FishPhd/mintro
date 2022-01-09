@@ -21,10 +21,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import {
-  useLogoutMutation,
-  useMeQuery,
-} from "../../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
 import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
 import { FeedbackForm } from "../forms/FeedbackForm";
@@ -35,18 +32,21 @@ interface NavBarProps {
 }
 
 export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
-  const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const apolloClient = useApolloClient();
 
-  const { data: me, loading } = useMeQuery();
-  var profile_photo = me?.me?.profileImageUrl?.replace("mintro-webapp-images.s3.amazonaws.com/", "ik.imagekit.io/wzbi68mgpi3/");
+  const { data: { me: me } = {}, loading } = useMeQuery();
+  let profile_photo = me?.profileImageUrl?.replace(
+    "mintro-webapp-images.s3.amazonaws.com/",
+    "ik.imagekit.io/wzbi68mgpi3/"
+  );
   profile_photo += "?tr=w-50,h-50";
   let userPane = null;
 
   if (loading) {
-  } else if (!me?.me) {
+  } else if (!me) {
     userPane = (
       <>
         <NextLink href="/login">
@@ -99,7 +99,6 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                 </Text>
                 <ChevronDownIcon boxSize={{ base: 4, md: 5 }} />
               </Flex>
-
             </VStack>
           </MenuButton>
 
@@ -140,7 +139,9 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
         <HStack dir="row" flex={{ base: 1 }}>
           <NextLink href="/" as="/">
             <Link _hover={{ opacity: "75%" }}>
-              <MintroLogo width="40" height="40" />
+              <Box>
+                <MintroLogo width="45" height="45" />
+              </Box>
             </Link>
           </NextLink>
 
@@ -150,12 +151,12 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
             spacing={4}
             direction="column"
           >
-            {me?.me && (
+            {me && (
               <>
-                <NextLink href={"/m/[user]"} as={"/m/" + me?.me.username}>
+                <NextLink href={"/m/[user]"} as={"/m/" + me?.username}>
                   <Link
                     color={
-                      router.asPath == "/m/" + me?.me.username
+                      router.asPath == "/m/" + me?.username
                         ? "mintro.300"
                         : "dark.400"
                     }
@@ -169,7 +170,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                       <Icon
                         mr={1}
                         color={
-                          router.asPath == "/m/" + me?.me.username
+                          router.asPath == "/m/" + me?.username
                             ? "mintro.300"
                             : "dark.400"
                         }
@@ -177,7 +178,9 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                         alignSelf={"center"}
                         as={RiUserFill}
                       />
-                      <Text fontSize={{ base: "xs", md: "md" }} pl={0}>{"Mintro"}</Text>
+                      <Text fontSize={{ base: "xs", md: "md" }} pl={0}>
+                        {"Mintro"}
+                      </Text>
                     </Stack>
                   </Link>
                 </NextLink>
@@ -203,7 +206,9 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
                         boxSize="6"
                         as={RiGroup2Fill}
                       />
-                      <Text fontSize={{ base: "xs", md: "md" }} pl={0}>{"Groups"}</Text>
+                      <Text fontSize={{ base: "xs", md: "md" }} pl={0}>
+                        {"Groups"}
+                      </Text>
                     </Stack>
                   </Link>
                 </NextLink>
@@ -213,7 +218,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
 
           <Spacer />
           <HStack>{userPane}</HStack>
-          <BugReportButton onOpen={onOpen} me={!!me?.me} />
+          <BugReportButton onOpen={onOpen} me={!!me} />
         </HStack>
       </Flex>
       <FeedbackForm isOpen={isOpen} onClose={onClose} />

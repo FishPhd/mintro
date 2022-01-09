@@ -9,18 +9,26 @@ import { FoundersList } from "../components/general/FoundersList";
 import { Footer } from "../components/general/Footer";
 import Parallax from "../components/general/Parallax";
 
-export const Index: React.FC<{}> = ({}) => {
+export const Index: React.FC = ({}) => {
   return (
     <>
       <Head>
         <title>Mintro - Home</title>
       </Head>
       <NavBar transparent />
-      
-      <Parallax><Hero /></Parallax>
-      <Parallax><ProblemStatement /></Parallax>
-      <Parallax><TemplateHeader /></Parallax>
-      <Parallax><FoundersList /></Parallax>
+
+      <Parallax>
+        <Hero />
+      </Parallax>
+      <Parallax>
+        <ProblemStatement />
+      </Parallax>
+      <Parallax>
+        <TemplateHeader />
+      </Parallax>
+      <Parallax>
+        <FoundersList />
+      </Parallax>
       <Footer />
     </>
   );

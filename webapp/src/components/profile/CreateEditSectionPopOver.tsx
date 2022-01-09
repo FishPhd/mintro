@@ -1,48 +1,41 @@
-import { TriangleDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Input,
-  Text,
-  Stack,
-  Flex,
-  Select,
   PopoverCloseButton,
-  VStack,
-  HStack,
+  Select,
+  Stack,
+  Text,
 } from "@chakra-ui/react";
-import { Field, FieldArray, Form, Formik } from "formik";
-import React, { useState } from "react";
-import * as Yup from "yup";
-import { number } from "yup/lib/locale";
+import { FieldArray, Form, Formik } from "formik";
+import React from "react";
 import {
   Section,
   useCreateSectionMutation,
   useGetDistinctSectionTypesQuery,
-  useGetSectionQuery,
   useGetSectionTypesQuery,
   useUpdateSectionMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
 
-const schema = Yup.object().shape({
-  friends: Yup.array()
-    .of(
-      Yup.object().shape({
-        name: Yup.string().min(4, "too short").required("Required"), // these constraints take precedence
-        salary: Yup.string().min(3, "cmon").required("Required"), // these constraints take precedence
-      })
-    )
-    .required("Must have friends") // these constraints are shown if and only if inner constraints are satisfied
-    .min(3, "Minimum of 3 friends"),
-});
+// const schema = Yup.object().shape({
+//   friends: Yup.array()
+//     .of(
+//       Yup.object().shape({
+//         name: Yup.string().min(4, "too short").required("Required"), // these constraints take precedence
+//         salary: Yup.string().min(3, "cmon").required("Required"), // these constraints take precedence
+//       })
+//     )
+//     .required("Must have friends") // these constraints are shown if and only if inner constraints are satisfied
+//     .min(3, "Minimum of 3 friends"),
+// });
 
 interface CreateSectionPopOverProps {
   section?: Section;
   sections?: Section[];
-  onClose?: any;
+  onClose?: () => void;
 }
 
 export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
@@ -52,10 +45,8 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
 }) => {
   const [createSection] = useCreateSectionMutation();
   const [updateSection] = useUpdateSectionMutation();
-  const { data: sectionTypes, loading: fetchingSectionTypes } =
-    useGetSectionTypesQuery();
-  const { data: distinctTypes, loading: fetchingDistinctSectionTypes } =
-    useGetDistinctSectionTypesQuery();
+  const { data: sectionTypes } = useGetSectionTypesQuery();
+  const { data: distinctTypes } = useGetDistinctSectionTypesQuery();
 
   return (
     <>
@@ -64,9 +55,11 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
           initialValues={
             section
               ? {
-                  typeId: section.typeId!,
-                  sectionName: section.type.name,
-                  items: section.items!,
+                  typeId: section.typeId ? section.typeId : undefined,
+                  sectionName: section.type.name
+                    ? section.type.name
+                    : undefined,
+                  items: section.items ? section.items : undefined,
                 }
               : { sectionName: "", typeId: 0, items: ["", "", ""] }
           }
@@ -75,28 +68,27 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
           // validationSchema={sectionInputSchema}
           onSubmit={async (
             values,
-            { setErrors, setStatus, setFieldValue, resetForm, validateForm }
+            { setErrors, setFieldValue, resetForm, validateForm }
           ) => {
             validateForm();
 
             if (section) {
-              const { data: updateData } = await updateSection({
+              await updateSection({
                 variables: {
                   id: section.id,
-                  // typeId: values.typeId!,
-                  items: values.items!,
+                  items: values.items ? values.items : [""],
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "updateSection" });
                   cache.evict({ fieldName: "getSectionsByUser" });
                 },
               });
-              setFieldValue("items", values.items!);
+              setFieldValue("items", values.items);
             } else {
               const { data: createData } = await createSection({
                 variables: {
-                  typeId: values.typeId!,
-                  items: values.items!,
+                  typeId: values.typeId ? values.typeId : -1,
+                  items: values.items ? values.items : [""],
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "getSectionsByUser" });
@@ -109,7 +101,9 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               }
               await resetForm({});
             }
-            onClose();
+            if (onClose) {
+              onClose();
+            }
           }}
         >
           {({ isSubmitting, setFieldValue, values, setErrors }) => (
@@ -133,38 +127,38 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     icon={<></>}
                     onChange={async (e) => {
                       setErrors({});
-                      let selectedIndex = e.target.options.selectedIndex;
-                      let sectionTypeId =
+                      const selectedIndex = e.target.options.selectedIndex;
+                      const sectionTypeId =
                         e.target.options[selectedIndex].getAttribute("data-id");
                       setFieldValue("sectionName", e.target.value);
-                      setFieldValue("typeId", parseInt(sectionTypeId!));
+                      if (sectionTypeId) {
+                        setFieldValue("typeId", parseInt(sectionTypeId));
+                      }
                     }}
                     // options={content}
                   >
-                    {distinctTypes?.getDistinctSectionTypes.map(
-                      (st, index: number) => (
-                        <optgroup key={st.type} label={st.type}>
-                          {sectionTypes?.getSectionTypes
-                            .filter((s) => s.type == st.type)
-                            .map(
-                              (section, index: number) =>
-                                sections?.findIndex(
-                                  (s) => s.typeId == section.id
-                                ) == -1 && (
-                                  <option key={section.id} data-id={section.id}>
-                                    {section.name}
-                                  </option>
-                                )
-                            )}
-                        </optgroup>
-                      )
-                    )}
+                    {distinctTypes?.getDistinctSectionTypes.map((st) => (
+                      <optgroup key={st.type} label={st.type}>
+                        {sectionTypes?.getSectionTypes
+                          .filter((s) => s.type == st.type)
+                          .map(
+                            (section) =>
+                              sections?.findIndex(
+                                (s) => s.typeId == section.id
+                              ) == -1 && (
+                                <option key={section.id} data-id={section.id}>
+                                  {section.name}
+                                </option>
+                              )
+                          )}
+                      </optgroup>
+                    ))}
                   </Select>
                 )}
                 {values.sectionName && (
                   <FieldArray
                     name="items"
-                    render={(arrayHelpers) => (
+                    render={() => (
                       <>
                         {sectionTypes?.getSectionTypes.map(
                           (section, index: number) => (
@@ -174,7 +168,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                               key={index}
                             >
                               {section.name == values.sectionName && (
-                                <Text fontWeight="bold" size="4xl" pt={4}>
+                                <Text fontWeight="bold" fontSize="4xl" pt={4}>
                                   {section.name}
                                 </Text>
                               )}
@@ -191,7 +185,11 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                                         focusBorderColor="mintro.300"
                                         name={`items.${index}`}
                                         placeholder={section.tagline}
-                                        value={values.items[index]}
+                                        value={
+                                          values.items
+                                            ? values.items[index]
+                                            : undefined
+                                        }
                                         my={2}
                                         variant="outline"
                                         bg="white"

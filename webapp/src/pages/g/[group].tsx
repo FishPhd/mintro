@@ -1,13 +1,12 @@
 import {
   Box,
-  useColorModeValue,
+  Heading,
+  HStack,
+  Icon,
   Text,
+  useColorModeValue,
   Wrap,
   WrapItem,
-  Heading,
-  Flex,
-  Icon,
-  HStack,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -18,30 +17,28 @@ import { UserCard } from "../../components/general/UserCard";
 import GroupHeader from "../../components/groups/GroupHeader";
 import { NavBar } from "../../components/page/NavBar";
 import {
-  useGetGroupByNameQuery,
-  useGetGroupByUrlLazyQuery,
   useGetGroupByUrlQuery,
   useGetGroupMembersQuery,
   useGroupHasPasswordQuery,
   useMeQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { usingApollo } from "../../utils/withApollo";
 
-export const Group: NextPage<{}> = () => {
+export const Group: NextPage = () => {
   const router = useRouter();
   let isMember = false;
   const url = router?.query?.group;
-  const { data: meData, loading: fetchingMe } = useMeQuery({
+  const { data: meData } = useMeQuery({
     notifyOnNetworkStatusChange: true,
   });
-  const { data: groupData, loading: groupFetching } = useGetGroupByUrlQuery({
+  const { data: groupData } = useGetGroupByUrlQuery({
     variables: {
       url: url !== undefined ? (url as string) : "",
     },
     notifyOnNetworkStatusChange: true,
   });
   const group = groupData?.getGroupByUrl;
-  const { data: userData, loading: userFetching } = useGetGroupMembersQuery({
+  const { data: userData } = useGetGroupMembersQuery({
     variables: { groupId: group?.id ? group.id : 0 },
   });
   const { data: groupHasPassword } = useGroupHasPasswordQuery({

@@ -18,6 +18,25 @@ export class StateResolver {
     return State.find();
   }
 
+  @Query(() => State)
+  async getStateFromName(
+    @Arg("stateName") stateName: string,
+    @Arg("countryId", () => Int) countryId: number
+  ): Promise<State> {
+    const qb = await getConnection()
+      .getRepository(State)
+      .createQueryBuilder("c")
+      .where('"name" = :stateName', {
+        stateName,
+      })
+      .andWhere('"country_id" = :countryId', {
+        countryId,
+      })
+      .getOneOrFail();
+
+    return qb;
+  }
+
   @Query(() => [State])
   async getStatesFromCountry(
     @Arg("countryId", () => Int) countryId: number

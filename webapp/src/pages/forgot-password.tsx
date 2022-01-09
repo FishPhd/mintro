@@ -1,22 +1,20 @@
 import {
   Box,
-  useColorModeValue,
+  Button,
   Heading,
   Link,
   Stack,
-  Button,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import React from "react";
-import { InputField } from "../components/forms/InputField";
 import NextLink from "next/link";
-import { useForgotPasswordMutation, useMeQuery } from "../generated/graphql";
-import { useState } from "react";
-import { usingApollo } from "../utils/withApollo";
-import NavBar from "../components/page/NavBar";
+import React, { useState } from "react";
 import * as Yup from "yup";
+import { InputField } from "../components/forms/InputField";
 import Card from "../components/general/Card";
+import NavBar from "../components/page/NavBar";
+import { usingApollo } from "../utils/withApollo";
 
 const forgotPasswordValidation = Yup.object().shape({
   identifier: Yup.string().required(
@@ -24,10 +22,8 @@ const forgotPasswordValidation = Yup.object().shape({
   ),
 });
 
-export const ForgotPassword: React.FC<{}> = ({}) => {
-  const [forgotPassword] = useForgotPasswordMutation();
+export const ForgotPassword: React.FC = ({}) => {
   const [complete, setComplete] = useState(false);
-  const { data: me, loading } = useMeQuery();
 
   return (
     <>
@@ -56,12 +52,12 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
             <Formik
               initialValues={{ identifier: "" }}
               validationSchema={forgotPasswordValidation}
-              onSubmit={async (values, { resetForm, validateForm }) => {
+              onSubmit={async (values, { validateForm }) => {
                 // await forgotPassword({ variables: { email: values.email } });
-                let supportEmail = "sam@mintro.page";
-                let ccEmail = "aaron@mintro.page";
-                let subject = "I Forgot My Mintro Password!";
-                let body = `My identifier is:  '${values.identifier}'`;
+                const supportEmail = "sam@mintro.page";
+                const ccEmail = "aaron@mintro.page";
+                const subject = "I Forgot My Mintro Password!";
+                const body = `My identifier is:  '${values.identifier}'`;
                 validateForm();
                 window.open(
                   `mailto:${supportEmail}?cc=${ccEmail}&subject=${

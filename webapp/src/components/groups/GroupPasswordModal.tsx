@@ -1,9 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
-  Flex,
-  FormLabel,
   Input,
   Modal,
   ModalCloseButton,
@@ -11,28 +8,16 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useRouter } from "next/router";
-// import { AnimatePresence, m, motion } from "framer-motion";
-import React, { useState } from "react";
-import * as Yup from "yup";
+import React from "react";
 import {
   Group,
-  LoginMutation,
-  useCreateGroupMutation,
-  useEditGroupMutation,
-  useGroupHasPasswordQuery,
-  useJoinGroupMutation,
-  GroupResponse,
   JoinGroupMutation,
-  useValidateGroupPasswordQuery,
-} from "../../generated/graphql";
+  useJoinGroupMutation,
+} from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
-import { PasswordUpdateField } from "../forms/PasswordUpdateField";
-import { UploadForm } from "../forms/UploadForm";
 
 const initialValues = {
   password: "",
@@ -50,7 +35,6 @@ export const GroupPasswordModal: React.FC<GroupPasswordModalProps> = ({
   onClose,
   ...props
 }) => {
-  const router = useRouter();
   const [joinGroup] = useJoinGroupMutation();
 
   return (
@@ -77,13 +61,13 @@ export const GroupPasswordModal: React.FC<GroupPasswordModalProps> = ({
               validateOnBlur={false}
               validateOnChange={false}
               initialValues={initialValues}
-              onSubmit={async (
-                values,
-                { setErrors, resetForm, validateForm }
-              ) => {
+              onSubmit={async (values, { setErrors }) => {
                 const { data: response } = (await joinGroup({
-                  variables: { groupId: group!.id, password: values.password },
-                  update: (cache, { data }) => {
+                  variables: {
+                    groupId: group ? group.id : -1,
+                    password: values.password,
+                  },
+                  update: (cache) => {
                     cache.evict({ fieldName: "getGroupMembers" });
                     cache.evict({ fieldName: "getGroupByUrl" });
                   },
@@ -96,7 +80,7 @@ export const GroupPasswordModal: React.FC<GroupPasswordModalProps> = ({
                 }
               }}
             >
-              {({ isSubmitting, setFieldValue, values, validateForm }) => (
+              {({ isSubmitting }) => (
                 <Form>
                   <>
                     <Input

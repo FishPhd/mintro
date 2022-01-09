@@ -2,30 +2,25 @@ import { TriangleDownIcon } from "@chakra-ui/icons";
 import {
   FormControl,
   FormErrorMessage,
-  FormHelperText,
   FormLabel,
   Select,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { useField } from "formik";
-import React, { InputHTMLAttributes } from "react";
-import { SelectHTMLAttributes } from "react";
-// import Select, { Option, ReactSelectProps } from "react-select";
+import React, { SelectHTMLAttributes } from "react";
 
 type SelectFieldProps = SelectHTMLAttributes<HTMLSelectElement> & {
   label?: string;
   name: string;
   isLoading?: boolean;
   disableIcon?: boolean;
-  // options: Array<object>;
+  size: string;
 };
 
 export const SelectField: React.FC<SelectFieldProps> = ({
   label,
-  size: _,
   isLoading,
   disableIcon,
-  // options, options={options}
   ...props
 }) => {
   const [field, { error }] = useField(props);

@@ -2,6 +2,7 @@ import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -35,4 +36,7 @@ export class Member extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.id)
   user: User;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

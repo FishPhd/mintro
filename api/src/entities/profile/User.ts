@@ -9,6 +9,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -112,4 +113,7 @@ export class User extends BaseEntity {
   // GROUPS
   @OneToMany(() => Member, (Member) => Member.user)
   groups: Member[];
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

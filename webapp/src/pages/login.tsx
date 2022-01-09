@@ -22,11 +22,11 @@ import {
   MeDocument,
   MeQuery,
   useLoginMutation,
-} from "../generated/graphql";
+} from "../graphql/generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
 import { usingApollo } from "../utils/withApollo";
 
-export const Login: React.FC<{}> = ({}) => {
+export const Login: React.FC = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
   return (

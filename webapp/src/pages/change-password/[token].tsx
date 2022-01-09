@@ -18,12 +18,12 @@ import {
   MeDocument,
   MeQuery,
   useChangePasswordMutation,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
 import { usingApollo } from "../../utils/withApollo";
 
 //TODO: Turn this into a proper "Change password" section that allows for users to change password when a user KNOWS their current password
-export const ChangePassword: React.FC<{}> = () => {
+export const ChangePassword: React.FC = () => {
   const [changePassword] = useChangePasswordMutation();
   const router = useRouter();
   const [tokenError, setTokenError] = useState([""]);
@@ -84,7 +84,7 @@ export const ChangePassword: React.FC<{}> = () => {
                     placeholder="Password"
                     label="New Password"
                     type="password"
-                  ></InputField>
+                  />
                   {tokenError ? (
                     <HStack>
                       <Box>

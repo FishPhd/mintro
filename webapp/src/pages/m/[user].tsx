@@ -1,9 +1,8 @@
-import { Box, Heading, Progress, Spacer, Stack } from "@chakra-ui/react";
+import { Box, Heading, Progress, Stack, useDisclosure } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { ShareButton } from "../../components/buttons/ShareButton";
+import React from "react";
 import Card from "../../components/general/Card";
 import { NavBar } from "../../components/page/NavBar";
 import AddEditSectionTrigger from "../../components/profile/AddEditSectionTrigger";
@@ -14,37 +13,47 @@ import {
   useGetSectionsByUserQuery,
   useGetUserQuery,
   useMeQuery,
-} from "../../generated/graphql";
+} from "../../graphql/generated/graphql";
 import { usingApollo } from "../../utils/withApollo";
 
-export const Profile: NextPage<{}> = () => {
+export const Profile: NextPage = () => {
   const router = useRouter();
-  const [setupProfile, setSetupProfile] = useState(false);
+  // const [setupProfile, setSetupProfile] = useState(false);
 
-  const { data: me, loading: fetchingMe } = useMeQuery({
+  const { data: { me: me } = {} } = useMeQuery({
     notifyOnNetworkStatusChange: true,
   });
-  const { data: userData, loading: userFetching } = useGetUserQuery({
+  const { data: { getUser: user } = {}, loading: userFetching } =
+    useGetUserQuery({
+      variables: {
+        username:
+          router?.query?.user !== undefined
+            ? (router.query?.user as string)
+            : "",
+      },
+      // notifyOnNetworkStatusChange: true,
+    });
+
+  const isMyProfile = !!(me?.id === user?.id && me?.id);
+
+  const {
+    data: { getSectionsByUser: sectionsData } = {},
+    loading: sectionFetching,
+  } = useGetSectionsByUserQuery({
     variables: {
-      username:
-        router?.query?.user !== undefined ? (router.query?.user as string) : "",
+      postCount: 10,
+      userId: user?.id !== undefined ? user?.id : 0,
     },
     notifyOnNetworkStatusChange: true,
   });
 
-  const isMyProfile = !!(me?.me?.id === userData?.getUser?.id && me?.me?.id);
+  const sections = sectionsData?.sections;
 
-  const { data: sectionsData, loading: sectionFetching } =
-    useGetSectionsByUserQuery({
-      variables: {
-        postCount: 10,
-        userId: userData?.getUser?.id !== undefined ? userData?.getUser?.id : 0,
-      },
-      notifyOnNetworkStatusChange: true,
-    });
-
-  const sections = sectionsData?.getSectionsByUser.sections;
-  const user = userData?.getUser;
+  const { isOpen, onOpen, onClose } = useDisclosure({});
+  if (!user?.profileSetup && !isOpen && !userFetching) {
+    onOpen();
+  }
+  // defaultIsOpen: user?.profileSetup ? false : true,
 
   return (
     <>
@@ -66,20 +75,21 @@ export const Profile: NextPage<{}> = () => {
       ) : (
         <Box bg={"gray.50"} minH="100vh">
           <ProfileHeader
-            setSetupProfile={setSetupProfile}
+            openSetupModal={onOpen}
             user={user ? user : undefined}
             isMyProfile={isMyProfile}
           />
 
-          {isMyProfile && !user?.profileSetup && <UserProfileSetup />}
-          {setupProfile && user && (
-            <UserProfileSetup user={user} setSetupProfile={setSetupProfile} />
+          {user && (
+            <UserProfileSetup user={user} isOpen={isOpen} onClose={onClose} />
           )}
 
           <Box as="section">
             <Box maxW="2xl" px={5} mx="auto">
               <Stack spacing="4">
-                {isMyProfile && <AddEditSectionTrigger sections={sections} />}
+                {isMyProfile && user?.profileSetup && (
+                  <AddEditSectionTrigger sections={sections} />
+                )}
                 {sectionFetching && (
                   <Box px={5} borderRadius="lg">
                     <Progress

@@ -1,4 +1,4 @@
-import { Box, Heading, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Heading, Link, Stack } from "@chakra-ui/react";
 import React from "react";
 import MintroLogo from "../svg/MintroLogo";
 import NextLink from "next/link";
@@ -8,7 +8,7 @@ export function Footer() {
     <>
       <Box
         as="section"
-        pt={{base: "20%", md:"10%"}}
+        pt={{ base: "20%", md: "10%" }}
         pb="20"
         overflow="hidden"
         // bgGradient="linear(to-t, mintro.100, white)"
@@ -18,7 +18,7 @@ export function Footer() {
           <Stack alignItems="center">
             <NextLink href="/" as="/">
               <Box _hover={{ opacity: "75%" }} as={Link}>
-                <MintroLogo width="40" height="40" />
+                <MintroLogo width="60" height="60" />
               </Box>
             </NextLink>
             <Heading

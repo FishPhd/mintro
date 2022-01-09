@@ -1,0 +1,5 @@
+query GetCityFromName($cityName: String!, $countryId: Int!) {
+  getCityFromName(cityName: $cityName, countryId: $countryId) {
+    ...City
+  }
+}

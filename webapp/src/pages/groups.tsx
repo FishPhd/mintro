@@ -1,39 +1,29 @@
 import {
+  Avatar,
   Box,
-  IconButton,
-  useColorModeValue,
-  Text,
-  Icon,
+  Button,
   Flex,
+  Heading,
+  HStack,
+  Link,
   Spacer,
   Stack,
-  Heading,
-  Button,
-  Avatar,
-  Link,
-  HStack,
+  Text,
+  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import React from "react";
-import { NavBar } from "../components/page/NavBar";
-import {
-  Group,
-  useGetUsersGroupsQuery,
-  useLoginMutation,
-} from "../generated/graphql";
-import { usingApollo } from "../utils/withApollo";
 import NextLink from "next/link";
-import { RiAddFill } from "react-icons/ri";
-import { groupCollapsed } from "console";
+import React from "react";
 import Card from "../components/general/Card";
 import { GroupSetup } from "../components/groups/GroupSetup";
+import { NavBar } from "../components/page/NavBar";
+import { Group, useGetUsersGroupsQuery } from "../graphql/generated/graphql";
+import { usingApollo } from "../utils/withApollo";
 
-export const Groups: React.FC<{}> = ({}) => {
+export const Groups: React.FC = ({}) => {
   // const router = useRouter();
-  const { data: userGroups, loading: loadingUserGroups } =
-    useGetUsersGroupsQuery();
+  const { data: userGroups } = useGetUsersGroupsQuery();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -67,32 +57,30 @@ export const Groups: React.FC<{}> = ({}) => {
               </Button>
             </Flex>
             <Stack py={5} spacing="4">
-              {userGroups?.getUsersGroups?.map(
-                (group: Group, index: number) => (
-                  <NextLink key={`group_${group.url}`} href={`g/${group.url}`}>
-                    <Link _hover={{ opacity: "75%", color: "mintro.300" }}>
-                      <Card p={5}>
-                        <HStack>
-                          <Avatar
-                            size="lg"
-                            src={
-                              group.groupImageUrl
-                                ? group.groupImageUrl
-                                : undefined
-                            }
-                          />
-                          <Stack spacing={0}>
-                            <Heading>{group.name}</Heading>
-                            <Text pl={1} fontStyle="italic" color="dark.200">
-                              {group.memberCount} Members
-                            </Text>
-                          </Stack>
-                        </HStack>
-                      </Card>
-                    </Link>
-                  </NextLink>
-                )
-              )}
+              {userGroups?.getUsersGroups?.map((group: Group) => (
+                <NextLink key={`group_${group.url}`} href={`g/${group.url}`}>
+                  <Link _hover={{ opacity: "75%", color: "mintro.300" }}>
+                    <Card p={5}>
+                      <HStack>
+                        <Avatar
+                          size="lg"
+                          src={
+                            group.groupImageUrl
+                              ? group.groupImageUrl
+                              : undefined
+                          }
+                        />
+                        <Stack spacing={0}>
+                          <Heading>{group.name}</Heading>
+                          <Text pl={1} fontStyle="italic" color="dark.200">
+                            {group.memberCount} Members
+                          </Text>
+                        </Stack>
+                      </HStack>
+                    </Card>
+                  </Link>
+                </NextLink>
+              ))}
             </Stack>
           </Box>
         </Box>
