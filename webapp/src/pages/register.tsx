@@ -48,7 +48,7 @@ export const Register: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Mintro - Register</title>
+        <title>Register | Mintro</title>
       </Head>
       <NavBar />
       <Box

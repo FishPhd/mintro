@@ -61,10 +61,7 @@ export const Group: NextPage = () => {
   return (
     <>
       <Head>
-        <title>
-          {/* Mintro - {user?.firstName ? user?.firstName : router?.query?.user}{" "}
-          {user?.lastName}{" "} */}
-        </title>
+        <title>{group?.name} | Groups | Mintro</title>
       </Head>
       <NavBar />
       <Box bg={useColorModeValue("gray.50", "inherit")} minH="100vh">

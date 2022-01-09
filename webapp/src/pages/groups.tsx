@@ -29,7 +29,7 @@ export const Groups: React.FC = ({}) => {
   return (
     <>
       <Head>
-        <title>Mintro - Groups</title>
+        <title>Groups | Mintro</title>
       </Head>
       <NavBar />
       <GroupSetup isOpen={isOpen} onClose={onClose} />
