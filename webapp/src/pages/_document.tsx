@@ -9,11 +9,11 @@ import Document, {
 } from "next/document";
 
 class AppDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx);
+  // static async getInitialProps(ctx: DocumentContext) {
+  //   const initialProps = await Document.getInitialProps(ctx);
 
-    return initialProps;
-  }
+  //   return initialProps;
+  // }
 
   render() {
     return (
@@ -28,7 +28,7 @@ class AppDocument extends Document {
             rel="stylesheet"
           />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="apple-touch-icon" href="/icon.png"></link>
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
           <meta name="theme-color" content="#fff" />
         </Head>
 

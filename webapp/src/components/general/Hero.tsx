@@ -2,7 +2,8 @@ import { Box, Text, Flex, Heading, Icon, IconButton } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
 import { IoChevronForwardSharp } from "react-icons/io5";
-export function Hero() {
+
+export default function Hero() {
   return (
     <>
       <Box

@@ -1,6 +1,7 @@
 import { useApolloClient } from "@apollo/client";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
   Button,
   Flex,
@@ -12,20 +13,19 @@ import {
   MenuItem,
   MenuList,
   Spacer,
+  Stack,
   Text,
   useDisclosure,
-  Stack,
-  Avatar,
   VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { useLogoutMutation, useMeQuery, User } from "../../graphql/generated/graphql";
-import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
-import { FeedbackForm } from "../forms/FeedbackForm";
+import { useLogoutMutation, User } from "../../graphql/generated/graphql";
 import { BugReportButton } from "../buttons/BugReportButton";
+import { FeedbackForm } from "../forms/FeedbackForm";
+import MintroLogo from "../svg/MintroLogo";
 
 interface NavBarProps {
   transparent?: boolean;
@@ -46,6 +46,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent, me }) => {
   profile_photo += "?tr=w-50,h-50";
 
   let userPane = null;
+  console.log(profile_photo);
 
   // if (loading) {
   // } else

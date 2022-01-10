@@ -1,5 +1,5 @@
 import { Box, Heading, Progress, Stack, useDisclosure } from "@chakra-ui/react";
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
@@ -14,7 +14,8 @@ import {
   useGetUserQuery,
   useMeQuery,
 } from "../../graphql/generated/graphql";
-import { usingApollo } from "../../utils/withApollo";
+import { initializeApollo } from "../../utils/withApollo";
+// import { usingApollo } from "../../utils/withApollo";
 
 export const Profile: NextPage = () => {
   const router = useRouter();
@@ -126,4 +127,17 @@ export const Profile: NextPage = () => {
   );
 };
 
-export default usingApollo({ ssr: true })(Profile);
+// export async function getServerSideProps(context: NextPageContext) {
+//   const apolloClient = initializeApollo(context);
+
+//   await apolloClient.query({
+//     query: ALL_POSTS_QUERY,
+//     variables: allPostsQueryVars,
+//   });
+
+//   return addApolloState(apolloClient, {
+//     props: {},
+//   });
+// }
+
+export default Profile;

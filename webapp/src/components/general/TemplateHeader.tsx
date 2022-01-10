@@ -53,7 +53,7 @@ const desktopVariant: Variants = {
   },
 };
 
-export const TemplateHeader = () => (
+const TemplateHeader = () => (
   <Box
     as="section"
     px={{ base: 0, lg: "10" }}
@@ -300,3 +300,5 @@ export const TemplateHeader = () => (
     </Box>
   </Box>
 );
+
+export default TemplateHeader;

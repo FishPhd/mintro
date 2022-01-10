@@ -1,5 +1,5 @@
 {
-  "name": "with-chakra-ui",
+  "name": "mintro",
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
@@ -39,7 +39,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.21.8",
+    "@graphql-codegen/cli": "^2.3.1",
     "@graphql-codegen/typescript": "^1.23.0",
     "@graphql-codegen/typescript-operations": "1.17.7",
     "@graphql-codegen/typescript-react-apollo": "^2.3.0",
