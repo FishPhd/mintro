@@ -10,6 +10,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/router";
 import React from "react";
 import {
   Section,
@@ -27,6 +28,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
   sections,
   isMyProfile,
 }) => {
+  const router = useRouter();
   const date_time = new Date().getTime();
   const [deleteSection] = useDeleteSectionMutation();
   const [updateRank] = useUpdateSectionRankMutation();
@@ -106,6 +108,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                               cache.evict({ fieldName: "getSectionsByUser" });
                             },
                           });
+                          router.replace(router.asPath);
                         }}
                       />
                     )}
@@ -137,6 +140,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                               cache.evict({ fieldName: "getSectionsByUser" });
                             },
                           });
+                          router.replace(router.asPath);
                         }}
                       />
                     )}

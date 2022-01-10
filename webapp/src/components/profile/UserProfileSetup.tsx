@@ -16,6 +16,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { BiChevronLeft } from "react-icons/bi";
 import * as Yup from "yup";
@@ -124,6 +125,11 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   //     countryId: userCountry?.id ? userCountry?.id : 233,
   //   },
   // });
+
+  const router = useRouter();
+  // const refreshData = () => {
+  //   router.replace(router.asPath);
+  // };
 
   const { data: { getStateFromName: userState } = {} } =
     useGetStateFromNameQuery({
@@ -270,6 +276,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                   setErrors(toErrorMap(setupData.setupProfile.errors));
                 }
 
+                router.replace(router.asPath);
                 onClose();
               }}
             >

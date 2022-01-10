@@ -22,23 +22,22 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
-import { useLogoutMutation, User } from "../../graphql/generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
 import { BugReportButton } from "../buttons/BugReportButton";
 import { FeedbackForm } from "../forms/FeedbackForm";
 import MintroLogo from "../svg/MintroLogo";
 
 interface NavBarProps {
   transparent?: boolean;
-  me: User | undefined;
 }
 
-export const NavBar: React.FC<NavBarProps> = ({ transparent, me }) => {
+export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   const [logout] = useLogoutMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const apolloClient = useApolloClient();
 
-  // const { data: { me: me } = {}, loading } = useMeQuery();
+  const { data: { me: me } = {}, loading } = useMeQuery();
   let profile_photo = me?.profileImageUrl?.replace(
     "mintro-webapp-images.s3.amazonaws.com/",
     "ik.imagekit.io/wzbi68mgpi3/"
@@ -46,11 +45,9 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent, me }) => {
   profile_photo += "?tr=w-50,h-50";
 
   let userPane = null;
-  console.log(profile_photo);
 
-  // if (loading) {
-  // } else
-  if (!me) {
+  if (loading) {
+  } else if (!me) {
     userPane = (
       <>
         <NextLink href="/login">

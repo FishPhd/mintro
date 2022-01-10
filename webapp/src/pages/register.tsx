@@ -24,8 +24,8 @@ import {
   useRegisterMutation,
 } from "../graphql/generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
-import { usingApollo } from "../utils/withApollo";
 
+//TODO do on server side
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -36,10 +36,6 @@ const RegisterSchema = Yup.object().shape({
     .required("Required")
     .matches(phoneRegExp, "Phone number is not valid"),
   password: Yup.string().required("Required"),
-
-  // passwordConfirm: Yup.string()
-  //   .oneOf([Yup.ref("password")], "Password does not match")
-  //   .required("Required"),
 });
 
 export const Register: React.FC = () => {
@@ -168,4 +164,4 @@ export const Register: React.FC = () => {
   );
 };
 
-export default usingApollo({ ssr: false })(Register);
+export default Register;

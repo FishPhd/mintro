@@ -35,8 +35,10 @@ export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-function createApolloClient(headers: IncomingHttpHeaders | null = null) {
-  console.log(process.env.NEXT_PUBLIC_API_URL);
+function createApolloClient(
+  headers: IncomingHttpHeaders | null = null,
+  initialState: InitialState | null
+) {
   const enhancedFetch = (url: RequestInfo, init: RequestInit) =>
     fetch(url, {
       ...init,
@@ -53,13 +55,9 @@ function createApolloClient(headers: IncomingHttpHeaders | null = null) {
       credentials: "include" as RequestCredentials, // Additional fetch() options like `credentials` or `headers`
       fetch: enhancedFetch, // context ? enchancedFetch : fetch,
     }),
-    // headers: {
-    //   cookie:
-    //     (typeof window === "undefined"
-    //       ? vs
-    //       : undefined) || "",
-    // },
-    cache: new InMemoryCache(), //.restore(initialState),
+    cache: initialState
+      ? new InMemoryCache().restore(initialState)
+      : new InMemoryCache(),
   });
 }
 
@@ -71,14 +69,13 @@ interface IInitializeApollo {
 type InitialState = NormalizedCacheObject | undefined;
 
 export function initializeApollo(
-  // context: NextPageContext | undefined,
-  // initialState = null
   { headers, initialState }: IInitializeApollo = {
     headers: null,
     initialState: null,
   }
 ) {
-  const _apolloClient = apolloClient ?? createApolloClient(headers);
+  const _apolloClient =
+    apolloClient ?? createApolloClient(headers, initialState);
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here
@@ -119,10 +116,7 @@ export function addApolloState(
   return pageProps;
 }
 
-export function useApollo(
-  pageProps: AppProps["pageProps"]
-  // context: NextPageContext | undefined
-) {
+export function useApollo(pageProps: AppProps["pageProps"]) {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
   const store = useMemo(() => initializeApollo(state), [state]);
   return store;

@@ -14,7 +14,6 @@ import * as Yup from "yup";
 import { InputField } from "../components/forms/InputField";
 import Card from "../components/general/Card";
 import NavBar from "../components/page/NavBar";
-import { usingApollo } from "../utils/withApollo";
 
 const forgotPasswordValidation = Yup.object().shape({
   identifier: Yup.string().required(
@@ -105,4 +104,4 @@ export const ForgotPassword: React.FC = ({}) => {
   );
 };
 
-export default usingApollo({ ssr: false })(ForgotPassword);
+export default ForgotPassword;

@@ -22,7 +22,6 @@ import {
   useGroupHasPasswordQuery,
   useMeQuery,
 } from "../../graphql/generated/graphql";
-import { usingApollo } from "../../utils/withApollo";
 
 export const Group: NextPage = () => {
   const router = useRouter();
@@ -113,4 +112,4 @@ export const Group: NextPage = () => {
   );
 };
 
-export default usingApollo({ ssr: true })(Group);
+export default Group;

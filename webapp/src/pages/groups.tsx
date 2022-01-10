@@ -19,7 +19,6 @@ import Card from "../components/general/Card";
 import { GroupSetup } from "../components/groups/GroupSetup";
 import { NavBar } from "../components/page/NavBar";
 import { Group, useGetUsersGroupsQuery } from "../graphql/generated/graphql";
-import { usingApollo } from "../utils/withApollo";
 
 export const Groups: React.FC = ({}) => {
   // const router = useRouter();
@@ -90,4 +89,4 @@ export const Groups: React.FC = ({}) => {
   );
 };
 
-export default usingApollo({ ssr: false })(Groups);
+export default Groups;

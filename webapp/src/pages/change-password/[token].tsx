@@ -20,7 +20,6 @@ import {
   useChangePasswordMutation,
 } from "../../graphql/generated/graphql";
 import { toErrorMap } from "../../utils/toErrorMap";
-import { usingApollo } from "../../utils/withApollo";
 
 //TODO: Turn this into a proper "Change password" section that allows for users to change password when a user KNOWS their current password
 export const ChangePassword: React.FC = () => {
@@ -116,4 +115,4 @@ export const ChangePassword: React.FC = () => {
   );
 };
 
-export default usingApollo({ ssr: false })(ChangePassword);
+export default ChangePassword;

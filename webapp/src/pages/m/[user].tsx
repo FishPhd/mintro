@@ -1,4 +1,4 @@
-import { Box, Heading, Progress, Stack, useDisclosure } from "@chakra-ui/react";
+import { Box, Heading, Stack, useDisclosure } from "@chakra-ui/react";
 import { NextPage, NextPageContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,51 +10,46 @@ import ProfileHeader from "../../components/profile/ProfileHeader";
 import { UserProfileSetup } from "../../components/profile/UserProfileSetup";
 import { UserSections } from "../../components/profile/UserSections";
 import {
-  useGetSectionsByUserQuery,
-  useGetUserQuery,
-  useMeQuery,
+  GetSectionsByUserDocument,
+  GetSectionsByUserQuery,
+  GetUserDocument,
+  GetUserQuery,
+  MeDocument,
+  MeQuery,
+  Section,
+  User,
 } from "../../graphql/generated/graphql";
-import { initializeApollo } from "../../utils/withApollo";
-// import { usingApollo } from "../../utils/withApollo";
+import { addApolloState, initializeApollo } from "../../utils/withApollo";
 
-export const Profile: NextPage = () => {
+interface UserPageProps {
+  isMyProfile: boolean;
+  user: User;
+  sections: Section[];
+}
+
+export const Profile: NextPage<UserPageProps> = ({
+  isMyProfile,
+  user,
+  sections,
+}) => {
+  // const {
+  //   data: { getSectionsByUser: sectionsData } = {},
+  //   loading: sectionFetching,
+  // } = useGetSectionsByUserQuery({
+  //   variables: {
+  //     postCount: 10,
+  //     userId: user?.id !== undefined ? user?.id : 0,
+  //   },
+  //   notifyOnNetworkStatusChange: true,
+  // });
+
+  // const sections = sectionsData?.sections;
   const router = useRouter();
-  // const [setupProfile, setSetupProfile] = useState(false);
-
-  const { data: { me: me } = {} } = useMeQuery({
-    notifyOnNetworkStatusChange: true,
-  });
-  const { data: { getUser: user } = {}, loading: userFetching } =
-    useGetUserQuery({
-      variables: {
-        username:
-          router?.query?.user !== undefined
-            ? (router.query?.user as string)
-            : "",
-      },
-      // notifyOnNetworkStatusChange: true,
-    });
-
-  const isMyProfile = !!(me?.id === user?.id && me?.id);
-
-  const {
-    data: { getSectionsByUser: sectionsData } = {},
-    loading: sectionFetching,
-  } = useGetSectionsByUserQuery({
-    variables: {
-      postCount: 10,
-      userId: user?.id !== undefined ? user?.id : 0,
-    },
-    notifyOnNetworkStatusChange: true,
-  });
-
-  const sections = sectionsData?.sections;
 
   const { isOpen, onOpen, onClose } = useDisclosure({});
-  if (!user?.profileSetup && !isOpen && !userFetching) {
+  if (user && !user?.profileSetup && !isOpen) {
     onOpen();
   }
-  // defaultIsOpen: user?.profileSetup ? false : true,
 
   return (
     <>
@@ -65,7 +60,7 @@ export const Profile: NextPage = () => {
         </title>
       </Head>
       <NavBar />
-      {!user?.username && !userFetching ? (
+      {!user?.username ? (
         <Box bg={"dark.25"} minH="100vh" pt={"20"} px={5}>
           <Card maxW="4xl" mx="auto" textAlign="center">
             <Heading p={5} fontSize={{ base: "3xl", md: "4xl" }}>
@@ -91,7 +86,7 @@ export const Profile: NextPage = () => {
                 {isMyProfile && user?.profileSetup && (
                   <AddEditSectionTrigger sections={sections} />
                 )}
-                {sectionFetching && (
+                {/* {sectionFetching && (
                   <Box px={5} borderRadius="lg">
                     <Progress
                       py={5}
@@ -101,7 +96,7 @@ export const Profile: NextPage = () => {
                       maxW={{ base: "md", md: "md", lg: "lg" }}
                     />
                   </Box>
-                )}
+                )} */}
                 <UserSections sections={sections} isMyProfile={isMyProfile} />
                 <Box id="footer"></Box>
                 {/* {sections?.getSectionsByUser.sections.length === 0 &&
@@ -127,17 +122,36 @@ export const Profile: NextPage = () => {
   );
 };
 
-// export async function getServerSideProps(context: NextPageContext) {
-//   const apolloClient = initializeApollo(context);
+export const getServerSideProps = async (context: NextPageContext) => {
+  const client = initializeApollo({ headers: context?.req?.headers });
+  const username = context.query.user;
+  const {
+    data: { me: me },
+  } = await client.query<MeQuery>({
+    query: MeDocument,
+  });
+  const {
+    data: { getUser: user },
+  } = await client.query<GetUserQuery>({
+    query: GetUserDocument,
+    variables: { username },
+  });
 
-//   await apolloClient.query({
-//     query: ALL_POSTS_QUERY,
-//     variables: allPostsQueryVars,
-//   });
+  const {
+    data: { getSectionsByUser: { sections: sections } = {} },
+  } = await client.query<GetSectionsByUserQuery>({
+    query: GetSectionsByUserDocument,
+    variables: {
+      postCount: 10,
+      userId: user?.id !== undefined ? user?.id : 0,
+    },
+  });
 
-//   return addApolloState(apolloClient, {
-//     props: {},
-//   });
-// }
+  const isMyProfile = !!(me?.id === user?.id && me?.id);
+
+  return addApolloState(client, {
+    props: { isMyProfile, user: user, sections },
+  });
+};
 
 export default Profile;
