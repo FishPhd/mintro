@@ -1,8 +1,8 @@
-import { Avatar, Icon, Spinner, Tooltip } from "@chakra-ui/react";
-
 import { FormLabel } from "@chakra-ui/form-control";
+import { EditIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
 import { Box } from "@chakra-ui/layout";
+import { Avatar, Icon, Spinner, Tooltip } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import moment from "moment";
@@ -11,7 +11,6 @@ import {
   useAddProfileImageMutation,
   useGetS3SignedUrlMutation,
 } from "../../graphql/generated/graphql";
-import { EditIcon } from "@chakra-ui/icons";
 
 export function formatFilename(filename: string) {
   const date = moment().format("YYYYMMDD");
@@ -63,14 +62,16 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             role="group"
           >
             <Icon
+              bg="mintro.200"
+              rounded={"full"}
               as={EditIcon}
-              _groupHover={{ opacity: "80%" }}
               color="dark.500"
-              boxSize={"5"}
+              p={1}
+              boxSize={"8"}
               zIndex={"2"}
               gridArea={"overlap"}
-              alignSelf={"center"}
-              justifySelf={"center"}
+              ml={"65%"}
+              mt={"65%"}
             />
             <Tooltip placement="top" label="Change Image">
               <Avatar
