@@ -13,7 +13,7 @@ import { IoMdShare } from "react-icons/io";
 export const ShareButton = (props: Omit<IconButtonProps, "aria-label">) => {
   const toast = useToast();
   const router = useRouter();
-  const variant = useBreakpointValue({ md: "Share", base: "" });
+  // const variant = useBreakpointValue({ md: "Share", base: "" });
   return (
     <IconButton
       color="dark.500"
@@ -41,7 +41,7 @@ export const ShareButton = (props: Omit<IconButtonProps, "aria-label">) => {
               as={IoMdShare}
             />
             <Text pl={1} pr={4}>
-              {variant}
+              Share
             </Text>
           </Stack>
         </>

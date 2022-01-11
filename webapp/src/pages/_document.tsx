@@ -16,8 +16,8 @@ class AppDocument extends Document {
             rel="stylesheet"
           />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
-          <meta name="theme-color" content="#fff" />
+          {/* <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link> */}
+          {/* <meta name="theme-color" content="#fff" /> */}
         </Head>
 
         <body>

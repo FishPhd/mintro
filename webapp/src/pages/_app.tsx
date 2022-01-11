@@ -9,27 +9,8 @@ function MintroWebApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={mintroTheme}>
       <Head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#f1fff6" />
-        <meta name="theme-color" content="#ffffff" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
@@ -48,7 +29,6 @@ function MintroWebApp({ Component, pageProps }: AppProps) {
           content="Mintro is the home to YOUR introduction. Make a Mintro, be yourself, share with others!"
         />
         <meta property="og:site_name" content="Mintro" />
-        {/* dont hardcode this TODO (use router) */}
         <meta property="og:url" content="mintro.page" />
       </Head>
       <Script
@@ -65,7 +45,6 @@ function MintroWebApp({ Component, pageProps }: AppProps) {
           gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
           `}
       </Script>
-      {/* TODO see if thsi googlefonts api is causing issues with load time */}
       <ColorModeScript initialColorMode={mintroMode.initialColorMode} />
       <Component {...pageProps} />
     </ChakraProvider>

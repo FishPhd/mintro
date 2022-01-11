@@ -542,7 +542,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                         isFullWidth={true}
                         colorScheme="mintro"
                         onClick={async () => {
-                          console.log("here");
                           const errors = await validateForm();
                           // If no validation errors on first page
                           if (Object.keys(errors).length === 0) {

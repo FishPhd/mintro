@@ -19,7 +19,6 @@ import { usingApollo } from "../../utils/withApollo";
 
 export const Profile: NextPage = () => {
   const router = useRouter();
-  // const [setupProfile, setSetupProfile] = useState(false);
 
   const { data: { me: me } = {} } = useMeQuery({
     notifyOnNetworkStatusChange: true,
@@ -32,7 +31,7 @@ export const Profile: NextPage = () => {
             ? (router.query?.user as string)
             : "",
       },
-      // notifyOnNetworkStatusChange: true,
+      notifyOnNetworkStatusChange: true,
     });
 
   const isMyProfile = !!(me?.id === user?.id && me?.id);
