@@ -3,7 +3,6 @@ import {
   IconButton,
   Text,
   useToast,
-  useBreakpointValue,
   Stack,
   IconButtonProps,
 } from "@chakra-ui/react";
