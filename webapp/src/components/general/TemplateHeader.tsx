@@ -107,8 +107,8 @@ const TemplateHeader = () => (
                     <Avatar
                       alt={"TemplateProfileImage"}
                       size={isMobile() ? "md" : "xl"}
-                      width={"300px"}
-                      height={"300px"}
+                      width={"120px"}
+                      height={"120px"}
                       src={"/templateProfileImage_300x300.webp"}
                     />
                     <Box p="0">
