@@ -108,6 +108,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               alignSelf={"center"}
               justifySelf={"center"}
               verticalAlign="middle"
+              color="mintro.500"
             />
           </Box>
         )}
@@ -138,16 +139,18 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 duration: 9000,
                 isClosable: true,
               });
+              setLoading(false);
               return;
             }
-            if (file.size > 10e6) {
+            if (file.size > 2e6) {
               toast({
                 title: "Invalid File!",
-                description: "File size too large (Maximum 10mb)",
+                description: "File size too large (Maximum 2mb)",
                 status: "error",
                 duration: 9000,
                 isClosable: true,
               });
+              setLoading(false);
               return;
             }
 
