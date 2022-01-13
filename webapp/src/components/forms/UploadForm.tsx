@@ -67,11 +67,11 @@ export const UploadForm: React.FC<UploadFormProps> = ({
               as={EditIcon}
               color="dark.500"
               p={1}
-              boxSize={"8"}
+              boxSize={"7"}
               zIndex={"2"}
               gridArea={"overlap"}
-              ml={"65%"}
-              mt={"65%"}
+              ml={"70%"}
+              mt={"70%"}
             />
             <Tooltip placement="top" label="Change Image">
               <Avatar
