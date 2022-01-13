@@ -1,6 +1,7 @@
 import { useApolloClient } from "@apollo/client";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
   Button,
   Flex,
@@ -12,20 +13,19 @@ import {
   MenuItem,
   MenuList,
   Spacer,
+  Stack,
   Text,
   useDisclosure,
-  Stack,
-  Avatar,
   VStack,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
-import MintroLogo from "../svg/MintroLogo";
 import { RiGroup2Fill, RiUserFill } from "react-icons/ri";
-import { FeedbackForm } from "../forms/FeedbackForm";
+import { useLogoutMutation, useMeQuery } from "../../graphql/generated/graphql";
 import { BugReportButton } from "../buttons/BugReportButton";
+import { FeedbackForm } from "../forms/FeedbackForm";
+import MintroLogo from "../svg/MintroLogo";
 
 interface NavBarProps {
   transparent?: boolean;
@@ -43,6 +43,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
     "ik.imagekit.io/wzbi68mgpi3/"
   );
   profile_photo += "?tr=w-50,h-50";
+
   let userPane = null;
 
   if (loading) {
@@ -51,6 +52,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
       <>
         <NextLink href="/login">
           <Button
+            aria-label="login"
             rounded="full"
             as={"a"}
             fontWeight={400}
@@ -62,6 +64,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
         </NextLink>
         <NextLink href="/register">
           <Button
+            aria-label="register"
             rounded="full"
             as={"a"}
             fontWeight={600}
@@ -77,9 +80,10 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
     userPane = (
       <>
         <Menu autoSelect={false} placement="bottom">
-          <MenuButton role="group">
+          <MenuButton aria-label="Profile Button" role="group">
             <VStack spacing={-1}>
               <Avatar
+                alt={"Current User Profile Image"}
                 boxSize={9}
                 mb={2}
                 bg="gray.300"

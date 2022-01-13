@@ -53,7 +53,7 @@ const desktopVariant: Variants = {
   },
 };
 
-export const TemplateHeader = () => (
+const TemplateHeader = () => (
   <Box
     as="section"
     px={{ base: 0, lg: "10" }}
@@ -105,7 +105,10 @@ export const TemplateHeader = () => (
                 >
                   <Stack px={5} direction="row">
                     <Avatar
+                      alt={"TemplateProfileImage"}
                       size={isMobile() ? "md" : "xl"}
+                      width={"300px"}
+                      height={"300px"}
                       src={"/templateProfileImage_300x300.webp"}
                     />
                     <Box p="0">
@@ -297,3 +300,5 @@ export const TemplateHeader = () => (
     </Box>
   </Box>
 );
+
+export default TemplateHeader;

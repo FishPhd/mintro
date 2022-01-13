@@ -3,7 +3,7 @@ import React from "react";
 import Card from "./Card";
 import Parallax from "./Parallax";
 
-export function ProblemStatement() {
+export default function ProblemStatement() {
   return (
     <>
       <Box

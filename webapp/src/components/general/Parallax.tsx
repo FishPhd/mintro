@@ -6,7 +6,6 @@ import {
   useViewportScroll,
 } from "framer-motion";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { usingApollo } from "../../utils/withApollo";
 
 type ParallaxProps = {
   children: ReactNode;
@@ -65,4 +64,4 @@ const Parallax = ({
   );
 };
 
-export default usingApollo({ ssr: true })(Parallax);
+export default Parallax;

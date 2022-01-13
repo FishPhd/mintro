@@ -15,10 +15,10 @@ import {
   useMeQuery,
 } from "../../graphql/generated/graphql";
 import { usingApollo } from "../../utils/withApollo";
+// import { usingApollo } from "../../utils/withApollo";
 
 export const Profile: NextPage = () => {
   const router = useRouter();
-  // const [setupProfile, setSetupProfile] = useState(false);
 
   const { data: { me: me } = {} } = useMeQuery({
     notifyOnNetworkStatusChange: true,
@@ -31,7 +31,7 @@ export const Profile: NextPage = () => {
             ? (router.query?.user as string)
             : "",
       },
-      // notifyOnNetworkStatusChange: true,
+      notifyOnNetworkStatusChange: true,
     });
 
   const isMyProfile = !!(me?.id === user?.id && me?.id);
@@ -50,10 +50,9 @@ export const Profile: NextPage = () => {
   const sections = sectionsData?.sections;
 
   const { isOpen, onOpen, onClose } = useDisclosure({});
-  if (!user?.profileSetup && !isOpen && !userFetching) {
+  if (user && !user?.profileSetup && !isOpen && !userFetching) {
     onOpen();
   }
-  // defaultIsOpen: user?.profileSetup ? false : true,
 
   return (
     <>
@@ -125,5 +124,4 @@ export const Profile: NextPage = () => {
     </>
   );
 };
-
 export default usingApollo({ ssr: true })(Profile);

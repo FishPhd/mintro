@@ -42,7 +42,7 @@ export function UserCard(props: UserCardProps) {
           bg="mintro.200"
           roundedTop="inherit"
         />
-        <Avatar size={isMobile() ? "lg" : "xl"} src={user_photo} />
+        <Avatar alt={"Member Picture"} size={isMobile() ? "lg" : "xl"} width={"250px"} height={"250px"} src={user_photo} />
         <Text pt={2} fontSize="2xl" fontWeight="700">
           {name}
         </Text>

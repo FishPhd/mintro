@@ -56,6 +56,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           >
             <Stack direction="row" spacing="2" w="100%">
               <Avatar
+                alt={"Profile Picture"}
                 bg="gray.300"
                 size="xl"
                 src={profile_photo ? profile_photo : undefined}

@@ -206,7 +206,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         isCentered={true}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent m={4}>
           {formPage > 1 && (
             <IconButton
               variant="unstyled"
@@ -269,7 +269,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                 if (setupData?.setupProfile?.errors) {
                   setErrors(toErrorMap(setupData.setupProfile.errors));
                 }
-
+                setFormPage(1);
                 onClose();
               }}
             >
@@ -542,7 +542,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                         isFullWidth={true}
                         colorScheme="mintro"
                         onClick={async () => {
-                          console.log("here");
                           const errors = await validateForm();
                           // If no validation errors on first page
                           if (Object.keys(errors).length === 0) {
