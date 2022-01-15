@@ -23,7 +23,6 @@ import * as Yup from "yup";
 import {
   useCountriesQuery,
   useGetCitiesFromStateQuery,
-  useGetCityFromNameQuery,
   useGetCountryFromNameQuery,
   useGetStateFromNameQuery,
   useGetStatesFromCountryQuery,
