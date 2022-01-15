@@ -6,11 +6,13 @@ import {
   Select,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 import {
   Section,
+  SectionType,
   useCreateSectionMutation,
   useGetDistinctSectionTypesQuery,
   useGetSectionTypesQuery,
@@ -20,22 +22,10 @@ import { toErrorMap } from "../../utils/toErrorMap";
 import { InputField } from "../forms/InputField";
 import { SelectField } from "../forms/SelectField";
 
-// const schema = Yup.object().shape({
-//   friends: Yup.array()
-//     .of(
-//       Yup.object().shape({
-//         name: Yup.string().min(4, "too short").required("Required"), // these constraints take precedence
-//         salary: Yup.string().min(3, "cmon").required("Required"), // these constraints take precedence
-//       })
-//     )
-//     .required("Must have friends") // these constraints are shown if and only if inner constraints are satisfied
-//     .min(3, "Minimum of 3 friends"),
-// });
-
 interface CreateSectionPopOverProps {
   section?: Section;
   sections?: Section[];
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
@@ -45,8 +35,11 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
 }) => {
   const [createSection] = useCreateSectionMutation();
   const [updateSection] = useUpdateSectionMutation();
-  const { data: sectionTypes } = useGetSectionTypesQuery();
-  const { data: distinctTypes } = useGetDistinctSectionTypesQuery();
+  const { data: { getSectionTypes: sectionTypes } = {} } =
+    useGetSectionTypesQuery();
+  const { data: { getDistinctSectionTypes: distinctTypes } = {} } =
+    useGetDistinctSectionTypesQuery();
+  const toast = useToast();
 
   return (
     <>
@@ -65,13 +58,13 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
           }
           validateOnChange={false}
           validateOnBlur={false}
-          // validationSchema={sectionInputSchema}
           onSubmit={async (
             values,
             { setErrors, setFieldValue, resetForm, validateForm }
           ) => {
             validateForm();
 
+            // If updating section
             if (section) {
               await updateSection({
                 variables: {
@@ -85,7 +78,9 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               });
               setFieldValue("items", values.items);
             } else {
-              const { data: createData } = await createSection({
+              // If creating section
+              // const { data: { getUser: user } = {}, loading: userFetching }
+              const { data: sectionResult } = await createSection({
                 variables: {
                   typeId: values.typeId ? values.typeId : -1,
                   items: values.items ? values.items : [""],
@@ -94,16 +89,27 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                   cache.evict({ fieldName: "getSectionsByUser" });
                 },
               });
-              if (createData?.createSection.errors) {
-                console.log("errors", createData?.createSection.errors);
-                setErrors(toErrorMap(createData.createSection.errors));
+
+              const response = sectionResult?.createSection;
+              if (response?.errors) {
+                if (response.errors[0].field == "section") {
+                  toast({
+                    title: "Too many Sections!",
+                    description: response.errors[0].message,
+                    status: "error",
+                    duration: 4500,
+                    isClosable: true,
+                  });
+                  await resetForm({});
+                  onClose();
+                }
+
+                setErrors(toErrorMap(response.errors));
                 return;
               }
               await resetForm({});
             }
-            if (onClose) {
-              onClose();
-            }
+            onClose();
           }}
         >
           {({ isSubmitting, setFieldValue, values, setErrors }) => (
@@ -137,12 +143,12 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     }}
                     // options={content}
                   >
-                    {distinctTypes?.getDistinctSectionTypes.map((st) => (
+                    {distinctTypes?.map((st) => (
                       <optgroup key={st.type} label={st.type}>
-                        {sectionTypes?.getSectionTypes
-                          .filter((s) => s.type == st.type)
+                        {sectionTypes
+                          ?.filter((s: SectionType) => s.type == st.type)
                           .map(
-                            (section) =>
+                            (section: SectionType) =>
                               sections?.findIndex(
                                 (s) => s.typeId == section.id
                               ) == -1 && (
@@ -160,48 +166,44 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     name="items"
                     render={() => (
                       <>
-                        {sectionTypes?.getSectionTypes.map(
-                          (section, index: number) => (
-                            <Box
-                              name={index}
-                              mt={[0, "0 !important"]}
-                              key={index}
-                            >
-                              {section.name == values.sectionName && (
-                                <Text fontWeight="bold" fontSize="4xl" pt={4}>
-                                  {section.name}
-                                </Text>
-                              )}
-                              {Array.from(Array(section.maxItems).keys()).map(
-                                (index: number) => (
-                                  <Box key={section.name + "_wrapper" + index}>
-                                    {section.name == values.sectionName && (
-                                      <Input
-                                        mt={0}
-                                        as={InputField}
-                                        hasText={
-                                          section.inputType === "textarea"
-                                        }
-                                        focusBorderColor="mintro.300"
-                                        name={`items.${index}`}
-                                        placeholder={section.tagline}
-                                        value={
-                                          values.items
-                                            ? values.items[index]
-                                            : undefined
-                                        }
-                                        my={2}
-                                        variant="outline"
-                                        bg="white"
-                                        errorBorderColor="red.200"
-                                      />
-                                    )}
-                                  </Box>
-                                )
-                              )}
-                            </Box>
-                          )
-                        )}
+                        {sectionTypes?.map((section, index: number) => (
+                          <Box
+                            name={index}
+                            mt={[0, "0 !important"]}
+                            key={index}
+                          >
+                            {section.name == values.sectionName && (
+                              <Text fontWeight="bold" fontSize="4xl" pt={4}>
+                                {section.name}
+                              </Text>
+                            )}
+                            {Array.from(Array(section.maxItems).keys()).map(
+                              (index: number) => (
+                                <Box key={section.name + "_wrapper" + index}>
+                                  {section.name == values.sectionName && (
+                                    <Input
+                                      mt={0}
+                                      as={InputField}
+                                      hasText={section.inputType === "textarea"}
+                                      focusBorderColor="mintro.300"
+                                      name={`items.${index}`}
+                                      placeholder={section.tagline}
+                                      value={
+                                        values.items
+                                          ? values.items[index]
+                                          : undefined
+                                      }
+                                      my={2}
+                                      variant="outline"
+                                      bg="white"
+                                      errorBorderColor="red.200"
+                                    />
+                                  )}
+                                </Box>
+                              )
+                            )}
+                          </Box>
+                        ))}
                         <Button
                           type="submit"
                           variant="mintro"

@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  ModalCloseButton,
   Select,
   Stack,
   Text,
@@ -22,6 +23,7 @@ import * as Yup from "yup";
 import {
   useCountriesQuery,
   useGetCitiesFromStateQuery,
+  useGetCityFromNameQuery,
   useGetCountryFromNameQuery,
   useGetStateFromNameQuery,
   useGetStatesFromCountryQuery,
@@ -75,7 +77,7 @@ const SetupProfileSchemaPage1 = Yup.object().shape({
   namePronunciation: Yup.string().min(2, "Too Short!").max(50, "Too Long!"),
   pronouns: Yup.string()
     .required(
-      "Please select a pronoun, if you feel that you are missing please reach out to 'hello@mintro.page'"
+      "Please select a pronoun! Are you missing? Please reach out to 'hello@mintro.page'"
     )
     .oneOf(pronouns),
   country: Yup.string().required("Please select a Country!"),
@@ -118,12 +120,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         countryName: user?.country ? user?.country : "United States",
       },
     });
-  // const { data: { getCityFromName: userCity } = {} } = useGetCityFromNameQuery({
-  //   variables: {
-  //     cityName: user?.city ? user?.city : "Seattle",
-  //     countryId: userCountry?.id ? userCountry?.id : 233,
-  //   },
-  // });
 
   const { data: { getStateFromName: userState } = {} } =
     useGetStateFromNameQuery({
@@ -163,10 +159,9 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   const [hideCities, setHideCities] = useState(false);
   const [formPage, setFormPage] = useState(1);
   const [setupProfile] = useSetupProfileMutation();
-  const { data: countryData } = useCountriesQuery();
-
+  const { data: { countries } = {} } = useCountriesQuery();
   const {
-    data: stateData,
+    data: { getStatesFromCountry: states } = {},
     refetch: refetchStates,
     loading: loadingStates,
   } = useGetStatesFromCountryQuery({
@@ -176,7 +171,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
   });
 
   const {
-    data: cityData,
+    data: { getCitiesFromState: cities } = {},
     refetch: refetchCities,
     loading: loadingCities,
   } = useGetCitiesFromStateQuery({
@@ -184,10 +179,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
       stateId: userState?.id ? userState?.id : 1462, // Washington code
     },
   });
-
-  const countries = countryData?.countries;
-  const states = stateData?.getStatesFromCountry;
-  const cities = cityData?.getCitiesFromState;
 
   return (
     <Box px={20}>
@@ -202,9 +193,13 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
         size="2xl"
         motionPreset="slideInBottom"
         isCentered={true}
+        initialFocusRef={undefined}
       >
         <ModalOverlay />
         <ModalContent m={4}>
+          {user?.profileSetup && (
+            <ModalCloseButton _focus={{ border: "none" }} />
+          )}
           {formPage > 1 && (
             <IconButton
               variant="unstyled"
@@ -214,6 +209,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
               onClick={async () => {
                 setFormPage(formPage - 1);
               }}
+              width={"fit-content"}
               icon={
                 <>
                   <Stack pl={5} pt={5} direction={"row"} spacing={0}>
@@ -226,7 +222,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
           )}
           <ModalHeader
             textAlign="center"
-            p={formPage > 1 ? 0 : undefined}
+            pt={formPage > 1 ? 0 : 5}
             fontSize="3xl"
           >
             {formPage == 1
@@ -292,6 +288,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                             name="firstName"
                             label="First Name"
                             w="80%"
+                            required
                           />
                           <Input
                             as={InputField}
@@ -299,6 +296,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                             label="Last Name"
                             focusBorderColor="mintro.400"
                             w="95%"
+                            required
                           />
                         </Flex>
                         <Flex>
@@ -307,22 +305,27 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                             name="nickname"
                             label="I go by..."
                             focusBorderColor="mintro.400"
-                            helperText="optional"
+                            helperText="what do your friends call you?"
                             w="95%"
-                          ></Input>
+                            type="search"
+                            autoComplete="off"
+                          />
 
                           <Input
                             as={InputField}
                             name="namePronunciation"
                             label="My name is pronounced..."
                             focusBorderColor="mintro.400"
-                            helperText="optional"
+                            helperText="skip the awkward explanations"
+                            type="search"
+                            autoComplete="off"
                             w="95%"
-                          ></Input>
+                          />
                         </Flex>
                         <Select
                           label="Pronouns"
                           name="pronouns"
+                          helperText="how do you identify?"
                           as={SelectField}
                           placeholder="Select pronouns..."
                           focusBorderColor="mintro.400"
@@ -330,6 +333,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                           onChange={async (e) => {
                             await setFieldValue("pronouns", e.target.value);
                           }}
+                          required
                         >
                           {pronouns.map((pronoun, index) => (
                             <option key={index} value={pronoun}>
@@ -345,6 +349,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                             focusBorderColor="mintro.400"
                             icon={<></>}
                             mx="1"
+                            autoComplete="off"
                             onChange={async (e) => {
                               const country = countries?.find(
                                 (item) => item.name == e.target.value
@@ -358,6 +363,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               await setFieldValue("city", "");
                               setHideCities(true);
                             }}
+                            required
                           >
                             {countries?.map((country) => (
                               <option key={country.id} value={country.name}>
@@ -365,17 +371,17 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               </option>
                             ))}
                           </Select>
-
                           {states?.length != 0 && (
                             <Select
                               as={SelectField}
                               name="state"
                               label="State"
+                              autoComplete="off"
+                              isReadOnly
                               mx="1"
                               placeholder="Select state..."
                               focusBorderColor="mintro.400"
                               isLoading={loadingStates}
-                              // autoComplete="none"
                               icon={<></>}
                               onChange={async (e) => {
                                 if (e.target.value) {
@@ -393,6 +399,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                                   setHideCities(true);
                                 }
                               }}
+                              required
                             >
                               {states?.map((state) => (
                                 <option key={state.id} value={state.name}>
@@ -401,8 +408,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               ))}
                             </Select>
                           )}
-
-                          {!hideCities && (
+                          {!hideCities && cities?.length != 0 && (
                             <Select
                               as={SelectField}
                               name="city"
@@ -413,7 +419,8 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                               isLoading={loadingCities}
                               placeholder="Select city..."
                               icon={<></>}
-                              // autoComplete="none"
+                              required
+                              autoComplete="none"
                               onChange={async (e) => {
                                 if (e.target.value) {
                                   const city = cities?.find(
@@ -442,25 +449,31 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                           name="tagline"
                           label="Tagline"
                           focusBorderColor="mintro.400"
-                          helperText="Your mantra, a brief quote, your job... up to you!"
+                          helperText="your mantra, a brief quote, your job... up to you!"
                           w="95%"
-                        ></Input>
+                          required
+                        />
                         <Input
                           as={InputField}
                           name="homeTown"
                           label="Home Town"
                           focusBorderColor="mintro.400"
-                          helperText="Name of city where you are from!"
+                          helperText="name of city where you are from!"
                           w="95%"
-                        ></Input>
+                          required
+                        />
                         <Box>
-                          <FormLabel mb={0}>Birthday</FormLabel>
+                          <FormLabel mb={0}>
+                            <Stack direction={"row"} spacing={1}>
+                              <span>Birthday</span>
+                              <Text color="mintro.300">*</Text>
+                            </Stack>
+                          </FormLabel>
                           <Text mb={2} color="gray.500" fontSize="sm">
-                            Age is not shared!
+                            your age is not shared!
                           </Text>
                           <Flex>
                             <Select
-                              // as={SelectField}
                               name="birthdayMonth"
                               type="number"
                               defaultValue={birthdayMonth}
