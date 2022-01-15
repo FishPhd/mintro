@@ -4,6 +4,8 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Stack,
+  Text,
   Textarea,
 } from "@chakra-ui/react";
 import { useField } from "formik";
@@ -17,12 +19,14 @@ type InputFieldProps = InputHTMLAttributes<
   hasText?: boolean;
   helperText?: string;
   size?: string;
+  required?: boolean;
 };
 
 export const InputField: React.FC<InputFieldProps> = ({
   label,
   hasText,
   helperText,
+  required,
   ...props
 }) => {
   const InputTag = hasText ? Textarea : Input;
@@ -32,7 +36,10 @@ export const InputField: React.FC<InputFieldProps> = ({
     <FormControl isInvalid={!!error} autoComplete="new-password">
       {label && (
         <FormLabel mt={2} mb={helperText ? 0 : 2} htmlFor={field.name}>
-          {label}{" "}
+          <Stack direction={"row"} spacing={1}>
+            <span>{label}</span>
+            {required && <Text color="mintro.300">*</Text>}
+          </Stack>
         </FormLabel>
       )}
       {helperText && (
@@ -46,7 +53,6 @@ export const InputField: React.FC<InputFieldProps> = ({
         {...props}
         focusBorderColor="transparent"
         id={field.name}
-        autoComplete="off"
       />
       {error ? (
         <FormErrorMessage name={field.name}>{error}</FormErrorMessage>

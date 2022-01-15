@@ -73,21 +73,6 @@ export class SectionResolver {
       replacements
     );
 
-    // const qb = await getConnection()
-    //   .getRepository(Section)
-    //   .createQueryBuilder("s")
-    //   .innerJoinAndSelect("s.creator", "u", "u.id = creator_id")
-    //   .limit(50);
-    // //   .orderBy('s."created_at"', "DESC");
-    // // take(limit + 1);
-
-    // if (cursor) {
-    //   qb.where('p."created_at" < :cursor', {
-    //     cursor: new Date(parseInt(cursor)),
-    //   });
-    // }
-    // const sections = await qb.getMany();
-
     return {
       sections: sections.slice(0, limit),
       isEnd: sections.length !== limit + 1,
@@ -129,11 +114,6 @@ export class SectionResolver {
     @Arg("movingUp", () => Boolean) movingUp: boolean,
     @Ctx() { req }: DbContext
   ): Promise<Section> {
-    // Since ranks are backwards (DESC) we need previous rank for moving up
-    // let lexoRank = movingUp
-    //   ? LexoRank.parse(rankToFollow).genPrev()
-    //   : LexoRank.parse(rankToFollow).genNext();
-
     let lexoRank;
     if (ranks.length == 2) {
       let rankStart = LexoRank.parse(ranks[0]);
@@ -145,12 +125,11 @@ export class SectionResolver {
         ? LexoRank.parse(ranks[0]).between(LexoRank.max())
         : LexoRank.parse(ranks[0]).between(LexoRank.min());
     }
-    // console.log(lexoRank.toString());
 
     const result = await getConnection()
       .createQueryBuilder()
       .update(Section)
-      .set({ rank: lexoRank.toString() })
+      .set({ rank: lexoRank.toString(), updatedAt: () => '"updated_at"' })
       .where('id = :id and "creator_id" = :creator_id', {
         id,
         creator_id: req.session.userId,
@@ -193,12 +172,11 @@ export class SectionResolver {
       .getMany();
 
     if (result.length >= 10) {
-      console.log("too many sections");
       return {
         errors: [
           {
             field: "section",
-            message: ["Too many sections! Remove some! Max of 10"],
+            message: ["You are too interesting! (Max of 10 sections)"],
           },
         ],
       };
@@ -213,7 +191,6 @@ export class SectionResolver {
       })
       .getOne();
 
-    // console.log("result: ", result?.rank);
     // Parse most recent post and generate rank
     if (result[0]) {
       lexoRank = LexoRank.parse(result[0].rank).between(LexoRank.max());
@@ -234,7 +211,6 @@ export class SectionResolver {
   @UseMiddleware(isAuth)
   async updateSection(
     @Arg("id", () => Int) id: number,
-    // @Arg("typeId", () => Int) typeId: number,
     @Arg("items", () => [String]) items: [string],
     @Ctx() { req }: DbContext
   ): Promise<Section | undefined> {

@@ -5,6 +5,7 @@ import {
   Flex,
   IconButton,
   Spacer,
+  Text,
   Stack,
   Wrap,
   WrapItem,
@@ -85,15 +86,6 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                                   sections[index + 2].rank,
                                 ]
                               : [sections[index + 1].rank];
-
-                          // if (index + 2 < sections.length) {
-                          //   ranks = [
-                          //     sections[index + 1].rank,
-                          //     sections[index + 2].rank,
-                          //   ];
-                          // } else {
-                          //   ranks = [sections[index + 1].rank];
-                          // }
 
                           // TODO: Evict only specific section to avoid refetch
                           updateRank({
@@ -209,6 +201,17 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                   </WrapItem>
                 ))}
               </Wrap>
+              <Spacer />
+              {section?.type?.creationDate && (
+                <Text
+                  fontSize={"sm"}
+                  textAlign={"end"}
+                  color="dark.200"
+                  fontStyle={"italic"}
+                >
+                  {parseInt(section?.type?.creationDate)}
+                </Text>
+              )}
             </Box>
           </motion.div>
         ))}
