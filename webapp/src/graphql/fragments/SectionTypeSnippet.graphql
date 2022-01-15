@@ -9,4 +9,5 @@ fragment SectionTypeSnippet on SectionType {
   createdAt
   updatedAt
   hidden
+  creationDate
 }

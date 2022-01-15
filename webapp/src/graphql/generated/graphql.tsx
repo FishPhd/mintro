@@ -13,59 +13,59 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
+  DateTime: string;
 };
 
 export type City = {
   __typename?: 'City';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  stateId: Scalars['Float'];
-  stateCode: Scalars['String'];
-  countryId: Scalars['Float'];
   countryCode: Scalars['String'];
+  countryId: Scalars['Float'];
+  createdAt: Scalars['String'];
+  flag: Scalars['Float'];
+  id: Scalars['Float'];
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
-  createdAt: Scalars['String'];
+  name: Scalars['String'];
+  stateCode: Scalars['String'];
+  stateId: Scalars['Float'];
   updatedAt: Scalars['String'];
-  flag: Scalars['Float'];
   wikiDataId: Scalars['String'];
 };
 
 export type Country = {
   __typename?: 'Country';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  iso3: Scalars['String'];
-  iso2: Scalars['String'];
-  phonecode: Scalars['String'];
   capital: Scalars['String'];
+  createdAt: Scalars['String'];
   currency: Scalars['String'];
   currencySymbol: Scalars['String'];
-  tld: Scalars['String'];
+  emoji: Scalars['String'];
+  emojiU: Scalars['String'];
+  flag: Scalars['Float'];
+  id: Scalars['Float'];
+  iso2: Scalars['String'];
+  iso3: Scalars['String'];
+  latitude: Scalars['Float'];
+  longitude: Scalars['Float'];
+  name: Scalars['String'];
   native: Scalars['String'];
+  phonecode: Scalars['String'];
   region: Scalars['String'];
   subregion: Scalars['String'];
   timezones: Scalars['String'];
+  tld: Scalars['String'];
   translations: Scalars['String'];
-  latitude: Scalars['Float'];
-  longitude: Scalars['Float'];
-  emoji: Scalars['String'];
-  emojiU: Scalars['String'];
-  createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  flag: Scalars['Float'];
   wikiDataId: Scalars['String'];
 };
 
 
 export type Feedback = {
   __typename?: 'Feedback';
-  id: Scalars['Float'];
-  userId?: Maybe<Scalars['Float']>;
-  feedback: Scalars['String'];
   createdAt: Scalars['String'];
+  feedback: Scalars['String'];
+  id: Scalars['Float'];
   updatedAt: Scalars['String'];
+  userId?: Maybe<Scalars['Float']>;
 };
 
 export type FeedbackResponse = {
@@ -82,16 +82,16 @@ export type FieldError = {
 
 export type Group = {
   __typename?: 'Group';
-  id: Scalars['Float'];
-  url: Scalars['String'];
-  name: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  groupImageUrl?: Maybe<Scalars['String']>;
   creatorId: Scalars['Float'];
-  password?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  groupImageUrl?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
   memberCount: Scalars['Float'];
+  name: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type GroupResponse = {
@@ -102,24 +102,29 @@ export type GroupResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  changePassword: UserResponse;
   addProfileImage: UserResponse;
-  forgotPassword: Scalars['Boolean'];
-  register: UserResponse;
-  setupProfile?: Maybe<UserResponse>;
-  login: UserResponse;
-  logout: Scalars['Boolean'];
-  submitFeedback: FeedbackResponse;
-  updateRank: Section;
-  createSection: SectionResponse;
-  updateSection?: Maybe<Section>;
-  deleteSection: Scalars['Boolean'];
-  getS3SignedUrl: S3Response;
+  changePassword: UserResponse;
   createGroup: GroupResponse;
+  createSection: SectionResponse;
+  deleteGroup: Scalars['Boolean'];
+  deleteSection: Scalars['Boolean'];
   editGroup: GroupResponse;
+  forgotPassword: Scalars['Boolean'];
+  getS3SignedUrl: S3Response;
   joinGroup: GroupResponse;
   leaveGroup: GroupResponse;
-  deleteGroup: Scalars['Boolean'];
+  login: UserResponse;
+  logout: Scalars['Boolean'];
+  register: UserResponse;
+  setupProfile?: Maybe<UserResponse>;
+  submitFeedback: FeedbackResponse;
+  updateRank: Section;
+  updateSection?: Maybe<Section>;
+};
+
+
+export type MutationAddProfileImageArgs = {
+  imageUrl: Scalars['String'];
 };
 
 
@@ -129,13 +134,68 @@ export type MutationChangePasswordArgs = {
 };
 
 
-export type MutationAddProfileImageArgs = {
-  imageUrl: Scalars['String'];
+export type MutationCreateGroupArgs = {
+  description: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+  url: Scalars['String'];
+};
+
+
+export type MutationCreateSectionArgs = {
+  items: Array<Scalars['String']>;
+  typeId: Scalars['Int'];
+};
+
+
+export type MutationDeleteGroupArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteSectionArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationEditGroupArgs = {
+  description: Scalars['String'];
+  groupId: Scalars['Int'];
+  imageUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
+  passwordUpdated: Scalars['Boolean'];
+  url: Scalars['String'];
 };
 
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationGetS3SignedUrlArgs = {
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
+  folder: Scalars['String'];
+};
+
+
+export type MutationJoinGroupArgs = {
+  groupId: Scalars['Int'];
+  password?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationLeaveGroupArgs = {
+  groupId: Scalars['Int'];
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  usernameOrEmail: Scalars['String'];
 };
 
 
@@ -149,149 +209,56 @@ export type MutationSetupProfileArgs = {
 };
 
 
-export type MutationLoginArgs = {
-  password: Scalars['String'];
-  usernameOrEmail: Scalars['String'];
-};
-
-
 export type MutationSubmitFeedbackArgs = {
   feedback: Scalars['String'];
 };
 
 
 export type MutationUpdateRankArgs = {
-  movingUp: Scalars['Boolean'];
   id: Scalars['Int'];
+  movingUp: Scalars['Boolean'];
   ranks: Array<Scalars['String']>;
 };
 
 
-export type MutationCreateSectionArgs = {
-  items: Array<Scalars['String']>;
-  typeId: Scalars['Int'];
-};
-
-
 export type MutationUpdateSectionArgs = {
+  id: Scalars['Int'];
   items: Array<Scalars['String']>;
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeleteSectionArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationGetS3SignedUrlArgs = {
-  filetype: Scalars['String'];
-  folder: Scalars['String'];
-  filename: Scalars['String'];
-};
-
-
-export type MutationCreateGroupArgs = {
-  password?: Maybe<Scalars['String']>;
-  imageUrl?: Maybe<Scalars['String']>;
-  url: Scalars['String'];
-  description: Scalars['String'];
-  name: Scalars['String'];
-};
-
-
-export type MutationEditGroupArgs = {
-  passwordUpdated: Scalars['Boolean'];
-  password?: Maybe<Scalars['String']>;
-  imageUrl?: Maybe<Scalars['String']>;
-  url: Scalars['String'];
-  description: Scalars['String'];
-  name: Scalars['String'];
-  groupId: Scalars['Int'];
-};
-
-
-export type MutationJoinGroupArgs = {
-  password?: Maybe<Scalars['String']>;
-  groupId: Scalars['Int'];
-};
-
-
-export type MutationLeaveGroupArgs = {
-  groupId: Scalars['Int'];
-};
-
-
-export type MutationDeleteGroupArgs = {
-  id: Scalars['Int'];
 };
 
 export type PaginatedSections = {
   __typename?: 'PaginatedSections';
-  sections: Array<Section>;
   isEnd: Scalars['Boolean'];
+  sections: Array<Section>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  me?: Maybe<User>;
-  getUser?: Maybe<User>;
-  users: Array<User>;
-  sections: PaginatedSections;
-  getSectionsByUser: PaginatedSections;
-  getSection?: Maybe<Section>;
-  getSectionTypes: Array<SectionType>;
-  getSectionType: SectionType;
-  getDistinctSectionTypes: Array<SectionType>;
   cities: Array<City>;
-  getCityFromName: City;
-  getCitiesFromState: Array<City>;
   countries: Array<Country>;
-  getCountryFromName: Country;
+  getCitiesFromState: Array<City>;
+  getCityFromName: City;
   getCountry: Country;
-  states: Array<State>;
-  getStateFromName: State;
-  getStatesFromCountry: Array<State>;
-  validateGroupPassword: GroupResponse;
-  groupHasPassword: Scalars['Boolean'];
-  getUsersGroups?: Maybe<Array<Group>>;
+  getCountryFromName: Country;
+  getDistinctSectionTypes: Array<SectionType>;
+  getGroupById?: Maybe<Group>;
   getGroupByName?: Maybe<Group>;
   getGroupByUrl?: Maybe<Group>;
-  getGroupById?: Maybe<Group>;
   getGroupMembers?: Maybe<Array<User>>;
-};
-
-
-export type QueryGetUserArgs = {
-  username: Scalars['String'];
-};
-
-
-export type QuerySectionsArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  postCount: Scalars['Int'];
-};
-
-
-export type QueryGetSectionsByUserArgs = {
-  userId: Scalars['Int'];
-  postCount: Scalars['Int'];
-};
-
-
-export type QueryGetSectionArgs = {
-  sectionId: Scalars['Int'];
-};
-
-
-export type QueryGetSectionTypeArgs = {
-  sectionTypeId: Scalars['Int'];
-};
-
-
-export type QueryGetCityFromNameArgs = {
-  countryId: Scalars['Int'];
-  cityName: Scalars['String'];
+  getSection?: Maybe<Section>;
+  getSectionType: SectionType;
+  getSectionTypes: Array<SectionType>;
+  getSectionsByUser: PaginatedSections;
+  getStateFromName: State;
+  getStatesFromCountry: Array<State>;
+  getUser?: Maybe<User>;
+  getUsersGroups?: Maybe<Array<Group>>;
+  groupHasPassword: Scalars['Boolean'];
+  me?: Maybe<User>;
+  sections: PaginatedSections;
+  states: Array<State>;
+  users: Array<User>;
+  validateGroupPassword: GroupResponse;
 };
 
 
@@ -300,8 +267,9 @@ export type QueryGetCitiesFromStateArgs = {
 };
 
 
-export type QueryGetCountryFromNameArgs = {
-  countryName: Scalars['String'];
+export type QueryGetCityFromNameArgs = {
+  cityName: Scalars['String'];
+  countryId: Scalars['Int'];
 };
 
 
@@ -310,24 +278,12 @@ export type QueryGetCountryArgs = {
 };
 
 
-export type QueryGetStateFromNameArgs = {
-  countryId: Scalars['Int'];
-  stateName: Scalars['String'];
+export type QueryGetCountryFromNameArgs = {
+  countryName: Scalars['String'];
 };
 
 
-export type QueryGetStatesFromCountryArgs = {
-  countryId: Scalars['Int'];
-};
-
-
-export type QueryValidateGroupPasswordArgs = {
-  password: Scalars['String'];
-  groupId: Scalars['Int'];
-};
-
-
-export type QueryGroupHasPasswordArgs = {
+export type QueryGetGroupByIdArgs = {
   groupId: Scalars['Int'];
 };
 
@@ -342,13 +298,57 @@ export type QueryGetGroupByUrlArgs = {
 };
 
 
-export type QueryGetGroupByIdArgs = {
+export type QueryGetGroupMembersArgs = {
   groupId: Scalars['Int'];
 };
 
 
-export type QueryGetGroupMembersArgs = {
+export type QueryGetSectionArgs = {
+  sectionId: Scalars['Int'];
+};
+
+
+export type QueryGetSectionTypeArgs = {
+  sectionTypeId: Scalars['Int'];
+};
+
+
+export type QueryGetSectionsByUserArgs = {
+  postCount: Scalars['Int'];
+  userId: Scalars['Int'];
+};
+
+
+export type QueryGetStateFromNameArgs = {
+  countryId: Scalars['Int'];
+  stateName: Scalars['String'];
+};
+
+
+export type QueryGetStatesFromCountryArgs = {
+  countryId: Scalars['Int'];
+};
+
+
+export type QueryGetUserArgs = {
+  username: Scalars['String'];
+};
+
+
+export type QueryGroupHasPasswordArgs = {
   groupId: Scalars['Int'];
+};
+
+
+export type QuerySectionsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  postCount: Scalars['Int'];
+};
+
+
+export type QueryValidateGroupPasswordArgs = {
+  groupId: Scalars['Int'];
+  password: Scalars['String'];
 };
 
 export type S3Response = {
@@ -359,14 +359,14 @@ export type S3Response = {
 
 export type Section = {
   __typename?: 'Section';
+  createdAt: Scalars['String'];
+  creator: User;
+  creatorId: Scalars['Float'];
   id: Scalars['Float'];
+  items?: Maybe<Array<Scalars['String']>>;
+  rank: Scalars['String'];
   type: SectionType;
   typeId: Scalars['Float'];
-  items?: Maybe<Array<Scalars['String']>>;
-  creatorId: Scalars['Float'];
-  rank: Scalars['String'];
-  creator: User;
-  createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -378,76 +378,77 @@ export type SectionResponse = {
 
 export type SectionType = {
   __typename?: 'SectionType';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  type: Scalars['String'];
-  itemNames: Scalars['String'];
-  hidden: Scalars['Boolean'];
-  tagline: Scalars['String'];
-  inputType: Scalars['String'];
-  maxItems: Scalars['Float'];
   createdAt: Scalars['String'];
+  creationDate?: Maybe<Scalars['DateTime']>;
+  hidden: Scalars['Boolean'];
+  id: Scalars['Float'];
+  inputType: Scalars['String'];
+  itemNames: Scalars['String'];
+  maxItems: Scalars['Float'];
+  name: Scalars['String'];
+  tagline: Scalars['String'];
+  type: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
 export type State = {
   __typename?: 'State';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  countryId: Scalars['Float'];
   countryCode: Scalars['String'];
+  countryId: Scalars['Float'];
+  createdAt: Scalars['String'];
   fipsCode: Scalars['String'];
+  flag: Scalars['Float'];
+  id: Scalars['Float'];
   iso2: Scalars['String'];
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
-  createdAt: Scalars['String'];
+  name: Scalars['String'];
   updatedAt: Scalars['String'];
-  flag: Scalars['Float'];
   wikiDataId: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['Float'];
-  username: Scalars['String'];
-  phoneNumber: Scalars['String'];
-  email: Scalars['String'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  nickname?: Maybe<Scalars['String']>;
-  profileImageUrl?: Maybe<Scalars['String']>;
-  namePronunciation?: Maybe<Scalars['String']>;
-  tagline?: Maybe<Scalars['String']>;
-  homeTown?: Maybe<Scalars['String']>;
-  pronouns?: Maybe<Scalars['String']>;
+  birthday?: Maybe<Scalars['DateTime']>;
   city?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  createdAt: Scalars['String'];
+  email: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
+  homeTown?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  lastName?: Maybe<Scalars['String']>;
+  namePronunciation?: Maybe<Scalars['String']>;
+  nickname?: Maybe<Scalars['String']>;
+  phoneNumber: Scalars['String'];
+  profileImageUrl?: Maybe<Scalars['String']>;
   profileSetup: Scalars['Boolean'];
-  birthday?: Maybe<Scalars['String']>;
+  pronouns?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  tagline?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserProfileSetupInput = {
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  nickname?: Maybe<Scalars['String']>;
-  namePronunciation?: Maybe<Scalars['String']>;
   birthday?: Maybe<Scalars['DateTime']>;
-  tagline?: Maybe<Scalars['String']>;
-  homeTown?: Maybe<Scalars['String']>;
-  pronouns?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  homeTown?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  namePronunciation?: Maybe<Scalars['String']>;
+  nickname?: Maybe<Scalars['String']>;
+  pronouns?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  tagline?: Maybe<Scalars['String']>;
 };
 
 export type UserRegistrationInput = {
-  username: Scalars['String'];
-  password: Scalars['String'];
   email: Scalars['String'];
+  password: Scalars['String'];
   phoneNumber: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -501,7 +502,7 @@ export type SectionSnippetFragment = (
 
 export type SectionTypeSnippetFragment = (
   { __typename?: 'SectionType' }
-  & Pick<SectionType, 'id' | 'name' | 'type' | 'itemNames' | 'tagline' | 'inputType' | 'maxItems' | 'createdAt' | 'updatedAt' | 'hidden'>
+  & Pick<SectionType, 'id' | 'name' | 'type' | 'itemNames' | 'tagline' | 'inputType' | 'maxItems' | 'createdAt' | 'updatedAt' | 'hidden' | 'creationDate'>
 );
 
 export type StateFragment = (
@@ -1189,6 +1190,7 @@ export const SectionTypeSnippetFragmentDoc = gql`
   createdAt
   updatedAt
   hidden
+  creationDate
 }
     `;
 export const SectionSnippetFragmentDoc = gql`

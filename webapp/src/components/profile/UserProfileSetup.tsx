@@ -134,9 +134,7 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
     });
 
   // Get birthday of user
-  const userBirthday = user?.birthday
-    ? new Date(user?.birthday.toString())
-    : undefined;
+  const userBirthday = user?.birthday ? new Date(user?.birthday) : undefined;
   const [birthdayMonth, setBirthdayMonth] = useState(
     userBirthday ? userBirthday.getUTCMonth() : 0
   );
