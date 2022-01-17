@@ -7,7 +7,10 @@ import {
   IconButton,
   Spacer,
   Stack,
+  TabList,
+  Tab,
   Text,
+  Tabs,
 } from "@chakra-ui/react";
 import React from "react";
 import { AiOutlineGift, AiOutlineHome } from "react-icons/ai";
@@ -21,12 +24,14 @@ interface ProfileHeaderProps {
   user: User | undefined;
   openSetupModal: () => void;
   isMyProfile: boolean;
+  setTabIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   user,
   openSetupModal,
   isMyProfile,
+  setTabIndex,
 }) => {
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
@@ -175,6 +180,26 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </Box>
             </Stack>
           </Stack>
+          <Tabs
+            pt={2}
+            colorScheme={"mintro"}
+            onChange={(index) => setTabIndex(index)}
+            isFitted
+          >
+            <TabList
+              border="0"
+              position="relative"
+              zIndex={1}
+              w={{ base: "100%", md: "auto" }}
+            >
+              <Tab _focus={{ outline: "none" }} fontWeight="semibold">
+                About
+              </Tab>
+              <Tab _focus={{ outline: "none" }} fontWeight="semibold">
+                Connect
+              </Tab>
+            </TabList>
+          </Tabs>
         </Card>
       )}
     </Box>

@@ -6,6 +6,7 @@ import React from "react";
 import Card from "../../components/general/Card";
 import { NavBar } from "../../components/page/NavBar";
 import AddEditSectionTrigger from "../../components/profile/AddEditSectionTrigger";
+import ContactCard from "../../components/profile/ContactCard";
 import ProfileHeader from "../../components/profile/ProfileHeader";
 import { UserProfileSetup } from "../../components/profile/UserProfileSetup";
 import { UserSections } from "../../components/profile/UserSections";
@@ -53,7 +54,8 @@ export const Profile: NextPage = () => {
   if (user && !user?.profileSetup && !isOpen && !userFetching) {
     onOpen();
   }
-
+  const [tabIndex, setTabIndex] = React.useState(0);
+  console.log(tabIndex);
   return (
     <>
       <Head>
@@ -77,6 +79,7 @@ export const Profile: NextPage = () => {
             openSetupModal={onOpen}
             user={user ? user : undefined}
             isMyProfile={isMyProfile}
+            setTabIndex={setTabIndex}
           />
 
           {user && (
@@ -86,7 +89,7 @@ export const Profile: NextPage = () => {
           <Box as="section">
             <Box maxW="2xl" px={5} mx="auto">
               <Stack spacing="4">
-                {isMyProfile && user?.profileSetup && (
+                {isMyProfile && user?.profileSetup && tabIndex == 0 && (
                   <AddEditSectionTrigger sections={sections} />
                 )}
                 {sectionFetching && (
@@ -100,7 +103,12 @@ export const Profile: NextPage = () => {
                     />
                   </Box>
                 )}
-                <UserSections sections={sections} isMyProfile={isMyProfile} />
+                {tabIndex == 0 && (
+                  <UserSections sections={sections} isMyProfile={isMyProfile} />
+                )}
+
+                {tabIndex == 1 && <ContactCard />}
+
                 <Box id="footer"></Box>
                 {/* {sections?.getSectionsByUser.sections.length === 0 &&
                 !sectionFetching &&
