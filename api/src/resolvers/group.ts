@@ -311,7 +311,7 @@ export class GroupResolver {
           userId: req.session.userId,
         });
 
-        if (existingMember) {
+        if (existingMember.length != 0) {
           await transactionalEntityManager.restore(Member, {
             groupId: groupId,
             userId: req.session.userId,
