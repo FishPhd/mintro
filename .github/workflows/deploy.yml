@@ -1,0 +1,28 @@
+   
+---
+name: 'deploy'
+
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - api/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Push to dokku
+        uses: dokku/github-action@master
+        with:
+          # specify the `main` branch as the remote branch to push to
+          branch: 'main'
+          git_remote_url: 'ssh://dokku@35.233.143.58:mintro-api'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
