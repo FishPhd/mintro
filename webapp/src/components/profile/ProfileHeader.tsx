@@ -7,10 +7,7 @@ import {
   IconButton,
   Spacer,
   Stack,
-  TabList,
-  Tab,
   Text,
-  Tabs,
 } from "@chakra-ui/react";
 import React from "react";
 import { AiOutlineGift, AiOutlineHome } from "react-icons/ai";
@@ -31,7 +28,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   user,
   openSetupModal,
   isMyProfile,
-  setTabIndex,
 }) => {
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
