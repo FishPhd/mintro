@@ -181,7 +181,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                 </Box>
               </Stack>
 
-              <Wrap justify="center" py={2} maxW={"4xl"} mb={2}>
+              <Wrap justify="center" py={2} pt={4} maxW={"4xl"} mb={2}>
                 {section?.items?.map((item: string, index: number) => (
                   <WrapItem key={item + "_" + index}>
                     {item && (

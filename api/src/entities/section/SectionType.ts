@@ -22,7 +22,7 @@ export class SectionType extends BaseEntity {
   sections: Section[];
 
   @Field()
-  @Column({ unique: true })
+  @Column()
   name!: string;
 
   @Field()

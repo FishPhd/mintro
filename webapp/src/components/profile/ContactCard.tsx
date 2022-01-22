@@ -37,7 +37,7 @@ export const ContactCard = () => (
         pt={5}
         fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
       >
-        social
+        Social
         <Box>
           <Stack direction={"row"} pl={0} alignItems={"flex-start"}>
             <Button
@@ -109,7 +109,7 @@ export const ContactCard = () => (
             </Button>
           </Stack>
         </Box>
-        <Text pt={5}>contact</Text>
+        <Text pt={5}>Contact</Text>
         <Box>
           <Stack direction={"row"} pl={0} alignItems={"flex-start"}>
             <Button

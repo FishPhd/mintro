@@ -6,11 +6,13 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from "typeorm";
 import { ContactType } from "../utility/ContactType";
 import { User } from "./User";
 
 @ObjectType()
+@Unique(["userId", "contactTypeId"])
 @Entity({ name: "users_contact_info" })
 export class UserContact extends BaseEntity {
   @Field()
