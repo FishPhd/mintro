@@ -168,10 +168,18 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             };
             if (signedRequest && url) {
               const res = await axios.put(signedRequest, file, options);
+              const cdnImageUrl = url.replace(
+                "mintro-webapp-images.s3.amazonaws.com/",
+                "ik.imagekit.io/wzbi68mgpi3/"
+              );
               if (folder == "profiles") {
-                await addProfileImage({ variables: { imageUrl: url } });
+                await addProfileImage({
+                  variables: {
+                    imageUrl: cdnImageUrl,
+                  },
+                });
               } else if (folder == "groups" && returnImage) {
-                returnImage(url);
+                returnImage(cdnImageUrl);
               }
               if (res.status == 200) {
                 toast({

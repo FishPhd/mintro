@@ -61,7 +61,9 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
   ...props
 }) => {
   const router = useRouter();
-  const [groupImageUrl, setGroupImage] = useState(String);
+  const [groupImageUrl, setGroupImage] = useState(
+    group?.groupImageUrl ? group?.groupImageUrl : undefined
+  );
   const [createGroup] = useCreateGroupMutation();
   const [editGroup] = useEditGroupMutation();
   const [updatePassword, setUpdatePassword] = useState(false);
@@ -176,6 +178,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
                             <UploadForm
                               folder="groups"
                               returnImage={setGroupImage}
+                              currentImage={groupImageUrl}
                             />
                           </FormLabel>
                         </Box>
