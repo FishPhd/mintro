@@ -55,7 +55,6 @@ export const Profile: NextPage = () => {
     onOpen();
   }
   const [tabIndex, setTabIndex] = React.useState(0);
-  console.log(tabIndex);
   return (
     <>
       <Head>

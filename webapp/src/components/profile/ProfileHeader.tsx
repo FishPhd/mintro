@@ -7,6 +7,9 @@ import {
   IconButton,
   Spacer,
   Stack,
+  Tab,
+  TabList,
+  Tabs,
   Text,
 } from "@chakra-ui/react";
 import React from "react";
@@ -28,15 +31,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   user,
   openSetupModal,
   isMyProfile,
+  setTabIndex,
 }) => {
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
-  let profile_photo = user?.profileImageUrl?.replace(
-    "mintro-webapp-images.s3.amazonaws.com/",
-    "ik.imagekit.io/wzbi68mgpi3/"
-  );
-  profile_photo += "?tr=w-250,h-250";
   return (
     <Box p="6">
       {user?.profileSetup && (
@@ -60,7 +59,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 alt={"Profile Picture"}
                 bg="gray.300"
                 size="xl"
-                src={profile_photo ? profile_photo : undefined}
+                src={user.profileImageUrl ? user.profileImageUrl : undefined}
               />
 
               <Box flex="1" px={2}>
@@ -176,7 +175,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </Box>
             </Stack>
           </Stack>
-          {/* <Tabs
+          <Tabs
             pt={2}
             colorScheme={"mintro"}
             onChange={(index) => setTabIndex(index)}
@@ -195,7 +194,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 Connect
               </Tab>
             </TabList>
-          </Tabs> */}
+          </Tabs>
         </Card>
       )}
     </Box>

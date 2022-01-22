@@ -38,11 +38,7 @@ export const NavBar: React.FC<NavBarProps> = ({ transparent }) => {
   const apolloClient = useApolloClient();
 
   const { data: { me: me } = {}, loading } = useMeQuery();
-  let profile_photo = me?.profileImageUrl?.replace(
-    "mintro-webapp-images.s3.amazonaws.com/",
-    "ik.imagekit.io/wzbi68mgpi3/"
-  );
-  profile_photo += "?tr=w-50,h-50";
+  const profile_photo = me?.profileImageUrl + "?tr=w-50,h-50";
 
   let userPane = null;
 

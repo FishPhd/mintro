@@ -34,10 +34,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
   const [addProfileImage] = useAddProfileImageMutation();
   const [getS3Url] = useGetS3SignedUrlMutation();
   const [fileName, setFileName] = useState("Pick File");
-  const profile_photo = currentImage?.replace(
-    "mintro-webapp-images.s3.amazonaws.com/",
-    "ik.imagekit.io/wzbi68mgpi3/"
-  );
 
   // const [file, setFile] = useState({} as File);
   const toast = useToast();
@@ -81,7 +77,7 @@ export const UploadForm: React.FC<UploadFormProps> = ({
                 gridArea={"overlap"}
                 _groupHover={{ opacity: "60%" }}
                 size="xl"
-                src={profile_photo ? profile_photo : undefined}
+                src={currentImage ? currentImage : undefined}
                 display="block"
               />
             </Tooltip>
