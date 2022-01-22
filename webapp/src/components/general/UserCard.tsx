@@ -14,11 +14,7 @@ export function UserCard(props: UserCardProps) {
   const { name, img, username, tagline } = props;
   const src = img as string;
 
-  let user_photo = src.replace(
-    "mintro-webapp-images.s3.amazonaws.com/",
-    "ik.imagekit.io/wzbi68mgpi3/"
-  );
-  user_photo += "?tr=w-250,h-250";
+  const user_photo = src + "?tr=w-250,h-250";
   return (
     <>
       <Flex
