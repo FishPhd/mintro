@@ -180,7 +180,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </Box>
             </Stack>
           </Stack>
-          <Tabs
+          {/* <Tabs
             pt={2}
             colorScheme={"mintro"}
             onChange={(index) => setTabIndex(index)}
@@ -199,7 +199,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 Connect
               </Tab>
             </TabList>
-          </Tabs>
+          </Tabs> */}
         </Card>
       )}
     </Box>
