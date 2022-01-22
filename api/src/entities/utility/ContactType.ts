@@ -24,21 +24,25 @@ export class ContactType extends BaseEntity {
   @Column()
   icon!: string;
 
-  @Field()
-  @Column()
-  url!: string;
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  url: string;
 
-  @Field()
-  @Column()
-  profileUrlTemplate!: string;
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  profileUrlTemplate: string;
 
-  @Field()
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   color1: string;
 
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  color2: string;
+
   @Field()
   @Column()
-  color2!: string;
+  placeholder!: string;
 
   @Field(() => Boolean)
   @Column({ type: "boolean", default: false })

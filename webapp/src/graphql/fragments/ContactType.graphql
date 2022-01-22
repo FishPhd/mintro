@@ -1,0 +1,13 @@
+fragment ContactType on ContactType {
+  id
+  name
+  icon
+  url
+  profileUrlTemplate
+  color1
+  color2
+  placeholder
+  socialMedia
+  createdAt
+  updatedAt
+}

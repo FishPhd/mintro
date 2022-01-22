@@ -32,6 +32,21 @@ export type City = {
   wikiDataId: Scalars['String'];
 };
 
+export type ContactType = {
+  __typename?: 'ContactType';
+  color1?: Maybe<Scalars['String']>;
+  color2?: Maybe<Scalars['String']>;
+  createdAt: Scalars['String'];
+  icon: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  placeholder: Scalars['String'];
+  profileUrlTemplate?: Maybe<Scalars['String']>;
+  socialMedia: Scalars['Boolean'];
+  updatedAt: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
+};
+
 export type Country = {
   __typename?: 'Country';
   capital: Scalars['String'];
@@ -235,6 +250,7 @@ export type PaginatedSections = {
 export type Query = {
   __typename?: 'Query';
   cities: Array<City>;
+  contactTypes: Array<ContactType>;
   countries: Array<Country>;
   getCitiesFromState: Array<City>;
   getCityFromName: City;
@@ -460,6 +476,11 @@ export type UserResponse = {
 export type CityFragment = (
   { __typename?: 'City' }
   & Pick<City, 'id' | 'name' | 'stateId' | 'stateCode' | 'countryId' | 'countryCode' | 'latitude' | 'longitude' | 'createdAt' | 'updatedAt' | 'flag' | 'wikiDataId'>
+);
+
+export type ContactTypeFragment = (
+  { __typename?: 'ContactType' }
+  & Pick<ContactType, 'id' | 'name' | 'icon' | 'url' | 'profileUrlTemplate' | 'color1' | 'color2' | 'placeholder' | 'socialMedia' | 'createdAt' | 'updatedAt'>
 );
 
 export type CountryFragment = (
@@ -786,6 +807,17 @@ export type UpdateSectionRankMutation = (
   ) }
 );
 
+export type ContactTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ContactTypesQuery = (
+  { __typename?: 'Query' }
+  & { contactTypes: Array<(
+    { __typename?: 'ContactType' }
+    & ContactTypeFragment
+  )> }
+);
+
 export type CountriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1097,6 +1129,21 @@ export const CityFragmentDoc = gql`
   updatedAt
   flag
   wikiDataId
+}
+    `;
+export const ContactTypeFragmentDoc = gql`
+    fragment ContactType on ContactType {
+  id
+  name
+  icon
+  url
+  profileUrlTemplate
+  color1
+  color2
+  placeholder
+  socialMedia
+  createdAt
+  updatedAt
 }
     `;
 export const CountryFragmentDoc = gql`
@@ -1880,6 +1927,40 @@ export function useUpdateSectionRankMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateSectionRankMutationHookResult = ReturnType<typeof useUpdateSectionRankMutation>;
 export type UpdateSectionRankMutationResult = Apollo.MutationResult<UpdateSectionRankMutation>;
 export type UpdateSectionRankMutationOptions = Apollo.BaseMutationOptions<UpdateSectionRankMutation, UpdateSectionRankMutationVariables>;
+export const ContactTypesDocument = gql`
+    query ContactTypes {
+  contactTypes {
+    ...ContactType
+  }
+}
+    ${ContactTypeFragmentDoc}`;
+
+/**
+ * __useContactTypesQuery__
+ *
+ * To run a query within a React component, call `useContactTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContactTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContactTypesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useContactTypesQuery(baseOptions?: Apollo.QueryHookOptions<ContactTypesQuery, ContactTypesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ContactTypesQuery, ContactTypesQueryVariables>(ContactTypesDocument, options);
+      }
+export function useContactTypesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContactTypesQuery, ContactTypesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ContactTypesQuery, ContactTypesQueryVariables>(ContactTypesDocument, options);
+        }
+export type ContactTypesQueryHookResult = ReturnType<typeof useContactTypesQuery>;
+export type ContactTypesLazyQueryHookResult = ReturnType<typeof useContactTypesLazyQuery>;
+export type ContactTypesQueryResult = Apollo.QueryResult<ContactTypesQuery, ContactTypesQueryVariables>;
 export const CountriesDocument = gql`
     query Countries {
   countries {
