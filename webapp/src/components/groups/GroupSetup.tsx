@@ -62,7 +62,7 @@ export const GroupSetup: React.FC<GroupSetupProps> = ({
 }) => {
   const router = useRouter();
   const [groupImageUrl, setGroupImage] = useState(
-    group?.groupImageUrl ? group?.groupImageUrl : undefined
+    group?.groupImageUrl ? group?.groupImageUrl : String
   );
   const [createGroup] = useCreateGroupMutation();
   const [editGroup] = useEditGroupMutation();
