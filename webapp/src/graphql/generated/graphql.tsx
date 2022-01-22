@@ -13,7 +13,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: string;
+  DateTime: any;
 };
 
 export type City = {
@@ -379,7 +379,7 @@ export type SectionResponse = {
 export type SectionType = {
   __typename?: 'SectionType';
   createdAt: Scalars['String'];
-  creationDate?: Maybe<Scalars['DateTime']>;
+  creationDate: Scalars['String'];
   hidden: Scalars['Boolean'];
   id: Scalars['Float'];
   inputType: Scalars['String'];
@@ -409,7 +409,7 @@ export type State = {
 
 export type User = {
   __typename?: 'User';
-  birthday?: Maybe<Scalars['DateTime']>;
+  birthday?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];

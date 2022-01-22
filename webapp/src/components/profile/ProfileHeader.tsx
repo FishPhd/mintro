@@ -21,6 +21,7 @@ interface ProfileHeaderProps {
   user: User | undefined;
   openSetupModal: () => void;
   isMyProfile: boolean;
+  setTabIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
@@ -175,6 +176,26 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </Box>
             </Stack>
           </Stack>
+          {/* <Tabs
+            pt={2}
+            colorScheme={"mintro"}
+            onChange={(index) => setTabIndex(index)}
+            isFitted
+          >
+            <TabList
+              border="0"
+              position="relative"
+              zIndex={1}
+              w={{ base: "100%", md: "auto" }}
+            >
+              <Tab _focus={{ outline: "none" }} fontWeight="semibold">
+                About
+              </Tab>
+              <Tab _focus={{ outline: "none" }} fontWeight="semibold">
+                Connect
+              </Tab>
+            </TabList>
+          </Tabs> */}
         </Card>
       )}
     </Box>

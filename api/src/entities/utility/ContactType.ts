@@ -5,21 +5,16 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Section } from "./Section";
 
 @ObjectType()
-@Entity({ name: "section_types" })
-export class SectionType extends BaseEntity {
+@Entity({ name: "contact_types" })
+export class ContactType extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @OneToMany(() => Section, (s) => s.type)
-  sections: Section[];
 
   @Field()
   @Column()
@@ -27,31 +22,27 @@ export class SectionType extends BaseEntity {
 
   @Field()
   @Column()
-  type!: string;
+  icon!: string;
 
   @Field()
   @Column()
-  itemNames!: string;
-
-  @Field()
-  @Column({ default: false })
-  hidden!: boolean;
+  url!: string;
 
   @Field()
   @Column()
-  tagline!: string;
+  profileUrlTemplate!: string;
 
   @Field()
   @Column()
-  inputType!: string;
+  color1: string;
 
   @Field()
   @Column()
-  maxItems!: number;
+  color2!: string;
 
-  @Field(() => String)
-  @Column({ type: "date", default: () => "((CURRENT_DATE))" })
-  creationDate: string;
+  @Field(() => Boolean)
+  @Column({ type: "boolean", default: false })
+  socialMedia!: boolean;
 
   @Field(() => String)
   @CreateDateColumn()

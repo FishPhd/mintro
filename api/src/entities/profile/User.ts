@@ -18,6 +18,7 @@ import {
 // import { Member } from "../groups/Member";
 import { Member } from "../groups/Member";
 import { Section } from "../section/Section";
+import { UserContact } from "./UserContact";
 
 @ObjectType()
 @Entity({ name: "users" })
@@ -110,9 +111,12 @@ export class User extends BaseEntity {
   @Column({ type: "date", nullable: true })
   birthday: Date;
 
-  // GROUPS
+  // RELATIONS
   @OneToMany(() => Member, (Member) => Member.user)
   groups: Member[];
+
+  @OneToMany(() => UserContact, (UserContact) => UserContact.user)
+  socials: UserContact[];
 
   @DeleteDateColumn()
   deletedAt?: Date;

@@ -151,7 +151,8 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                             (section: SectionType) =>
                               sections?.findIndex(
                                 (s) => s.typeId == section.id
-                              ) == -1 && (
+                              ) == -1 &&
+                              !section.hidden && (
                                 <option key={section.id} data-id={section.id}>
                                   {section.name}
                                 </option>
@@ -172,33 +173,47 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                             mt={[0, "0 !important"]}
                             key={index}
                           >
-                            {section.name == values.sectionName && (
-                              <Text fontWeight="bold" fontSize="4xl" pt={4}>
-                                {section.name}
-                              </Text>
-                            )}
+                            {section.name == values.sectionName &&
+                              !section.hidden && (
+                                <>
+                                  <Text fontWeight="bold" fontSize="4xl" pt={4}>
+                                    {section.name}
+                                  </Text>
+                                  <Text
+                                    fontSize="lg"
+                                    pb={2}
+                                    color={"dark.300"}
+                                    fontStyle={"italic"}
+                                  >
+                                    {section.tagline}
+                                  </Text>
+                                </>
+                              )}
                             {Array.from(Array(section.maxItems).keys()).map(
                               (index: number) => (
                                 <Box key={section.name + "_wrapper" + index}>
-                                  {section.name == values.sectionName && (
-                                    <Input
-                                      mt={0}
-                                      as={InputField}
-                                      hasText={section.inputType === "textarea"}
-                                      focusBorderColor="mintro.300"
-                                      name={`items.${index}`}
-                                      placeholder={section.tagline}
-                                      value={
-                                        values.items
-                                          ? values.items[index]
-                                          : undefined
-                                      }
-                                      my={2}
-                                      variant="outline"
-                                      bg="white"
-                                      errorBorderColor="red.200"
-                                    />
-                                  )}
+                                  {section.name == values.sectionName &&
+                                    !section.hidden && (
+                                      <Input
+                                        mt={0}
+                                        as={InputField}
+                                        hasText={
+                                          section.inputType === "textarea"
+                                        }
+                                        focusBorderColor="mintro.300"
+                                        name={`items.${index}`}
+                                        placeholder={section.itemNames}
+                                        value={
+                                          values.items
+                                            ? values.items[index]
+                                            : undefined
+                                        }
+                                        my={2}
+                                        variant="outline"
+                                        bg="white"
+                                        errorBorderColor="red.200"
+                                      />
+                                    )}
                                 </Box>
                               )
                             )}
