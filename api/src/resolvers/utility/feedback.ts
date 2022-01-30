@@ -1,7 +1,7 @@
 import { Arg, Ctx, Field, Mutation, ObjectType, Resolver } from "type-graphql";
 import { Feedback } from "../../entities/utility/Feedback";
 import { DbContext } from "../../types/types";
-import { FieldError } from "../user";
+import { FieldError } from "../../utils/fieldError";
 
 @ObjectType()
 class FeedbackResponse {

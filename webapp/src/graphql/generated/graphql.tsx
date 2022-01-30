@@ -117,7 +117,7 @@ export type GroupResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addContact: UserContact;
+  addContact: UserContactResponse;
   addProfileImage: UserResponse;
   changePassword: UserResponse;
   createGroup: GroupResponse;
@@ -280,7 +280,7 @@ export type Query = {
   me?: Maybe<User>;
   sections: PaginatedSections;
   states: Array<State>;
-  userContact: Array<UserContact>;
+  userContacts: Array<UserContact>;
   users: Array<User>;
   validateGroupPassword: GroupResponse;
 };
@@ -370,7 +370,7 @@ export type QuerySectionsArgs = {
 };
 
 
-export type QueryUserContactArgs = {
+export type QueryUserContactsArgs = {
   userId: Scalars['Int'];
 };
 
@@ -461,10 +461,17 @@ export type User = {
 
 export type UserContact = {
   __typename?: 'UserContact';
+  contactType: ContactType;
   contactTypeId: Scalars['Float'];
   id: Scalars['Float'];
   input: Scalars['String'];
   userId: Scalars['Float'];
+};
+
+export type UserContactResponse = {
+  __typename?: 'UserContactResponse';
+  errors?: Maybe<Array<FieldError>>;
+  userContact?: Maybe<UserContact>;
 };
 
 export type UserProfileSetupInput = {
@@ -582,8 +589,14 @@ export type AddContactMutationVariables = Exact<{
 export type AddContactMutation = (
   { __typename?: 'Mutation' }
   & { addContact: (
-    { __typename?: 'UserContact' }
-    & UserContactFragment
+    { __typename?: 'UserContactResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & ErrorFragment
+    )>>, userContact?: Maybe<(
+      { __typename?: 'UserContact' }
+      & UserContactFragment
+    )> }
   ) }
 );
 
@@ -1130,6 +1143,23 @@ export type SectionsQuery = (
   ) }
 );
 
+export type UserContactsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type UserContactsQuery = (
+  { __typename?: 'Query' }
+  & { userContacts: Array<(
+    { __typename?: 'UserContact' }
+    & { contactType: (
+      { __typename?: 'ContactType' }
+      & ContactTypeFragment
+    ) }
+    & UserContactFragment
+  )> }
+);
+
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1336,10 +1366,16 @@ ${UserFragmentDoc}`;
 export const AddContactDocument = gql`
     mutation AddContact($typeId: Int!, $input: String!) {
   addContact(typeId: $typeId, input: $input) {
-    ...UserContact
+    errors {
+      ...Error
+    }
+    userContact {
+      ...UserContact
+    }
   }
 }
-    ${UserContactFragmentDoc}`;
+    ${ErrorFragmentDoc}
+${UserContactFragmentDoc}`;
 export type AddContactMutationFn = Apollo.MutationFunction<AddContactMutation, AddContactMutationVariables>;
 
 /**
@@ -2786,6 +2822,45 @@ export function useSectionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<S
 export type SectionsQueryHookResult = ReturnType<typeof useSectionsQuery>;
 export type SectionsLazyQueryHookResult = ReturnType<typeof useSectionsLazyQuery>;
 export type SectionsQueryResult = Apollo.QueryResult<SectionsQuery, SectionsQueryVariables>;
+export const UserContactsDocument = gql`
+    query UserContacts($userId: Int!) {
+  userContacts(userId: $userId) {
+    contactType {
+      ...ContactType
+    }
+    ...UserContact
+  }
+}
+    ${ContactTypeFragmentDoc}
+${UserContactFragmentDoc}`;
+
+/**
+ * __useUserContactsQuery__
+ *
+ * To run a query within a React component, call `useUserContactsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserContactsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserContactsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useUserContactsQuery(baseOptions: Apollo.QueryHookOptions<UserContactsQuery, UserContactsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserContactsQuery, UserContactsQueryVariables>(UserContactsDocument, options);
+      }
+export function useUserContactsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserContactsQuery, UserContactsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserContactsQuery, UserContactsQueryVariables>(UserContactsDocument, options);
+        }
+export type UserContactsQueryHookResult = ReturnType<typeof useUserContactsQuery>;
+export type UserContactsLazyQueryHookResult = ReturnType<typeof useUserContactsLazyQuery>;
+export type UserContactsQueryResult = Apollo.QueryResult<UserContactsQuery, UserContactsQueryVariables>;
 export const UsersDocument = gql`
     query users {
   users {

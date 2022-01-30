@@ -18,7 +18,7 @@ import { createQueryBuilder, getManager, getRepository } from "typeorm";
 import { getConnection } from "typeorm";
 import { User } from "../entities/profile/User";
 import { validate } from "class-validator";
-import { FieldError } from "./user";
+import { FieldError } from "../utils/fieldError";
 
 @ObjectType()
 class GroupResponse {

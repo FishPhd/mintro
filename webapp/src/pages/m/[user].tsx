@@ -106,7 +106,12 @@ export const Profile: NextPage = () => {
                   <UserSections sections={sections} isMyProfile={isMyProfile} />
                 )}
 
-                {tabIndex == 1 && <ContactCard />}
+                {tabIndex == 1 && (
+                  <ContactCard
+                    user={user || undefined}
+                    isMyProfile={isMyProfile}
+                  />
+                )}
 
                 <Box id="footer"></Box>
                 {/* {sections?.getSectionsByUser.sections.length === 0 &&

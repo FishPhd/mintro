@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { UserContact } from "../profile/UserContact";
 
 @ObjectType()
 @Entity({ name: "contact_types" })
@@ -58,4 +60,8 @@ export class ContactType extends BaseEntity {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  // RELATIONS
+  @OneToMany(() => UserContact, (UserContact) => UserContact.contactType)
+  userContacts: UserContact[];
 }

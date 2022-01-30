@@ -10,7 +10,6 @@ import {
   Unique,
 } from "typeorm";
 import { ContactType } from "../utility/ContactType";
-import { User } from "./User";
 
 @ObjectType()
 @Unique(["userId", "contactTypeId"])
@@ -29,16 +28,18 @@ export class UserContact extends BaseEntity {
   contactTypeId: number;
 
   @Field()
-  @ValidateIf((ct) => ct.contactType.name === "Phone")
+  @ValidateIf((ct) => ct.contactTypeId === 8)
   @IsPhoneNumber("US")
-  @Length(10, 15)
+  @Length(10, 15, {
+    message: `Phone number must be between $constraint1 and $constraint2 digits`,
+  })
   @Column()
   input: string;
 
   // RELATIONS
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
-
+  // @ManyToOne(() => User, (user) => user.id)
+  // user: User;
+  @Field(() => ContactType)
   @ManyToOne(() => ContactType, (contactType) => contactType.id)
   contactType: ContactType;
 
