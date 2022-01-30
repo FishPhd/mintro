@@ -1,51 +1,57 @@
 import {
-  Box,
   Button,
+  Flex,
   Icon,
+  IconProps,
   Input,
-  Select,
+  Spacer,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { Formik, Form, FieldArray, Field } from "formik";
+import { Form, Formik } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
-// import {
-//   FaSnapchatGhost,
-//   FaInstagram,
-//   FaTiktok,
-//   FaPhoneAlt,
-//   FaEnvelope,
-// } from "react-icons/fa";
-import { InputField } from "../forms/InputField";
-import { SelectField } from "../forms/SelectField";
-import Card from "../general/Card";
-
 import * as Icons from "react-icons/fa";
+import { IconType } from "react-icons/lib";
 import {
   ContactType,
+  useAddContactMutation,
   useContactTypesQuery,
 } from "../../graphql/generated/graphql";
-import { PhoneIcon } from "@chakra-ui/icons";
+import { InputField } from "../forms/InputField";
+import Card from "../general/Card";
 
-interface DynamicFaIconProps {
-  name: string;
+interface InitialValueDict {
+  [index: string]: { id: number; input: string };
 }
 
 /* Your icon name from database data can now be passed as prop */
-const DynamicFaIcon: React.FC<DynamicFaIconProps> = ({ name }) => {
-  const IconComponent = Icons[name];
-
-  if (!IconComponent) {
+const DynamicFaIcon: React.FC<IconProps> = ({ name, ...props }) => {
+  if (!name) {
     // Return a default one
-    return <Icons.FaBeer />;
+    return <Icon {...props} as={Icons.FaBeer} />;
   }
 
-  return <IconComponent />;
+  const iconType = {};
+  const IconComponent: IconType = Icons[name as keyof typeof iconType];
+  if (!IconComponent) {
+    // Return a default one
+    return <Icon {...props} as={Icons.FaBeer} />;
+  }
+
+  return <Icon {...props} as={IconComponent} />;
 };
 
 export const ContactCard = () => {
   const { data: { contactTypes: contactTypes } = {} } = useContactTypesQuery();
-  console.log(contactTypes);
+  const [addContact] = useAddContactMutation();
+  const initialValues = {} as InitialValueDict;
+
+  if (contactTypes) {
+    for (const type of contactTypes) {
+      initialValues[type.name] = { id: type.id, input: "" };
+    }
+  }
+
   return (
     <AnimatePresence presenceAffectsLayout>
       <motion.div
@@ -127,171 +133,140 @@ export const ContactCard = () => {
             </Button>
           </Stack>
         </Box> */}
-          <Text
-            fontWeight="800"
-            color="dark.500"
-            fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-          >
-            Contact
-          </Text>
-          <Formik
-            initialValues={{ contactInfo: [] }}
-            onSubmit={async (values) =>
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-              }, 500)
-            }
-          >
-            {({ values }) => (
-              <Form>
-                <FieldArray
-                  name="contactInfo"
-                  render={(arrayHelpers) => (
-                    <Stack>
-                      {values.contactInfo && values.contactInfo.length > 0 ? (
-                        values.contactInfo.map((contactInfo, index) => (
-                          <Stack direction={"row"} spacing={2} key={index}>
-                            <Select
-                              as={SelectField}
-                              borderColor={"mintro.200"}
-                              focusBorderColor={"mintro.200"}
-                              variant="filled"
-                              width="50%"
-                              bg="white"
-                              key="sectionName"
-                              iconSize={"10"}
-                              icon={<></>}
-                              name={`contactTypes.${index}`}
-                            >
-                              {contactTypes?.map((contactType) => (
-                                <option
-                                  key={contactType.id}
-                                  value={contactType.name}
-                                >
-                                  {contactType.name}
-                                </option>
-                              ))}
-                            </Select>
-                            <Input
-                              as={InputField}
-                              focusBorderColor="mintro.300"
-                              name={`contactInfo.${index}`}
-                              placeholder="Phone Number"
-                              variant="outline"
-                              bg="white"
-                              errorBorderColor="red.200"
-                            />
-                            <Button
-                              onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                            >
-                              -
-                            </Button>
-                            <Button
-                              onClick={() => arrayHelpers.insert(index, "")} // insert an empty string at a position
-                            >
-                              +
-                            </Button>
-                          </Stack>
-                        ))
-                      ) : (
-                        <Button onClick={() => arrayHelpers.push("")}>
-                          {/* show this when user has removed all friends from the list */}
-                          Add Contact Info
-                        </Button>
-                      )}
-                      {/* <Box>
-                        <Button mt={5} variant="mintro" type="submit">
-                          Save
-                        </Button>
-                      </Box> */}
-                    </Stack>
-                  )}
-                />
-              </Form>
-            )}
-          </Formik>
 
-          <Text
-            fontWeight="800"
-            color="dark.500"
-            pt={5}
-            fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-          >
-            Social
-          </Text>
           <Formik
-            initialValues={{ contactInfo: [] }}
-            onSubmit={async (values) =>
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-              }, 500)
-            }
+            enableReinitialize={true}
+            initialValues={initialValues}
+            onSubmit={async (values) => {
+              console.log(values);
+
+              for (const value in values || []) {
+                if (values[value].value != "") {
+                  console.log(values[value].value);
+                  addContact({
+                    variables: {
+                      typeId: values[value].id,
+                      input: values[value].input,
+                    },
+                  });
+                }
+              }
+            }}
           >
-            {({ values }) => (
+            {({ values, setFieldValue }) => (
               <Form>
-                <FieldArray
-                  name="contactInfo"
-                  render={(arrayHelpers) => (
-                    <Stack>
-                      {values.contactInfo && values.contactInfo.length > 0 ? (
-                        values.contactInfo.map((contactInfo, index) => (
-                          <Stack direction={"row"} spacing={2} key={index}>
-                            <Select
-                              as={SelectField}
-                              borderColor={"mintro.200"}
-                              focusBorderColor={"mintro.200"}
-                              variant="filled"
-                              width="50%"
-                              bg="white"
-                              key="sectionName"
-                              iconSize={"10"}
-                              icon={<></>}
-                              name={`contactTypes.${index}`}
-                            >
-                              {contactTypes?.map((contactType) => (
-                                <option
-                                  key={contactType.id}
-                                  value={contactType.name}
-                                >
-                                  {contactType.name}
-                                </option>
-                              ))}
-                            </Select>
-                            <Input
-                              as={InputField}
-                              focusBorderColor="mintro.300"
-                              name={`contactInfo.${index}`}
-                              placeholder="Phone Number"
-                              variant="outline"
-                              bg="white"
-                              errorBorderColor="red.200"
-                            />
-                            <Button
-                              onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                            >
-                              -
-                            </Button>
-                            <Button
-                              onClick={() => arrayHelpers.insert(index, "")} // insert an empty string at a position
-                            >
-                              +
-                            </Button>
-                          </Stack>
-                        ))
-                      ) : (
-                        <Button onClick={() => arrayHelpers.push("")}>
-                          {/* show this when user has removed all friends from the list */}
-                          Add Social Media
-                        </Button>
-                      )}
-                      {/* <Box>
-                        <Button mt={5} variant="mintro" type="submit">
-                          Save
-                        </Button>
-                      </Box> */}
-                    </Stack>
-                  )}
-                />
+                <Text
+                  fontWeight="800"
+                  color="dark.500"
+                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                >
+                  Contact
+                </Text>
+                <Stack>
+                  {contactTypes &&
+                    contactTypes.length > 0 &&
+                    contactTypes
+                      ?.filter((ct: ContactType) => !ct.socialMedia)
+                      .map((contactType, index) => (
+                        <Stack
+                          alignItems={"center"}
+                          direction={"row"}
+                          spacing={2}
+                          key={index}
+                        >
+                          <DynamicFaIcon
+                            boxSize={"5"}
+                            color={
+                              contactType.color1
+                                ? contactType.color1
+                                : undefined
+                            }
+                            name={contactType.icon}
+                          />
+                          <Input
+                            as={InputField}
+                            focusBorderColor="mintro.300"
+                            name={`${contactType.name}`}
+                            value={values[contactType.name]?.value || ""}
+                            variant="outline"
+                            bg="white"
+                            type={
+                              contactType.name == "Phone" ? "phone" : undefined
+                            }
+                            placeholder={contactType.placeholder}
+                            errorBorderColor="red.200"
+                            onChange={async (e) => {
+                              setFieldValue(contactType.name, {
+                                id: contactType.id,
+                                input: e.target.value,
+                              });
+                            }}
+                            // onBlur={async () => }
+                          />
+                        </Stack>
+                      ))}
+                </Stack>
+                <Text
+                  fontWeight="800"
+                  color="dark.500"
+                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                  pt={5}
+                >
+                  Social
+                </Text>
+                <Stack>
+                  {contactTypes &&
+                    contactTypes.length > 0 &&
+                    contactTypes
+                      ?.filter((ct: ContactType) => ct.socialMedia)
+                      .map((contactType, index) => (
+                        <Stack
+                          alignItems={"center"}
+                          direction={"row"}
+                          spacing={2}
+                          key={index}
+                        >
+                          <DynamicFaIcon
+                            boxSize={"5"}
+                            color={
+                              contactType.color1
+                                ? contactType.color1
+                                : undefined
+                            }
+                            strokeWidth={
+                              contactType.name == "Snapchat"
+                                ? "10px"
+                                : undefined
+                            }
+                            stroke="black"
+                            name={contactType.icon}
+                          />
+                          <Input
+                            as={InputField}
+                            focusBorderColor="mintro.300"
+                            name={`${contactType.name}`}
+                            value={values[contactType.name]?.input || ""}
+                            variant="outline"
+                            bg="white"
+                            placeholder={contactType.placeholder}
+                            errorBorderColor="red.200"
+                            onChange={async (e) => {
+                              setFieldValue(contactType.name, {
+                                id: contactType.id,
+                                input: e.target.value,
+                              });
+                            }}
+                            // onBlur={async () => }
+                          />
+                        </Stack>
+                      ))}
+                </Stack>
+                <Flex pt={5}>
+                  <Spacer />
+                  <Button variant="mintro" type="submit">
+                    Save
+                  </Button>
+                </Flex>
               </Form>
             )}
           </Formik>

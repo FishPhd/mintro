@@ -1,5 +1,5 @@
-import { Arg, Int, Query, Resolver } from "type-graphql";
-import { getConnection } from "typeorm";
+import { Query, Resolver } from "type-graphql";
+// import { getConnection } from "typeorm";
 import { ContactType } from "../../entities/utility/ContactType";
 
 // @ObjectType()
@@ -15,6 +15,10 @@ import { ContactType } from "../../entities/utility/ContactType";
 export class ContactTypeResolver {
   @Query(() => [ContactType])
   async contactTypes(): Promise<ContactType[]> {
-    return ContactType.find();
+    return ContactType.find({
+      order: {
+        id: "ASC",
+      },
+    });
   }
 }

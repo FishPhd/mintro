@@ -117,6 +117,7 @@ export type GroupResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addContact: UserContact;
   addProfileImage: UserResponse;
   changePassword: UserResponse;
   createGroup: GroupResponse;
@@ -135,6 +136,12 @@ export type Mutation = {
   submitFeedback: FeedbackResponse;
   updateRank: Section;
   updateSection?: Maybe<Section>;
+};
+
+
+export type MutationAddContactArgs = {
+  input: Scalars['String'];
+  typeId: Scalars['Int'];
 };
 
 
@@ -273,6 +280,7 @@ export type Query = {
   me?: Maybe<User>;
   sections: PaginatedSections;
   states: Array<State>;
+  userContact: Array<UserContact>;
   users: Array<User>;
   validateGroupPassword: GroupResponse;
 };
@@ -362,6 +370,11 @@ export type QuerySectionsArgs = {
 };
 
 
+export type QueryUserContactArgs = {
+  userId: Scalars['Int'];
+};
+
+
 export type QueryValidateGroupPasswordArgs = {
   groupId: Scalars['Int'];
   password: Scalars['String'];
@@ -444,6 +457,14 @@ export type User = {
   tagline?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type UserContact = {
+  __typename?: 'UserContact';
+  contactTypeId: Scalars['Float'];
+  id: Scalars['Float'];
+  input: Scalars['String'];
+  userId: Scalars['Float'];
 };
 
 export type UserProfileSetupInput = {
@@ -536,6 +557,11 @@ export type UserFragment = (
   & Pick<User, 'id' | 'username' | 'createdAt' | 'updatedAt' | 'firstName' | 'lastName' | 'city' | 'state' | 'country' | 'profileSetup' | 'tagline' | 'pronouns' | 'homeTown' | 'birthday' | 'nickname' | 'namePronunciation' | 'phoneNumber' | 'email' | 'profileImageUrl'>
 );
 
+export type UserContactFragment = (
+  { __typename?: 'UserContact' }
+  & Pick<UserContact, 'id' | 'userId' | 'contactTypeId' | 'input'>
+);
+
 export type UserResponseFragment = (
   { __typename?: 'UserResponse' }
   & { errors?: Maybe<Array<(
@@ -545,6 +571,20 @@ export type UserResponseFragment = (
     { __typename?: 'User' }
     & UserFragment
   )> }
+);
+
+export type AddContactMutationVariables = Exact<{
+  typeId: Scalars['Int'];
+  input: Scalars['String'];
+}>;
+
+
+export type AddContactMutation = (
+  { __typename?: 'Mutation' }
+  & { addContact: (
+    { __typename?: 'UserContact' }
+    & UserContactFragment
+  ) }
 );
 
 export type AddProfileImageMutationVariables = Exact<{
@@ -1274,6 +1314,14 @@ export const StateFragmentDoc = gql`
   wikiDataId
 }
     `;
+export const UserContactFragmentDoc = gql`
+    fragment UserContact on UserContact {
+  id
+  userId
+  contactTypeId
+  input
+}
+    `;
 export const UserResponseFragmentDoc = gql`
     fragment UserResponse on UserResponse {
   errors {
@@ -1285,6 +1333,40 @@ export const UserResponseFragmentDoc = gql`
 }
     ${ErrorFragmentDoc}
 ${UserFragmentDoc}`;
+export const AddContactDocument = gql`
+    mutation AddContact($typeId: Int!, $input: String!) {
+  addContact(typeId: $typeId, input: $input) {
+    ...UserContact
+  }
+}
+    ${UserContactFragmentDoc}`;
+export type AddContactMutationFn = Apollo.MutationFunction<AddContactMutation, AddContactMutationVariables>;
+
+/**
+ * __useAddContactMutation__
+ *
+ * To run a mutation, you first call `useAddContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addContactMutation, { data, loading, error }] = useAddContactMutation({
+ *   variables: {
+ *      typeId: // value for 'typeId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddContactMutation(baseOptions?: Apollo.MutationHookOptions<AddContactMutation, AddContactMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddContactMutation, AddContactMutationVariables>(AddContactDocument, options);
+      }
+export type AddContactMutationHookResult = ReturnType<typeof useAddContactMutation>;
+export type AddContactMutationResult = Apollo.MutationResult<AddContactMutation>;
+export type AddContactMutationOptions = Apollo.BaseMutationOptions<AddContactMutation, AddContactMutationVariables>;
 export const AddProfileImageDocument = gql`
     mutation AddProfileImage($imageUrl: String!) {
   addProfileImage(imageUrl: $imageUrl) {
