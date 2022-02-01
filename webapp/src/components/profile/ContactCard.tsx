@@ -5,11 +5,13 @@ import {
   Icon,
   IconProps,
   Input,
+  Link,
   Spacer,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { Form, Formik } from "formik";
 import { AnimatePresence, motion } from "framer-motion";
 import * as Icons from "react-icons/fa";
@@ -24,6 +26,7 @@ import {
 } from "../../graphql/generated/graphql";
 import { InputField } from "../forms/InputField";
 import Card from "../general/Card";
+import { useState } from "react";
 
 interface InitialValueDict {
   [index: string]: { id: number; input: string };
@@ -60,13 +63,17 @@ export const ContactCard: React.FC<ContactCardProps> = ({
   user,
   isMyProfile,
 }) => {
-  // const <div isSubmitting,="" setSub=""></div> = useState(false);
+  const initialValues = {} as InitialValueDict;
   const toast = useToast();
+  const [addContact] = useAddContactMutation();
+  const [touched, setTouched] = useState<number[]>([]);
+
   const { data: { contactTypes: contactTypes } = {} } = useContactTypesQuery();
   const { data: { userContacts: userContactsData } = {} } =
     useUserContactsQuery({
       variables: { userId: user ? user.id : -1 },
     });
+
   const userContacts = userContactsData?.filter(
     (uc: UserContact) => !uc.contactType.socialMedia
   );
@@ -74,16 +81,12 @@ export const ContactCard: React.FC<ContactCardProps> = ({
   const userSocials = userContactsData?.filter(
     (uc: UserContact) => uc.contactType.socialMedia
   );
-  const [addContact] = useAddContactMutation();
-  const initialValues = {} as InitialValueDict;
 
-  if (contactTypes) {
-    for (const type of contactTypes) {
-      const userInput = userContactsData?.find(
-        (i) => i.contactTypeId == type.id
-      )?.input;
-      initialValues[type.name] = { id: type.id, input: userInput || "" };
-    }
+  for (const type of contactTypes || []) {
+    const userInput = userContactsData?.find(
+      (i) => i.contactTypeId == type.id
+    )?.input;
+    initialValues[type.name] = { id: type.id, input: userInput || "" };
   }
 
   return (
@@ -97,176 +100,148 @@ export const ContactCard: React.FC<ContactCardProps> = ({
         <Card>
           {!isMyProfile ? (
             <Box>
-              <Text
-                fontWeight="800"
-                color="dark.500"
-                fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-              >
-                Contact
-              </Text>
-              <Stack direction={"row"} pl={0} alignItems={"flex-start"}>
-                {userContacts?.map((uc, index) => (
-                  <>
-                    <Button
-                      key={`userContact.${index}`}
-                      size="md"
-                      variant="ghost"
-                      colorScheme={"mintro"}
-                      _hover={{ opacity: "60%" }}
-                      leftIcon={
-                        <>
-                          <svg width="0" height="0">
-                            <linearGradient id="instagram" x1="100%" y1="100%">
-                              <stop stopColor="#7a6ded" offset="0%" />
-                              <stop stopColor="#591885" offset="100%" />
-                            </linearGradient>
-                          </svg>
-                          <DynamicFaIcon
-                            boxSize={"5"}
-                            color={
-                              uc.contactType.color1
-                                ? uc.contactType.color1
-                                : undefined
-                            }
-                            name={uc.contactType.icon}
-                          />
-                        </>
-                      }
-                    >
-                      <Text
-                        // bgGradient="linear(to-l, #7a6ded, #591885)"
-                        // bgClip="text"
-                        color={"black"}
-                        fontWeight="extrabold"
-                        fontSize={"sm"}
-                      >
-                        {uc.input}
-                      </Text>
-                    </Button>
-                  </>
-                ))}
-
-                {/* <Button
-                  size="md"
-                  variant="ghost"
-                  colorScheme={"mintro"}
-                  _hover={{ opacity: "60%" }}
-                  leftIcon={
-                    <>
-                      {" "}
-                      <svg width="0" height="0">
-                        <linearGradient id="instagram" x1="100%" y1="100%">
-                          <stop stopColor="#7a6ded" offset="0%" />
-                          <stop stopColor="#591885" offset="100%" />
-                        </linearGradient>
-                      </svg>
-                      <FaInstagram
-                        size="20px"
-                        style={{ fill: "url(#instagram)" }}
-                      />{" "}
-                    </>
-                  }
-                >
-                  <Text
-                    // bgGradient="linear(to-l, #7a6ded, #591885)"
-                    // bgClip="text"
-                    color={"black"}
-                    fontWeight="extrabold"
-                    fontSize={"sm"}
-                  >
-                    /u/user
-                  </Text>
-                </Button>
-                <Button
-                  size="md"
-                  variant="ghost"
-                  colorScheme={"mintro"}
-                  _hover={{ opacity: "80%" }}
-                  leftIcon={<FaTiktok size="20px" style={{ fill: "black" }} />}
-                >
-                  <Text
-                    color={"dark.500"}
-                    fontWeight="extrabold"
-                    fontSize={"sm"}
-                  >
-                    /u/user
-                  </Text>
-                </Button>
-                <Button
-                  size="md"
-                  variant="ghost"
-                  colorScheme={"mintro"}
-                  _hover={{ opacity: "60%" }}
-                  leftIcon={
-                    <>
-                      <FaSnapchatGhost
-                        size="20px"
-                        stroke="black"
-                        strokeWidth={"20px"}
-                        fill="yellow"
-                      />
-                    </>
-                  }
-                >
-                  <Text
-                    bgClip="text"
-                    color={"dark.500"}
-                    fontWeight="extrabold"
-                    fontSize={"sm"}
-                  >
-                    /u/user
-                  </Text>
-                </Button> */}
-              </Stack>
-              {userSocials?.length != 0 && (
+              {userContacts?.length != 0 && (
                 <Text
                   fontWeight="800"
                   color="dark.500"
                   fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
                 >
-                  Social
+                  Contact
                 </Text>
               )}
-              {userSocials?.map((us, index) => (
-                <>
-                  <Button
-                    key={`userSocial.${index}`}
-                    size="md"
-                    variant="ghost"
-                    colorScheme={"mintro"}
-                    _hover={{ opacity: "60%" }}
-                    leftIcon={
-                      <>
-                        <DynamicFaIcon
-                          boxSize={"5"}
-                          color={
-                            us.contactType.color1
-                              ? us.contactType.color1
-                              : undefined
-                          }
-                          strokeWidth={
-                            us.contactType.name == "Snapchat"
-                              ? "10px"
-                              : undefined
-                          }
-                          stroke="black"
-                          name={us.contactType.icon}
-                        />
-                      </>
-                    }
-                  >
-                    <Text
-                      // bgGradient="linear(to-l, #7a6ded, #591885)"
-                      // bgClip="text"
-                      color={"black"}
-                      fontWeight="extrabold"
-                      fontSize={"sm"}
+              <Stack
+                maxW="2xl"
+                flexWrap={"wrap"}
+                spacing="0"
+                direction={"column"}
+                pl={0}
+                alignItems={"flex-start"}
+              >
+                {userContacts?.map((uc, index) => (
+                  <>
+                    <NextLink
+                      passHref
+                      href={
+                        uc?.contactType.url && uc.contactType.url && uc.input
+                          ? uc?.contactType.url +
+                            uc.contactType?.profileUrlTemplate +
+                            uc.input
+                          : ""
+                      }
                     >
-                      {us.input}
-                    </Text>
-                  </Button>
-                </>
-              ))}
+                      <Link _hover={{ opacity: "75%" }}>
+                        <Button
+                          key={`userContact.${index}`}
+                          size="md"
+                          variant="ghost"
+                          _hover={{ opacity: "60%" }}
+                          leftIcon={
+                            <>
+                              <svg width="0" height="0">
+                                <linearGradient
+                                  id="instagram"
+                                  x1="100%"
+                                  y1="100%"
+                                >
+                                  <stop stopColor="#7a6ded" offset="0%" />
+                                  <stop stopColor="#591885" offset="100%" />
+                                </linearGradient>
+                              </svg>
+                              <DynamicFaIcon
+                                boxSize={"8"}
+                                color={
+                                  uc.contactType.color1
+                                    ? uc.contactType.color1
+                                    : undefined
+                                }
+                                name={uc.contactType.icon}
+                              />
+                            </>
+                          }
+                        >
+                          <Text
+                            color={"black"}
+                            fontWeight="extrabold"
+                            fontSize={"md"}
+                          >
+                            {uc.input}
+                          </Text>
+                        </Button>
+                      </Link>
+                    </NextLink>
+                  </>
+                ))}
+              </Stack>
+              {userSocials?.length != 0 && (
+                <Text
+                  pt={5}
+                  fontWeight="800"
+                  color="dark.500"
+                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                >
+                  Socials
+                </Text>
+              )}
+              <Stack
+                maxW="2xl"
+                flexWrap={"wrap"}
+                spacing="0"
+                direction={"row"}
+                pl={0}
+                alignItems={"flex-start"}
+              >
+                {userSocials?.map((us, index) => (
+                  <>
+                    <NextLink
+                      passHref
+                      href={
+                        us?.contactType.url && us.contactType.url && us.input
+                          ? us?.contactType.url +
+                            us.contactType?.profileUrlTemplate +
+                            us.input
+                          : ""
+                      }
+                    >
+                      <Link _hover={{ opacity: "75%" }}>
+                        <Button
+                          mt={5}
+                          key={`userSocial.${index}`}
+                          size="md"
+                          variant="ghost"
+                          _hover={{ opacity: "60%" }}
+                          leftIcon={
+                            <>
+                              <DynamicFaIcon
+                                boxSize={"8"}
+                                color={
+                                  us.contactType.color1
+                                    ? us.contactType.color1
+                                    : undefined
+                                }
+                                strokeWidth={
+                                  us.contactType.name == "Snapchat"
+                                    ? "10px"
+                                    : undefined
+                                }
+                                stroke="black"
+                                name={us.contactType.icon}
+                              />
+                            </>
+                          }
+                        >
+                          <Text
+                            color={"black"}
+                            fontWeight="extrabold"
+                            fontSize={"sm"}
+                          >
+                            {us.input}
+                          </Text>
+                        </Button>
+                      </Link>
+                    </NextLink>
+                  </>
+                ))}
+              </Stack>
             </Box>
           ) : (
             <Formik
@@ -274,36 +249,35 @@ export const ContactCard: React.FC<ContactCardProps> = ({
               initialValues={initialValues}
               onSubmit={async (values, { setFieldError }) => {
                 console.log(values);
+                console.log(touched);
 
                 for (const value in values || []) {
-                  if (values[value].input != "") {
+                  if (touched.includes(values[value].id)) {
                     console.log(values[value].input);
                     const { data: response } = await addContact({
                       variables: {
                         typeId: values[value].id,
                         input: values[value].input,
                       },
+                      update: (cache) => {
+                        cache.evict({ fieldName: "userContacts" });
+                      },
                     });
 
                     if (response?.addContact.errors) {
-                      // const dict = response.addContact.errors.map(function (num) {
-                      //   return {
-                      //     id: values[value].id,
-                      //     input: values[value].input,
-                      //   };
-                      // });
                       const errorMsgArr = response?.addContact.errors[0];
                       const errorMsg = errorMsgArr.message
                         ? errorMsgArr.message[0]
                         : "";
                       console.log(response?.addContact.errors);
-                      setFieldError("Phone", errorMsg);
+                      console.log("error!");
+                      setFieldError(errorMsgArr.field, errorMsg);
+                      // setTouched([]);
+                      return;
                     }
-                    // else if (response?.addContact.userContact) {
-                    //   await onClose();
-                    // }
                   }
                 }
+                setTouched([]);
                 toast({
                   title: "Updated!",
                   status: "success",
@@ -357,12 +331,15 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               placeholder={contactType.placeholder}
                               errorBorderColor="red.200"
                               onChange={async (e) => {
+                                setTouched((touched) => [
+                                  ...touched,
+                                  contactType.id,
+                                ]);
                                 setFieldValue(contactType.name, {
                                   id: contactType.id,
                                   input: e.target.value,
                                 });
                               }}
-                              // onBlur={async () => }
                             />
                           </Stack>
                         ))}
@@ -412,12 +389,15 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               placeholder={contactType.placeholder}
                               errorBorderColor="red.200"
                               onChange={async (e) => {
+                                setTouched((touched) => [
+                                  ...touched,
+                                  contactType.id,
+                                ]);
                                 setFieldValue(contactType.name, {
                                   id: contactType.id,
                                   input: e.target.value,
                                 });
                               }}
-                              // onBlur={async () => }
                             />
                           </Stack>
                         ))}

@@ -178,7 +178,9 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
           <Tabs
             pt={2}
             colorScheme={"mintro"}
-            onChange={(index) => setTabIndex(index)}
+            onChange={async (index) => {
+              setTabIndex(index);
+            }}
             isFitted
           >
             <TabList

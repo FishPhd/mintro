@@ -49,8 +49,8 @@ export class UserContactResolver {
   ): Promise<UserContactResponse> {
     console.log(req.session.userId);
     let contactExists = await UserContact.findOne({
-      userId: req.session.userId,
-      contactTypeId: typeId,
+      where: { userId: req.session.userId, contactTypeId: typeId },
+      withDeleted: true,
     });
 
     let userContact = await UserContact.create({
@@ -63,7 +63,13 @@ export class UserContactResolver {
     const errors = await validate(userContact);
 
     if (errors.length > 0) {
+      let contactType = await ContactType.findOneOrFail({
+        id: typeId,
+      });
       // throw new Error(`Validation failed!`);
+      console.log(errors);
+      console.log(contactType);
+
       let message = "";
       if (errors[0]?.constraints) {
         message = Object.values(errors[0]?.constraints)[0];
@@ -72,19 +78,20 @@ export class UserContactResolver {
       return {
         errors: [
           {
-            field: errors[0].property,
+            field: contactType.name,
             message: [message],
           },
         ],
       };
     }
+
     if (contactExists) {
+      if (input == "") {
+        contactExists.deletedAt = new Date();
+      } else if (contactExists.deletedAt) {
+        contactExists.recover();
+      }
       contactExists.input = input;
-
-      // return { userContact };
-    }
-
-    if (contactExists) {
       userContact = await getManager().save(contactExists);
       return { userContact };
     }
