@@ -19,6 +19,8 @@ import { ImageUploadResolver } from "./resolvers/utility/imageUpload";
 import { StateResolver } from "./resolvers/utility/state";
 import { createUserLoader } from "./utils/createUserLoader";
 import { GroupResolver } from "./resolvers/group";
+import { ContactTypeResolver } from "./resolvers/utility/contactType";
+import { UserContactResolver } from "./resolvers/userContact";
 
 const main = async () => {
   const conn = await createConnection();
@@ -78,6 +80,8 @@ const main = async () => {
         ImageUploadResolver,
         SectionTypeResolver,
         FeedbackResolver,
+        ContactTypeResolver,
+        UserContactResolver,
       ],
       validate: false,
     }),

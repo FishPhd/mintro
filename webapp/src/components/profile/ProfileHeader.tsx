@@ -7,9 +7,9 @@ import {
   IconButton,
   Spacer,
   Stack,
-  // Tab,
-  // TabList,
-  // Tabs,
+  Tab,
+  TabList,
+  Tabs,
   Text,
 } from "@chakra-ui/react";
 import React from "react";
@@ -31,7 +31,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   user,
   openSetupModal,
   isMyProfile,
-  // setTabIndex,
+  setTabIndex,
 }) => {
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
@@ -175,10 +175,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               </Box>
             </Stack>
           </Stack>
-          {/* <Tabs
+          <Tabs
             pt={2}
             colorScheme={"mintro"}
-            onChange={(index) => setTabIndex(index)}
+            onChange={async (index) => {
+              setTabIndex(index);
+            }}
             isFitted
           >
             <TabList
@@ -194,7 +196,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 Connect
               </Tab>
             </TabList>
-          </Tabs> */}
+          </Tabs>
         </Card>
       )}
     </Box>

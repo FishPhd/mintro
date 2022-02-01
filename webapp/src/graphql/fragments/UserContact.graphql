@@ -1,0 +1,6 @@
+fragment UserContact on UserContact {
+  id
+  userId
+  contactTypeId
+  input
+}

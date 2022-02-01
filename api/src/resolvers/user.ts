@@ -21,14 +21,7 @@ import { v4 } from "uuid";
 import { getConnection, getManager } from "typeorm";
 import { isAuth } from "../middleware/isAuth";
 import { validate } from "class-validator";
-
-@ObjectType()
-export class FieldError {
-  @Field()
-  field: string;
-  @Field(() => [String], { nullable: true })
-  message: string[];
-}
+import { FieldError } from "../utils/fieldError";
 
 @ObjectType()
 class UserResponse {

@@ -1,3 +1,4 @@
+import { IsPhoneNumber, Length, ValidateIf } from "class-validator";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -9,7 +10,6 @@ import {
   Unique,
 } from "typeorm";
 import { ContactType } from "../utility/ContactType";
-import { User } from "./User";
 
 @ObjectType()
 @Unique(["userId", "contactTypeId"])
@@ -27,10 +27,19 @@ export class UserContact extends BaseEntity {
   @Column()
   contactTypeId: number;
 
-  // RELATIONS
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
+  @Field()
+  @ValidateIf((ct) => [1, 3].includes(ct.contactTypeId) && ct.input != "")
+  @IsPhoneNumber("US")
+  @Length(10, 15, {
+    message: `Phone number must be between $constraint1 and $constraint2 digits`,
+  })
+  @Column()
+  input: string;
 
+  // RELATIONS
+  // @ManyToOne(() => User, (user) => user.id)
+  // user: User;
+  @Field(() => ContactType)
   @ManyToOne(() => ContactType, (contactType) => contactType.id)
   contactType: ContactType;
 

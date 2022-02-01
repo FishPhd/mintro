@@ -16,7 +16,7 @@ import { DbContext } from "../types/types";
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
 import { LexoRank } from "lexorank";
-import { FieldError } from "./user";
+import { FieldError } from "../utils/fieldError";
 import { User } from "../entities/profile/User";
 import { SectionType } from "../entities/section/SectionType";
 

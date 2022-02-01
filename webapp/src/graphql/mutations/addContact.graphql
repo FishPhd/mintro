@@ -1,0 +1,10 @@
+mutation AddContact($typeId: Int!, $input: String!) {
+  addContact(typeId: $typeId, input: $input) {
+    errors {
+      ...Error
+    }
+    userContact {
+      ...UserContact
+    }
+  }
+}
