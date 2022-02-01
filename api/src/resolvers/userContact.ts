@@ -62,7 +62,6 @@ export class UserContactResolver {
       return { errors: undefined };
     }
 
-    console.log(req.session.userId);
     let contactExists = await UserContact.findOne({
       where: { userId: req.session.userId, contactTypeId: typeId },
       withDeleted: true,
@@ -74,16 +73,12 @@ export class UserContactResolver {
       input,
     });
 
-    console.log(userContact);
     const errors = await validate(userContact);
 
     if (errors.length > 0) {
       let contactType = await ContactType.findOneOrFail({
         id: typeId,
       });
-      // throw new Error(`Validation failed!`);
-      console.log(errors);
-      console.log(contactType);
 
       let message = "";
       if (errors[0]?.constraints) {
@@ -120,70 +115,4 @@ export class UserContactResolver {
     userContact = await getManager().save(userContact);
     return { userContact };
   }
-
-  // @Mutation(() => UserContactResponse)
-  // @UseMiddleware(isAuth)
-  // async addContacts(
-  //   @Arg("inputs") inputs: UserContactInputs,
-  //   @Ctx() { req }: DbContext
-  // ): Promise<UserContactResponse> {
-  //   console.log(req.session.userId);
-
-  //   let contactExists = await UserContact.findOne({
-  //     where: { userId: req.session.userId, contactTypeId: typeId },
-  //     withDeleted: true,
-  //   });
-
-  //   let userContact = await UserContact.create({
-  //     userId: req.session.userId,
-  //     contactTypeId: typeId,
-  //     input,
-  //   });
-
-  //   console.log(userContact);
-  //   const errors = await validate(userContact);
-
-  //   if (errors.length > 0) {
-  //     let contactType = await ContactType.findOneOrFail({
-  //       id: typeId,
-  //     });
-  //     // throw new Error(`Validation failed!`);
-  //     console.log(errors);
-  //     console.log(contactType);
-
-  //     let message = "";
-  //     if (errors[0]?.constraints) {
-  //       message = Object.values(errors[0]?.constraints)[0];
-  //       message = message[0].toUpperCase() + message.slice(1);
-  //     }
-  //     return {
-  //       errors: [
-  //         {
-  //           field: contactType.name,
-  //           message: [message],
-  //         },
-  //       ],
-  //     };
-  //   }
-
-  //   if (contactExists) {
-  //     if (input == "") {
-  //       contactExists.deletedAt = new Date();
-  //     } else if (contactExists.deletedAt) {
-  //       contactExists.recover();
-  //     }
-  //     contactExists.input = input;
-  //     userContact = await getManager().save(contactExists);
-  //     return { userContact };
-  //   }
-
-  //   await getConnection()
-  //     .createQueryBuilder()
-  //     .relation(ContactType, "userContacts")
-  //     .of(typeId)
-  //     .add(userContact);
-
-  //   userContact = await getManager().save(userContact);
-  //   return { userContact };
-  // }
 }
