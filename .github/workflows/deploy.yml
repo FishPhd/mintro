@@ -14,11 +14,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Cloning repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
