@@ -112,7 +112,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   Contact
                 </Text>
               )}
-              <Wrap justify="center" py={2} pt={2} maxW={"2xl"} mb={2}>
+              <Wrap justify="center" maxW={"2xl"}>
                 {userContacts?.map((uc, index) => (
                   <>
                     <NextLink
@@ -180,7 +180,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   Socials
                 </Text>
               )}
-              <Wrap justify="center" py={2} pt={2} maxW={"2xl"} mb={2}>
+              <Wrap justify="center" maxW={"2xl"}>
                 {userSocials?.map((us, index) => (
                   <>
                     <NextLink
