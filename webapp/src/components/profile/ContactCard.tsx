@@ -67,6 +67,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
   const toast = useToast();
   const [addContact] = useAddContactMutation();
   const [touched, setTouched] = useState<number[]>([]);
+  const [showSaveButton, setshowSaveButton] = useState(false);
 
   const { data: { contactTypes: contactTypes } = {} } = useContactTypesQuery();
   const { data: { userContacts: userContactsData } = {} } =
@@ -248,19 +249,12 @@ export const ContactCard: React.FC<ContactCardProps> = ({
               enableReinitialize={true}
               initialValues={initialValues}
               onSubmit={async (values, { setFieldError }) => {
-                console.log(values);
-                console.log(touched);
-
                 for (const value in values || []) {
                   if (touched.includes(values[value].id)) {
-                    console.log(values[value].input);
                     const { data: response } = await addContact({
                       variables: {
                         typeId: values[value].id,
                         input: values[value].input,
-                      },
-                      update: (cache) => {
-                        cache.evict({ fieldName: "userContacts" });
                       },
                     });
 
@@ -269,15 +263,22 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                       const errorMsg = errorMsgArr.message
                         ? errorMsgArr.message[0]
                         : "";
-                      console.log(response?.addContact.errors);
-                      console.log("error!");
                       setFieldError(errorMsgArr.field, errorMsg);
-                      // setTouched([]);
                       return;
                     }
                   }
                 }
+                await addContact({
+                  variables: {
+                    typeId: -1,
+                    input: "",
+                  },
+                  update: (cache) => {
+                    cache.evict({ fieldName: "userContacts" });
+                  },
+                });
                 setTouched([]);
+                setshowSaveButton(false);
                 toast({
                   title: "Updated!",
                   status: "success",
@@ -331,6 +332,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               placeholder={contactType.placeholder}
                               errorBorderColor="red.200"
                               onChange={async (e) => {
+                                setshowSaveButton(true);
                                 setTouched((touched) => [
                                   ...touched,
                                   contactType.id,
@@ -389,6 +391,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               placeholder={contactType.placeholder}
                               errorBorderColor="red.200"
                               onChange={async (e) => {
+                                setshowSaveButton(true);
                                 setTouched((touched) => [
                                   ...touched,
                                   contactType.id,
@@ -405,6 +408,8 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   <Flex pt={5}>
                     <Spacer />
                     <Button
+                      visibility={showSaveButton ? "visible" : "collapse"}
+                      position={showSaveButton ? "unset" : "absolute"}
                       isLoading={isSubmitting}
                       variant="mintro"
                       type="submit"
