@@ -28,7 +28,7 @@ export class UserContact extends BaseEntity {
   contactTypeId: number;
 
   @Field()
-  @ValidateIf((ct) => ct.contactTypeId === 1 && ct.input != "")
+  @ValidateIf((ct) => [1, 3].includes(ct.contactTypeId) && ct.input != "")
   @IsPhoneNumber("US")
   @Length(10, 15, {
     message: `Phone number must be between $constraint1 and $constraint2 digits`,

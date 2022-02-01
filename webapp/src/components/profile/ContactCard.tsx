@@ -10,6 +10,7 @@ import {
   Stack,
   Text,
   useToast,
+  Wrap,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { Form, Formik } from "formik";
@@ -35,6 +36,7 @@ interface InitialValueDict {
 const contactValidationType = {
   Phone: "number",
   Email: "email",
+  WhatsApp: "number",
 };
 
 /* Your icon name from database data can now be passed as prop */
@@ -110,14 +112,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   Contact
                 </Text>
               )}
-              <Stack
-                maxW="2xl"
-                flexWrap={"wrap"}
-                spacing="0"
-                direction={"column"}
-                pl={0}
-                alignItems={"flex-start"}
-              >
+              <Wrap justify="center" py={2} pt={2} maxW={"2xl"} mb={2}>
                 {userContacts?.map((uc, index) => (
                   <>
                     <NextLink
@@ -127,6 +122,8 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                           ? uc?.contactType.url +
                             uc.contactType?.profileUrlTemplate +
                             uc.input
+                          : uc.contactType.url
+                          ? uc.contactType.url && uc.input
                           : ""
                       }
                     >
@@ -149,7 +146,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                                 </linearGradient>
                               </svg>
                               <DynamicFaIcon
-                                boxSize={"8"}
+                                boxSize={"7"}
                                 color={
                                   uc.contactType.color1
                                     ? uc.contactType.color1
@@ -172,25 +169,18 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                     </NextLink>
                   </>
                 ))}
-              </Stack>
+              </Wrap>
               {userSocials?.length != 0 && (
                 <Text
-                  pt={5}
+                  pt={2}
                   fontWeight="800"
                   color="dark.500"
-                  fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
+                  fontSize={{ base: "4xl", md: "2xl", lg: "5xl" }}
                 >
                   Socials
                 </Text>
               )}
-              <Stack
-                maxW="2xl"
-                flexWrap={"wrap"}
-                spacing="0"
-                direction={"row"}
-                pl={0}
-                alignItems={"flex-start"}
-              >
+              <Wrap justify="center" py={2} pt={2} maxW={"2xl"} mb={2}>
                 {userSocials?.map((us, index) => (
                   <>
                     <NextLink
@@ -205,7 +195,6 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                     >
                       <Link _hover={{ opacity: "75%" }}>
                         <Button
-                          mt={5}
                           key={`userSocial.${index}`}
                           size="md"
                           variant="ghost"
@@ -242,7 +231,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                     </NextLink>
                   </>
                 ))}
-              </Stack>
+              </Wrap>
             </Box>
           ) : (
             <Formik

@@ -46,7 +46,6 @@ export class UserContactResolver {
       where: { userId },
       relations: ["contactType"],
     });
-    console.log(userContacts);
     return userContacts;
   }
 
