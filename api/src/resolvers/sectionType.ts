@@ -26,7 +26,7 @@ export class SectionTypeResolver {
   async getDistinctSectionTypes(): Promise<SectionType[]> {
     const result = await getManager().query(`SELECT * FROM section_types
     WHERE id IN
-    (SELECT MIN(id) FROM section_types GROUP BY type) and hidden = false`);
+    (SELECT MIN(id) FROM section_types where hidden = false GROUP BY type ) order by creation_date DESC`);
     return result;
   }
 }
