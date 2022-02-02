@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import NextLink from "next/link";
@@ -14,6 +15,7 @@ import * as Yup from "yup";
 import { InputField } from "../components/forms/InputField";
 import Card from "../components/general/Card";
 import NavBar from "../components/page/NavBar";
+import { useForgotPasswordMutation } from "../graphql/generated/graphql";
 import { usingApollo } from "../utils/withApollo";
 
 const forgotPasswordValidation = Yup.object().shape({
@@ -24,7 +26,8 @@ const forgotPasswordValidation = Yup.object().shape({
 
 export const ForgotPassword: React.FC = ({}) => {
   const [complete, setComplete] = useState(false);
-
+  const [forgotPassword] = useForgotPasswordMutation();
+  const toast = useToast();
   return (
     <>
       <NavBar />
@@ -52,19 +55,19 @@ export const ForgotPassword: React.FC = ({}) => {
             <Formik
               initialValues={{ identifier: "" }}
               validationSchema={forgotPasswordValidation}
-              onSubmit={async (values, { validateForm }) => {
-                // await forgotPassword({ variables: { email: values.email } });
-                const supportEmail = "sam@mintro.page";
-                const ccEmail = "aaron@mintro.page";
-                const subject = "I Forgot My Mintro Password!";
-                const body = `My identifier is:  '${values.identifier}'`;
-                validateForm();
-                window.open(
-                  `mailto:${supportEmail}?cc=${ccEmail}&subject=${
-                    encodeURIComponent(subject) || ""
-                  }&body=${encodeURIComponent(body) || ""}`
-                );
-
+              onSubmit={async (values) => {
+                console.log("here");
+                await forgotPassword({
+                  variables: { identifier: values.identifier },
+                });
+                toast({
+                  title: "Password reset Received!",
+                  description:
+                    "Currently requests are handled manually, we appreciate the patience",
+                  status: "success",
+                  duration: 9000,
+                  isClosable: true,
+                });
                 setComplete(true);
               }}
             >
@@ -86,7 +89,7 @@ export const ForgotPassword: React.FC = ({}) => {
                       ></InputField>
                       <Button
                         type="submit"
-                        colorScheme="mintro"
+                        variant={"mintro"}
                         isLoading={isSubmitting}
                         size="lg"
                         fontSize="md"

@@ -10,18 +10,18 @@ export async function sendEmail(to: string, html: string) {
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false, // true for 465, false for other ports
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    // secure: false, // true for 465, false for other ports
     auth: {
-      user: "vwe3jqfsjetbyyju@ethereal.email", // generated ethereal user
-      pass: "48h972WBGVwHxcntV8", // generated ethereal password
+      user: "674703eb4672ca",
+      pass: "901e613b5b2eba",
     },
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    from: '"Mintro Support" <sam@mintro.page>', // sender address
     to, // list of receivers
     subject: "Change password", // Subject line
     html,

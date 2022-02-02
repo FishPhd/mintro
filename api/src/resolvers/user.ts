@@ -22,6 +22,7 @@ import { getConnection, getManager } from "typeorm";
 import { isAuth } from "../middleware/isAuth";
 import { validate } from "class-validator";
 import { FieldError } from "../utils/fieldError";
+import { forgotPasswordHtml } from "../utils/html/resetPassword";
 
 @ObjectType()
 class UserResponse {
@@ -114,10 +115,16 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   async forgotPassword(
-    @Arg("email") email: string,
+    @Arg("identifier") identifier: string,
     @Ctx() { redis }: DbContext
   ) {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: [
+        { email: identifier },
+        { phoneNumber: identifier },
+        { username: identifier },
+      ],
+    });
     if (!user) {
       // Email not found
       return true;
@@ -130,11 +137,8 @@ export class UserResolver {
       "ex",
       1000 * 60 * 60 * 24 * 3 // 3 days ttl
     );
-
-    await sendEmail(
-      email,
-      `<a href=https://localhost:3000/change-password/${token}">reset password</a>`
-    );
+    console.log("Token created!");
+    await sendEmail(user.email as string, await forgotPasswordHtml(token));
 
     return true;
   }

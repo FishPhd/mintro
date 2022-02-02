@@ -193,7 +193,7 @@ export type MutationEditGroupArgs = {
 
 
 export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
+  identifier: Scalars['String'];
 };
 
 
@@ -704,7 +704,7 @@ export type EditGroupMutation = (
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
-  email: Scalars['String'];
+  identifier: Scalars['String'];
 }>;
 
 
@@ -1663,8 +1663,8 @@ export type EditGroupMutationHookResult = ReturnType<typeof useEditGroupMutation
 export type EditGroupMutationResult = Apollo.MutationResult<EditGroupMutation>;
 export type EditGroupMutationOptions = Apollo.BaseMutationOptions<EditGroupMutation, EditGroupMutationVariables>;
 export const ForgotPasswordDocument = gql`
-    mutation ForgotPassword($email: String!) {
-  forgotPassword(email: $email)
+    mutation ForgotPassword($identifier: String!) {
+  forgotPassword(identifier: $identifier)
 }
     `;
 export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
@@ -1682,7 +1682,7 @@ export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMut
  * @example
  * const [forgotPasswordMutation, { data, loading, error }] = useForgotPasswordMutation({
  *   variables: {
- *      email: // value for 'email'
+ *      identifier: // value for 'identifier'
  *   },
  * });
  */
