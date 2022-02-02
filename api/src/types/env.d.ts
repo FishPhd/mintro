@@ -8,5 +8,7 @@ declare namespace NodeJS {
     AWS_SECRET_ACCESS_KEY: string;
     AWS_ACCESS_KEY_ID: string;
     S3_BUCKET_IMAGES: string;
+    SUPPORT_EMAIL: string;
+    SUPPORT_EMAIL_PASS: string;
   }
 }
