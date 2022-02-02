@@ -9,6 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import Head from "next/head";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -30,6 +31,9 @@ export const ChangePassword: React.FC = () => {
   const [tokenError, setTokenError] = useState<string[]>();
   return (
     <>
+      <Head>
+        <title>Change Password | Mintro</title>
+      </Head>
       <NavBar />
       <Box
         bg={useColorModeValue("gray.50", "inherit")}

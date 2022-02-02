@@ -9,6 +9,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import Head from "next/head";
 import NextLink from "next/link";
 import React, { useState } from "react";
 import * as Yup from "yup";
@@ -30,6 +31,9 @@ export const ForgotPassword: React.FC = ({}) => {
   const toast = useToast();
   return (
     <>
+      <Head>
+        <title>Forgot Password | Mintro</title>
+      </Head>
       <NavBar />
 
       <Box
