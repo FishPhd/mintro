@@ -24,4 +24,5 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           dokku-host: '35.233.143.58'
           app-name: 'mintro-api'
+          remote-branch: 'main'
      
