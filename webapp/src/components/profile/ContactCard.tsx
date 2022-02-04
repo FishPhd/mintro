@@ -308,7 +308,9 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               name={contactType.icon}
                             />
                             {contactType.prefix != "" && (
-                              <Text>{contactType.prefix}</Text>
+                              <Text color="dark.500" pl={2} fontWeight={"bold"}>
+                                {contactType.prefix}
+                              </Text>
                             )}
                             <Input
                               as={InputField}
@@ -376,12 +378,11 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               name={contactType.icon}
                             />
                             {contactType.prefix != "" && (
-                              <Text pl={2} fontWeight={"bold"}>
+                              <Text color="dark.500" pl={2} fontWeight={"bold"}>
                                 {contactType.prefix}
                               </Text>
                             )}
                             <Input
-                              ml={-1}
                               as={InputField}
                               focusBorderColor="mintro.300"
                               name={`${contactType.name}`}
