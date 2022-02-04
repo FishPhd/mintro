@@ -10,5 +10,8 @@ declare namespace NodeJS {
     S3_BUCKET_IMAGES: string;
     SUPPORT_EMAIL: string;
     SUPPORT_EMAIL_PASS: string;
+    OAUTH_CLIENTID: string;
+    OAUTH_CLIENT_SECRET: string;
+    OAUTH_REFRESH_TOKEN: string;
   }
 }
