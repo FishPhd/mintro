@@ -22,6 +22,6 @@ jobs:
       - name: Push to dokku
         uses: dokku/github-action@master
         with:
-          git_remote_url: 'ssh://dokku@35.233.143.58/mintro-api'
+          git_remote_url: 'ssh://dokku@35.233.143.58/main'
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
      
