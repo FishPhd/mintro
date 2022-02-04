@@ -18,9 +18,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    
+    
+    
       - name: Push to Dokku
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         run: |
+           git remote add dokku dokku@35.233.143.58:mintro-api
            git subtree push --prefix api dokku master
      
