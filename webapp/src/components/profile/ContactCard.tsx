@@ -298,6 +298,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                             key={index}
                           >
                             <DynamicFaIcon
+                              mr={2}
                               boxSize={"5"}
                               color={
                                 contactType.color1
