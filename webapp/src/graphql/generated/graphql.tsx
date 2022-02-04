@@ -41,6 +41,7 @@ export type ContactType = {
   id: Scalars['Float'];
   name: Scalars['String'];
   placeholder: Scalars['String'];
+  prefix?: Maybe<Scalars['String']>;
   profileUrlTemplate?: Maybe<Scalars['String']>;
   socialMedia: Scalars['Boolean'];
   updatedAt: Scalars['String'];
@@ -508,7 +509,7 @@ export type CityFragment = (
 
 export type ContactTypeFragment = (
   { __typename?: 'ContactType' }
-  & Pick<ContactType, 'id' | 'name' | 'icon' | 'url' | 'profileUrlTemplate' | 'color1' | 'color2' | 'placeholder' | 'socialMedia' | 'createdAt' | 'updatedAt'>
+  & Pick<ContactType, 'id' | 'name' | 'icon' | 'url' | 'profileUrlTemplate' | 'color1' | 'color2' | 'placeholder' | 'prefix' | 'socialMedia' | 'createdAt' | 'updatedAt'>
 );
 
 export type CountryFragment = (
@@ -1211,6 +1212,7 @@ export const ContactTypeFragmentDoc = gql`
   color1
   color2
   placeholder
+  prefix
   socialMedia
   createdAt
   updatedAt

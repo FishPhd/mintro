@@ -285,7 +285,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   >
                     Contact
                   </Text>
-                  <Stack>
+                  <Stack maxW="sm" mx={"auto"}>
                     {contactTypes &&
                       contactTypes.length > 0 &&
                       contactTypes
@@ -298,6 +298,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                             key={index}
                           >
                             <DynamicFaIcon
+                              mr={2}
                               boxSize={"5"}
                               color={
                                 contactType.color1
@@ -306,6 +307,11 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               }
                               name={contactType.icon}
                             />
+                            {contactType.prefix != "" && (
+                              <Text color="dark.500" pl={2} fontWeight={"bold"}>
+                                {contactType.prefix}
+                              </Text>
+                            )}
                             <Input
                               as={InputField}
                               focusBorderColor="mintro.300"
@@ -343,7 +349,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   >
                     Social
                   </Text>
-                  <Stack>
+                  <Stack maxW="sm" mx={"auto"}>
                     {contactTypes &&
                       contactTypes.length > 0 &&
                       contactTypes
@@ -356,6 +362,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                             key={index}
                           >
                             <DynamicFaIcon
+                              mr={2}
                               boxSize={"5"}
                               color={
                                 contactType.color1
@@ -370,6 +377,11 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                               stroke="black"
                               name={contactType.icon}
                             />
+                            {contactType.prefix != "" && (
+                              <Text color="dark.500" pl={2} fontWeight={"bold"}>
+                                {contactType.prefix}
+                              </Text>
+                            )}
                             <Input
                               as={InputField}
                               focusBorderColor="mintro.300"

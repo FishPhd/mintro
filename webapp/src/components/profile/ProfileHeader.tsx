@@ -19,6 +19,7 @@ import { User } from "../../graphql/generated/graphql";
 import { ShareButton } from "../buttons/ShareButton";
 import { Card } from "../general/Card";
 import { TextWithIcon } from "../general/TextWithIcon";
+import { isMobile } from "is-mobile";
 
 interface ProfileHeaderProps {
   user: User | undefined;
@@ -36,6 +37,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
+  // const isMobile = isMobile();
   return (
     <Box p="6">
       {user?.profileSetup && (
@@ -58,7 +60,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               <Avatar
                 alt={"Profile Picture"}
                 bg="gray.300"
-                size="xl"
+                size={isMobile() ? "md" : "xl"}
                 src={user.profileImageUrl ? user.profileImageUrl : undefined}
               />
 
@@ -81,29 +83,40 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   </Text>
 
                   <Spacer />
-                  {isMyProfile && user?.profileSetup && (
-                    <IconButton
-                      textAlign={"justify"}
-                      variant="mintro"
-                      bg="dark.100"
-                      rounded={"full"}
-                      aria-label="Edit Section"
-                      onClick={openSetupModal}
-                      icon={
-                        <>
-                          <Stack direction={"row"} p={4}>
-                            <EditIcon
-                              alignSelf={"center"}
-                              boxSize="4"
-                              color="dark.500"
-                            />
-                            <Text>Edit</Text>
-                          </Stack>
-                        </>
-                      }
+                  <Stack
+                    alignItems={"center"}
+                    direction={isMobile() ? "column" : "row"}
+                  >
+                    {isMyProfile && user?.profileSetup && (
+                      <IconButton
+                        textAlign={"justify"}
+                        variant="mintro"
+                        bg="dark.100"
+                        rounded={"full"}
+                        aria-label="Edit Section"
+                        onClick={openSetupModal}
+                        maxW={isMobile() ? "-webkit-fit-content" : "md"}
+                        icon={
+                          <>
+                            <Stack direction={"row"} p={4}>
+                              <EditIcon
+                                alignSelf={"center"}
+                                boxSize={isMobile() ? "3" : "4"}
+                                color="dark.500"
+                              />
+                              <Text fontSize={isMobile() ? "sm" : "lg"}>
+                                Edit
+                              </Text>
+                            </Stack>
+                          </>
+                        }
+                      />
+                    )}
+                    <ShareButton
+                      maxW={isMobile() ? "-webkit-fit-content" : "md"}
+                      pl={2}
                     />
-                  )}
-                  <ShareButton pl={2} />
+                  </Stack>
                 </HStack>
                 <HStack>
                   <Heading color="dark.400" size="xs">
@@ -130,6 +143,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   py={2}
                 >
                   <TextWithIcon
+                    maxW={"-webkit-fit-content"}
                     bgGradient="linear(to-tr, mintro.200, mintro.300)"
                     px={3}
                     py={2}
@@ -144,6 +158,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                       : ""}
                   </TextWithIcon>
                   <TextWithIcon
+                    maxW={"-webkit-fit-content"}
                     bgGradient="linear(to-tr, mintro.200, mintro.300)"
                     px={3}
                     py={2}
@@ -161,6 +176,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     })}
                   </TextWithIcon>
                   <TextWithIcon
+                    maxW={"-webkit-fit-content"}
                     bgGradient="linear(to-tr, mintro.200, mintro.300)"
                     px={3}
                     color="black"
