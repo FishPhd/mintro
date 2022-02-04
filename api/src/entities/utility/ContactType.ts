@@ -46,6 +46,10 @@ export class ContactType extends BaseEntity {
   @Column()
   placeholder!: string;
 
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  prefix!: string;
+
   @Field(() => Boolean)
   @Column({ type: "boolean", default: false })
   socialMedia!: boolean;
