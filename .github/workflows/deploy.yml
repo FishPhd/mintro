@@ -18,15 +18,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Cloning repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Push to dokku
-        uses: dokku/github-action@master
-        with:
-          # specify the `main` branch as the remote branch to push to
-          branch: 'main'
-          git_remote_url: 'ssh://dokku@dokku.me:22/appname'
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Push to Dokku
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        run: |
+           git subtree push --prefix api dokku master
+     
