@@ -1,2 +1,3 @@
-// Deploy to Dokku
-git subtree push --prefix api dokku master
+## Deploy to Dokku
+
+`git push dokku main`
