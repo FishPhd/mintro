@@ -42,11 +42,11 @@ export const ForgotPassword: React.FC = ({}) => {
         py="12"
         px={{ base: "4", lg: "8" }}
       >
-        <Box maxW="md" mx="auto">
+        <Box maxW={"lg"} mx="auto">
           <Heading textAlign="center" size="xl" fontWeight="extrabold">
             Forgot your password?
           </Heading>
-          <Text pt={2} mb="8" align="center" maxW="md" fontWeight="medium">
+          <Text pt={2} mb="8" align="center" fontWeight="medium">
             <Text as="span">Don&apos;t have an account?</Text>
             <NextLink href="register">
               <Link ml={2} color="mintro.500">
@@ -66,8 +66,7 @@ export const ForgotPassword: React.FC = ({}) => {
                 });
                 toast({
                   title: "Password reset Received!",
-                  description:
-                    "Currently requests are handled manually, we appreciate the patience",
+                  description: "You should receive an email shortly",
                   status: "success",
                   duration: 9000,
                   isClosable: true,
@@ -79,9 +78,8 @@ export const ForgotPassword: React.FC = ({}) => {
                 complete ? (
                   <Box>
                     <Heading pb={5}>Success!</Heading>
-                    Thank you for reaching out! If you have an account your
-                    password will be reset shortly! (We are still setting up our
-                    email server so thank you for your patience!)
+                    If we find an account linked to your information you will
+                    get an email from us!
                   </Box>
                 ) : (
                   <Form>
