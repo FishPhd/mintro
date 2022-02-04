@@ -14,14 +14,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Cloning repo
-        uses: actions/checkout@v2
-        with:
+    - uses: actions/checkout@v2
+      with:
           fetch-depth: 0
-
-      - name: Push to dokku
-        uses: dokku/github-action@master
-        with:
-          git_remote_url: 'ssh://dokku@35.233.143.58/main'
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - id: deploy
+      name: Deploy to dokku
+      uses: idoberko2/dokku-deploy-github-action@v1
+      with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          dokku-host: '35.233.143.58'
+          app-name: 'mintro-api'
      
