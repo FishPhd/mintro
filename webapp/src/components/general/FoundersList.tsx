@@ -30,7 +30,9 @@ export function FoundersList() {
           />
           <UserCard
             name="Sam"
-            img={"/SamFounderPic_300x300.webp"}
+            img={
+              "https://ik.imagekit.io/wzbi68mgpi3/profiles/20220205-s404v-dsc00177-2-jpg"
+            }
             tagline={"CTO"}
             username="sam"
           />
