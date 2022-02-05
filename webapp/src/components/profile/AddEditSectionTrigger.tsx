@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
   Portal,
   Stack,
+  Box,
   Text,
 } from "@chakra-ui/react";
 import React from "react";
@@ -38,29 +39,32 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
           </PopoverTrigger>
         ) : (
           <PopoverTrigger>
-            <Button
+            <IconButton
+              aria-label="Add Section"
               role="group"
               bg="white"
               _hover={{
                 bgGradient: "linear(to-tr, mintro.100, mintro.200)",
                 boxShadow: "lg",
               }}
-              py={20}
               size="lg"
+              py={10}
+              height={"auto"}
               px={5}
               mt={2}
               borderRadius="lg"
               boxShadow="md"
-            >
-              <Stack>
-                <PlusSquareIcon
-                  boxSize="50"
-                  color="gray.600"
-                  alignSelf="center"
-                />
-                <Text>Add Section</Text>
-              </Stack>
-            </Button>
+              icon={
+                <Box>
+                  <PlusSquareIcon
+                    boxSize="50"
+                    color="gray.600"
+                    alignSelf="center"
+                  />
+                  <Text>Add Section</Text>
+                </Box>
+              }
+            ></IconButton>
           </PopoverTrigger>
         )}
 
@@ -69,7 +73,7 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
             zIndex="popover"
             px={5}
             py={5}
-            w={{ base: "lg", sm: "md", md: "xl", lg: "2xl" }}
+            w={{ base: "sm", sm: "md", md: "xl" }}
           >
             <CreateSectionPopOver
               section={section}

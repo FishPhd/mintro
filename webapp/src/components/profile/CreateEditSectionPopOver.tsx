@@ -114,7 +114,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
         >
           {({ isSubmitting, setFieldValue, values, setErrors }) => (
             <Form>
-              <Stack spacing="4">
+              <Stack spacing={0}>
                 {!section && (
                   <Select
                     as={SelectField}
@@ -125,6 +125,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     name={"sectionName"}
                     label={"Section"}
                     bg="white"
+                    size={"lg"}
                     key="sectionName"
                     value={values.sectionName || ""}
                     isDisabled={!!section}
@@ -168,11 +169,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     render={() => (
                       <>
                         {sectionTypes?.map((section, index: number) => (
-                          <Box
-                            name={index}
-                            mt={[0, "0 !important"]}
-                            key={index}
-                          >
+                          <Box name={index} mt={0} key={index}>
                             {section.name == values.sectionName &&
                               !section.hidden && (
                                 <>
@@ -224,6 +221,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                           variant="mintro"
                           isLoading={isSubmitting}
                           size="lg"
+                          mt={[20, " 20px !important"]}
                           fontSize="md"
                           color="dark.500"
                         >
