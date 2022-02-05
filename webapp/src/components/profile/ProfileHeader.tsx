@@ -82,10 +82,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     {user?.nickname}
                   </Text>
 
-                  {isMobile() && <Spacer />}
+                  {!isMobile() && <Spacer />}
                   <Stack
                     alignItems={"center"}
-                    direction={isMobile() ? "row" : "column"}
+                    direction={isMobile() ? "column" : "row"}
                   >
                     {isMyProfile && user?.profileSetup && (
                       <IconButton
