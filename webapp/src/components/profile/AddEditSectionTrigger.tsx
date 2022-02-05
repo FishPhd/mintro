@@ -1,12 +1,10 @@
 import { PlusSquareIcon, EditIcon } from "@chakra-ui/icons";
 import {
-  Button,
   IconButton,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Portal,
-  Stack,
   Box,
   Text,
 } from "@chakra-ui/react";
