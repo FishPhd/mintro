@@ -22,7 +22,7 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
   section,
   sections,
 }) => (
-  <Popover autoFocus={false}>
+  <Popover autoFocus={true} closeOnBlur={true}>
     {({ onClose }) => (
       <>
         {section ? (
@@ -69,6 +69,7 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
         <Portal>
           <PopoverContent
             zIndex="popover"
+            _focus={{ outline: "none" }}
             px={5}
             py={5}
             w={{ base: "sm", sm: "md", md: "xl" }}

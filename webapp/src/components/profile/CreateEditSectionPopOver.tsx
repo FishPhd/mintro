@@ -33,6 +33,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
   sections,
   onClose,
 }) => {
+  console.log(section);
   const [createSection] = useCreateSectionMutation();
   const [updateSection] = useUpdateSectionMutation();
   const { data: { getSectionTypes: sectionTypes } = {} } =
@@ -114,7 +115,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
         >
           {({ isSubmitting, setFieldValue, values, setErrors }) => (
             <Form>
-              <Stack spacing={0}>
+              <Stack spacing={4}>
                 {!section && (
                   <Select
                     as={SelectField}
@@ -168,29 +169,29 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     name="items"
                     render={() => (
                       <>
-                        {sectionTypes?.map((section, index: number) => (
-                          <Box name={index} mt={0} key={index}>
-                            {section.name == values.sectionName &&
-                              !section.hidden && (
-                                <>
-                                  <Text fontWeight="bold" fontSize="4xl" pt={4}>
-                                    {section.name}
-                                  </Text>
-                                  <Text
-                                    fontSize="lg"
-                                    pb={2}
-                                    color={"dark.300"}
-                                    fontStyle={"italic"}
-                                  >
-                                    {section.tagline}
-                                  </Text>
-                                </>
-                              )}
-                            {Array.from(Array(section.maxItems).keys()).map(
-                              (index: number) => (
-                                <Box key={section.name + "_wrapper" + index}>
-                                  {section.name == values.sectionName &&
-                                    !section.hidden && (
+                        {sectionTypes
+                          ?.filter((s: SectionType) => s.id == values.typeId)
+                          ?.map((section, index: number) => (
+                            <Box
+                              name={index}
+                              mt={[0, "0px !important"]}
+                              key={index}
+                            >
+                              <Text fontWeight="bold" fontSize="4xl" pt={4}>
+                                {section.name}
+                              </Text>
+                              <Text
+                                fontSize="lg"
+                                pb={2}
+                                color={"dark.300"}
+                                fontStyle={"italic"}
+                              >
+                                {section.tagline}
+                              </Text>
+                              {Array.from(Array(section.maxItems).keys()).map(
+                                (index: number) => (
+                                  <Box key={section.name + "_wrapper" + index}>
+                                    {section.name == values.sectionName && (
                                       <Input
                                         mt={0}
                                         as={InputField}
@@ -211,11 +212,11 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                                         errorBorderColor="red.200"
                                       />
                                     )}
-                                </Box>
-                              )
-                            )}
-                          </Box>
-                        ))}
+                                  </Box>
+                                )
+                              )}
+                            </Box>
+                          ))}
                         <Button
                           type="submit"
                           variant="mintro"
