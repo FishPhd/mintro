@@ -9,12 +9,12 @@ export async function sendEmail(to: string, html: string) {
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      type: "OAuth2",
+      // type: "OAuth2",
       user: process.env.SUPPORT_EMAIL,
       pass: process.env.SUPPORT_EMAIL_PASS,
-      clientId: process.env.OAUTH_CLIENTID,
-      clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+      // clientId: process.env.OAUTH_CLIENTID,
+      // clientSecret: process.env.OAUTH_CLIENT_SECRET,
+      // refreshToken: process.env.OAUTH_REFRESH_TOKEN,
     },
   } as SMTPTransport.Options);
 
