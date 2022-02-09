@@ -79,7 +79,7 @@ export const ForgotPassword: React.FC = ({}) => {
                   <Box>
                     <Heading pb={5}>Success!</Heading>
                     If we find an account linked to your information you will
-                    get an email from us!
+                    get an email from us! Check your spam!
                   </Box>
                 ) : (
                   <Form>
