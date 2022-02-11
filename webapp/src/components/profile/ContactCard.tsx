@@ -103,6 +103,16 @@ export const ContactCard: React.FC<ContactCardProps> = ({
         <Card>
           {!isMyProfile ? (
             <Box>
+              {userContacts?.length == 0 && userSocials?.length == 0 && (
+                <Text
+                  fontWeight="800"
+                  color="dark.500"
+                  textAlign={"center"}
+                  fontSize={{ base: "2xl", md: "2xl", lg: "3xl" }}
+                >
+                  User has no contact info!
+                </Text>
+              )}
               {userContacts?.length != 0 && (
                 <Text
                   fontWeight="800"
