@@ -45,7 +45,8 @@ export const UserSections: React.FC<UserSectionsProps> = ({
             <Box
               key={section.id}
               index={index}
-              py={isMyProfile ? 2 : 8}
+              pt={isMyProfile ? 2 : 6}
+              pb={2}
               px={5}
               borderRadius="lg"
               boxShadow="md"
