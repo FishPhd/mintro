@@ -83,18 +83,20 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   spacing="2"
                   alignItems={"baseline"}
                 >
-                  <Stack spacing={1} direction={{ base: "row", lg: "row" }}>
+                  <Stack spacing={2} direction={{ base: "row", lg: "row" }}>
                     <Text fontSize="3xl" fontWeight="bold">
                       {user?.firstName}
                     </Text>
-                    <Text
-                      fontStyle="italic"
-                      color="dark.500"
-                      alignSelf={"center"}
-                      fontSize="lg"
-                    >
-                      ({user?.nickname})
-                    </Text>
+                    {user?.nickname && (
+                      <Text
+                        fontStyle="italic"
+                        color="dark.500"
+                        alignSelf={"center"}
+                        fontSize="lg"
+                      >
+                        ({user?.nickname})
+                      </Text>
+                    )}
                     <Text fontSize="3xl" fontWeight="bold">
                       {user?.lastName}
                     </Text>
