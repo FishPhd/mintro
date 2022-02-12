@@ -45,7 +45,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
             <Box
               key={section.id}
               index={index}
-              pt={isMyProfile ? 2 : 6}
+              pt={isMyProfile ? 2 : 4}
               pb={2}
               px={5}
               borderRadius="lg"
@@ -161,7 +161,7 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                   (date_time - parseInt(section.updatedAt)) /
                     (1000 * 3600 * 24) >
                     2
-                    ? -5
+                    ? -2
                     : 0
                 }
                 spacing="0"

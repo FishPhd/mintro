@@ -6,14 +6,12 @@ import {
   Stack,
   IconButtonProps,
 } from "@chakra-ui/react";
-import isMobile from "is-mobile";
 import { useRouter } from "next/router";
 import React from "react";
 import { IoMdShare } from "react-icons/io";
 export const ShareButton = (props: Omit<IconButtonProps, "aria-label">) => {
   const toast = useToast();
   const router = useRouter();
-  // const variant = useBreakpointValue({ md: "Share", base: "" });
   return (
     <IconButton
       color="dark.500"
@@ -33,14 +31,19 @@ export const ShareButton = (props: Omit<IconButtonProps, "aria-label">) => {
         <>
           <Stack direction={"row"} spacing={0}>
             <Icon
-              ml={1}
-              boxSize={isMobile() ? "3" : "4"}
+              ml={0.5}
+              boxSize={4}
               color="dark.500"
-              mr={{ base: 2.2, sm: 1 }}
+              mr={{ base: 3, lg: 1 }}
               alignSelf={"center"}
               as={IoMdShare}
             />
-            <Text pl={1} pr={4} fontSize={isMobile() ? "sm" : "lg"}>
+            <Text
+              pl={1}
+              pr={4}
+              fontSize={{ base: "sm", lg: "lg" }}
+              display={{ base: "none", lg: "unset" }}
+            >
               Share
             </Text>
           </Stack>

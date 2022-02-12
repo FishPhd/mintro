@@ -1,16 +1,15 @@
-import { EditIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
   Heading,
   HStack,
-  IconButton,
   Spacer,
   Stack,
   Tab,
   TabList,
   Tabs,
   Text,
+  Wrap,
 } from "@chakra-ui/react";
 import React from "react";
 import { AiOutlineGift, AiOutlineHome } from "react-icons/ai";
@@ -19,7 +18,7 @@ import { User } from "../../graphql/generated/graphql";
 import { ShareButton } from "../buttons/ShareButton";
 import { Card } from "../general/Card";
 import { TextWithIcon } from "../general/TextWithIcon";
-import { isMobile } from "is-mobile";
+import { EditProfileButton } from "../buttons/EditProfileButton";
 
 interface ProfileHeaderProps {
   user: User | undefined;
@@ -37,7 +36,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   const userBirthday = user?.birthday
     ? new Date(user?.birthday.toString())
     : undefined;
-  // const isMobile = isMobile();
   return (
     <Box p="6">
       {user?.profileSetup && (
@@ -53,67 +51,70 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             spacing={{ base: "4", md: "4" }}
             direction={{ base: "column", lg: "row" }}
             justify="space-between"
-            align="flex-start"
             w="-webkit-fill-available"
           >
-            <Stack direction="row" spacing="2" w="100%">
-              <Avatar
-                alt={"Profile Picture"}
-                bg="gray.300"
-                size={isMobile() ? "md" : "xl"}
-                src={user.profileImageUrl ? user.profileImageUrl : undefined}
-              />
+            <Stack
+              direction={{ base: "column", md: "row" }}
+              spacing="2"
+              w="100%"
+            >
+              <Stack direction={"row"}>
+                <Avatar
+                  alt={"Profile Picture"}
+                  bg="gray.300"
+                  size={"xl"}
+                  src={user.profileImageUrl ? user.profileImageUrl : undefined}
+                />
+                <Spacer />
+                {isMyProfile && user?.profileSetup && (
+                  <EditProfileButton
+                    display={{ base: "unset", lg: "none" }}
+                    openSetupModal={openSetupModal}
+                  />
+                )}
+                <ShareButton display={{ base: "unset", lg: "none" }} pl={2} />
+              </Stack>
 
               <Box flex="1" px={2}>
-                <HStack mb={1} align="flex-end" lineHeight="1" spacing="2">
-                  <Stack
-                    spacing={{ base: "0", lg: "2" }}
-                    direction={{ base: "column", lg: "row" }}
-                  >
-                    <Text fontSize="2xl" fontWeight="bold">
+                <HStack
+                  mb={{ base: 1, lg: -1 }}
+                  align="flex-end"
+                  lineHeight="1"
+                  spacing="2"
+                  alignItems={"baseline"}
+                >
+                  <Stack spacing={1} direction={{ base: "row", lg: "row" }}>
+                    <Text fontSize="3xl" fontWeight="bold">
                       {user?.firstName}
                     </Text>
-                    <Text fontSize="2xl" fontWeight="bold">
+                    <Text
+                      fontStyle="italic"
+                      color="dark.500"
+                      alignSelf={"center"}
+                      fontSize="lg"
+                    >
+                      ({user?.nickname})
+                    </Text>
+                    <Text fontSize="3xl" fontWeight="bold">
                       {user?.lastName}
                     </Text>
                   </Stack>
 
-                  <Text fontStyle="italic" color="dark.500" fontSize="md">
-                    {user?.nickname}
-                  </Text>
-
-                  {!isMobile() && <Spacer />}
+                  <Spacer />
                   <Stack
-                    alignItems={"center"}
-                    direction={isMobile() ? "column" : "row"}
+                    alignItems={"flex-start"}
+                    direction={{ base: "column", xl: "row" }}
+                    // display={isMobile() ? "box" : "unset"}
+                    spacing={{ base: "2", xl: "0" }}
                   >
                     {isMyProfile && user?.profileSetup && (
-                      <IconButton
-                        textAlign={"justify"}
-                        variant="mintro"
-                        bg="dark.100"
-                        rounded={"full"}
-                        aria-label="Edit Section"
-                        onClick={openSetupModal}
-                        maxW={isMobile() ? "-webkit-fit-content" : "md"}
-                        icon={
-                          <>
-                            <Stack direction={"row"} p={4}>
-                              <EditIcon
-                                alignSelf={"center"}
-                                boxSize={isMobile() ? "3" : "4"}
-                                color="dark.500"
-                              />
-                              <Text fontSize={isMobile() ? "sm" : "lg"}>
-                                Edit
-                              </Text>
-                            </Stack>
-                          </>
-                        }
+                      <EditProfileButton
+                        display={{ base: "none", lg: "unset" }}
+                        openSetupModal={openSetupModal}
                       />
                     )}
                     <ShareButton
-                      maxW={isMobile() ? "-webkit-fit-content" : "md"}
+                      display={{ base: "none", lg: "unset" }}
                       pl={2}
                     />
                   </Stack>
@@ -137,8 +138,8 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 >
                   {user?.tagline}
                 </Heading>
-                <Stack
-                  direction={{ base: "column", md: "row" }}
+                <Wrap
+                  // direction={{ base: "column", md: "row" }}
                   spacing={{ base: "3", lg: "3" }}
                   py={2}
                 >
@@ -187,7 +188,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                   >
                     {user?.homeTown}
                   </TextWithIcon>
-                </Stack>
+                </Wrap>
               </Box>
             </Stack>
           </Stack>

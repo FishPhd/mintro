@@ -72,10 +72,12 @@ export const ContactCard: React.FC<ContactCardProps> = ({
   const [showSaveButton, setshowSaveButton] = useState(false);
 
   const { data: { contactTypes: contactTypes } = {} } = useContactTypesQuery();
-  const { data: { userContacts: userContactsData } = {} } =
-    useUserContactsQuery({
-      variables: { userId: user ? user.id : -1 },
-    });
+  const {
+    data: { userContacts: userContactsData } = {},
+    loading: loadingUserContacts,
+  } = useUserContactsQuery({
+    variables: { userId: user ? user.id : -1 },
+  });
 
   const userContacts = userContactsData?.filter(
     (uc: UserContact) => !uc.contactType.socialMedia
@@ -113,7 +115,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   User has no contact info!
                 </Text>
               )}
-              {userContacts?.length != 0 && (
+              {!loadingUserContacts && userContacts?.length != 0 && (
                 <Text
                   fontWeight="800"
                   color="dark.500"
@@ -180,7 +182,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({
                   </>
                 ))}
               </Wrap>
-              {userSocials?.length != 0 && (
+              {!loadingUserContacts && userSocials?.length != 0 && (
                 <Text
                   pt={2}
                   fontWeight="800"
