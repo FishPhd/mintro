@@ -16,7 +16,7 @@ import { SectionType } from "./SectionType";
 
 @ObjectType()
 @Entity({ name: "sections" })
-@Unique(["id", "type"])
+@Unique(["id", "typeId", "deletedAt"])
 export class Section extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
