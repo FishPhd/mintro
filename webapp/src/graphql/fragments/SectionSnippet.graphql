@@ -3,7 +3,6 @@ fragment SectionSnippet on Section {
   createdAt
   updatedAt
   typeId
-  items
   rank
   creatorId
   creator {
@@ -11,5 +10,8 @@ fragment SectionSnippet on Section {
   }
   type {
     ...SectionTypeSnippet
+  }
+  items {
+    ...SectionItem
   }
 }

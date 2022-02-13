@@ -19,6 +19,7 @@ import { LexoRank } from "lexorank";
 import { FieldError } from "../utils/fieldError";
 import { User } from "../entities/profile/User";
 import { SectionType } from "../entities/section/SectionType";
+import { SectionItem } from "../entities/section/SectionItem";
 
 @ObjectType()
 class SectionResponse {
@@ -88,7 +89,7 @@ export class SectionResolver {
     let sections = await getConnection()
       .getRepository(Section)
       .find({
-        relations: ["type"],
+        relations: ["type", "items"],
         where: { creatorId: userId },
         order: { rank: "DESC" },
         take: limit,
@@ -197,10 +198,20 @@ export class SectionResolver {
     } else {
       lexoRank = LexoRank.middle();
     }
+
+    const sectionItems = [];
+    for (let i = 0; i < items.length; i++) {
+      const newItem = SectionItem.create({
+        content: items[i],
+        sectionId: type?.id,
+      });
+      sectionItems.push(newItem);
+    }
+
     const section = await Section.create({
       typeId,
       type,
-      items,
+      items: sectionItems,
       creatorId: req.session.userId,
       rank: lexoRank.toString(),
     }).save();
@@ -214,11 +225,21 @@ export class SectionResolver {
     @Arg("items", () => [String]) items: [string],
     @Ctx() { req }: DbContext
   ): Promise<Section | undefined> {
+    const sectionItems = [];
+    for (let i = 0; i < items.length; i++) {
+      const newItem = SectionItem.create({
+        content: items[i],
+        sectionId: id,
+      });
+      sectionItems.push(newItem);
+    }
+
     let sectionUpdate = await getConnection().getRepository(Section).save({
       id,
       creator_id: req.sessionID,
-      items,
+      items: sectionItems,
     });
+
     if (sectionUpdate == undefined) {
       // TODO add error
       console.log("Section could not be updated!");
@@ -226,7 +247,7 @@ export class SectionResolver {
     }
 
     return Section.findOne({
-      relations: ["type"],
+      relations: ["type", "items"],
       where: { id },
     });
   }

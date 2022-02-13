@@ -1,3 +1,4 @@
+@@ -0,0 +1,42 @@
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -5,13 +6,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Section } from "./Section";
 
 @ObjectType()
 @Entity({ name: "section_items" })
-export class SectionItems extends BaseEntity {
+export class SectionItem extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -23,6 +26,9 @@ export class SectionItems extends BaseEntity {
   @Field(() => String, { nullable: false })
   @Column("text", { nullable: false })
   content!: string;
+
+  @ManyToOne(() => Section, (s) => s.items)
+  section: Section;
 
   @Field(() => String)
   @CreateDateColumn()

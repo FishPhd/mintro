@@ -393,10 +393,19 @@ export type Section = {
   creator: User;
   creatorId: Scalars['Float'];
   id: Scalars['Float'];
-  items?: Maybe<Array<Scalars['String']>>;
+  items?: Maybe<Array<SectionItem>>;
   rank: Scalars['String'];
   type: SectionType;
   typeId: Scalars['Float'];
+  updatedAt: Scalars['String'];
+};
+
+export type SectionItem = {
+  __typename?: 'SectionItem';
+  content: Scalars['String'];
+  createdAt: Scalars['String'];
+  id: Scalars['Float'];
+  sectionId: Scalars['Float'];
   updatedAt: Scalars['String'];
 };
 
@@ -538,16 +547,24 @@ export type GroupResponseFragment = (
   )> }
 );
 
+export type SectionItemFragment = (
+  { __typename?: 'SectionItem' }
+  & Pick<SectionItem, 'id' | 'sectionId' | 'content' | 'createdAt' | 'updatedAt'>
+);
+
 export type SectionSnippetFragment = (
   { __typename?: 'Section' }
-  & Pick<Section, 'id' | 'createdAt' | 'updatedAt' | 'typeId' | 'items' | 'rank' | 'creatorId'>
+  & Pick<Section, 'id' | 'createdAt' | 'updatedAt' | 'typeId' | 'rank' | 'creatorId'>
   & { creator: (
     { __typename?: 'User' }
     & UserFragment
   ), type: (
     { __typename?: 'SectionType' }
     & SectionTypeSnippetFragment
-  ) }
+  ), items?: Maybe<Array<(
+    { __typename?: 'SectionItem' }
+    & SectionItemFragment
+  )>> }
 );
 
 export type SectionTypeSnippetFragment = (
@@ -857,7 +874,11 @@ export type UpdateSectionRankMutation = (
   { __typename?: 'Mutation' }
   & { updateRank: (
     { __typename?: 'Section' }
-    & Pick<Section, 'id' | 'items'>
+    & Pick<Section, 'id'>
+    & { items?: Maybe<Array<(
+      { __typename?: 'SectionItem' }
+      & SectionItemFragment
+    )>> }
   ) }
 );
 
@@ -1312,13 +1333,21 @@ export const SectionTypeSnippetFragmentDoc = gql`
   creationDate
 }
     `;
+export const SectionItemFragmentDoc = gql`
+    fragment SectionItem on SectionItem {
+  id
+  sectionId
+  content
+  createdAt
+  updatedAt
+}
+    `;
 export const SectionSnippetFragmentDoc = gql`
     fragment SectionSnippet on Section {
   id
   createdAt
   updatedAt
   typeId
-  items
   rank
   creatorId
   creator {
@@ -1327,9 +1356,13 @@ export const SectionSnippetFragmentDoc = gql`
   type {
     ...SectionTypeSnippet
   }
+  items {
+    ...SectionItem
+  }
 }
     ${UserFragmentDoc}
-${SectionTypeSnippetFragmentDoc}`;
+${SectionTypeSnippetFragmentDoc}
+${SectionItemFragmentDoc}`;
 export const StateFragmentDoc = gql`
     fragment State on State {
   id
@@ -2015,10 +2048,12 @@ export const UpdateSectionRankDocument = gql`
     mutation UpdateSectionRank($ranks: [String!]!, $id: Int!, $movingUp: Boolean!) {
   updateRank(ranks: $ranks, id: $id, movingUp: $movingUp) {
     id
-    items
+    items {
+      ...SectionItem
+    }
   }
 }
-    `;
+    ${SectionItemFragmentDoc}`;
 export type UpdateSectionRankMutationFn = Apollo.MutationFunction<UpdateSectionRankMutation, UpdateSectionRankMutationVariables>;
 
 /**

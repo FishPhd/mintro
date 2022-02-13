@@ -54,7 +54,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     : undefined,
                   items: section.items ? section.items : undefined,
                 }
-              : { sectionName: "", typeId: 0, items: ["", "", ""] }
+              : { sectionName: "", typeId: 0, items: [] }
           }
           validateOnChange={false}
           validateOnBlur={false}
@@ -69,7 +69,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               await updateSection({
                 variables: {
                   id: section.id,
-                  items: values.items ? values.items : [""],
+                  items: values.items ? values.items : undefined,
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "updateSection" });
@@ -83,7 +83,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               const { data: sectionResult } = await createSection({
                 variables: {
                   typeId: values.typeId ? values.typeId : -1,
-                  items: values.items ? values.items : [""],
+                  items: values.items ? values.items : undefined,
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "getSectionsByUser" });
@@ -202,7 +202,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                                         placeholder={section.itemNames}
                                         value={
                                           values.items
-                                            ? values.items[index]
+                                            ? values.items[index].content
                                             : undefined
                                         }
                                         my={2}

@@ -1,0 +1,7 @@
+fragment SectionItem on SectionItem {
+  id
+  sectionId
+  content
+  createdAt
+  updatedAt
+}
