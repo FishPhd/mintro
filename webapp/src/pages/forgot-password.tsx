@@ -60,7 +60,6 @@ export const ForgotPassword: React.FC = ({}) => {
               initialValues={{ identifier: "" }}
               validationSchema={forgotPasswordValidation}
               onSubmit={async (values) => {
-                console.log("here");
                 await forgotPassword({
                   variables: { identifier: values.identifier },
                 });

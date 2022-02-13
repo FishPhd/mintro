@@ -118,8 +118,6 @@ export const UploadForm: React.FC<UploadFormProps> = ({
             if (e.target.files && e.target.files.length) {
               file = e.target.files[0];
               await setFileName(file.name);
-              // await setFile(file);
-              console.log(file);
             }
 
             if (

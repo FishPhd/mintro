@@ -387,7 +387,6 @@ export const UserProfileSetup: React.FC<UserProfileSetupProps> = ({
                                   const state = states?.find(
                                     (item) => item.name == e.target.value
                                   );
-                                  console.log(state);
                                   await setFieldValue("state", state?.name);
                                   await refetchCities({
                                     stateId: state?.id,

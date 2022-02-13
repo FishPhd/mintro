@@ -33,7 +33,6 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
   sections,
   onClose,
 }) => {
-  console.log(section);
   const [createSection] = useCreateSectionMutation();
   const [updateSection] = useUpdateSectionMutation();
   const { data: { getSectionTypes: sectionTypes } = {} } =
