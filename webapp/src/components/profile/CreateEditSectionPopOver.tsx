@@ -40,6 +40,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
   const { data: { getDistinctSectionTypes: distinctTypes } = {} } =
     useGetDistinctSectionTypesQuery();
   const toast = useToast();
+  console.log(section?.items);
 
   return (
     <>
@@ -163,7 +164,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     ))}
                   </Select>
                 )}
-                {values.sectionName && (
+                {values.sectionName && values.items?.length != 0 && (
                   <FieldArray
                     name="items"
                     render={() => (
@@ -201,7 +202,8 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                                         name={`items.${index}`}
                                         placeholder={section.itemNames}
                                         value={
-                                          values.items
+                                          values.items &&
+                                          index < values.items.length
                                             ? values.items[index].content
                                             : undefined
                                         }
