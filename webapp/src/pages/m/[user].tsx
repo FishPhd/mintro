@@ -64,7 +64,8 @@ export const Profile: NextPage = () => {
         </title>
       </Head>
       <NavBar />
-      {(!user?.username && !userFetching) || !user?.profileSetup ? (
+      {(!user?.username && !userFetching) ||
+      (!user?.profileSetup && !isMyProfile) ? (
         <Box bg={"dark.25"} minH="100vh" pt={"20"} px={5}>
           <Card maxW="4xl" mx="auto" textAlign="center">
             <Heading p={5} fontSize={{ base: "3xl", md: "4xl" }}>
