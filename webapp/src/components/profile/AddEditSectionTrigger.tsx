@@ -60,8 +60,8 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
                     alignSelf="center"
                   />
                   <Text>Add Section</Text>
-                  {(sections && sections?.length < 5) ||
-                    (!sections)(
+                  {!sections ||
+                    (sections && sections?.length < 5 && (
                       <Text
                         fontStyle={"italics"}
                         fontWeight={"hairline"}
@@ -69,7 +69,7 @@ export const AddEditSectionTrigger: React.FC<AddEditSectionTriggerProps> = ({
                       >
                         we recommend at least 5
                       </Text>
-                    )}
+                    ))}
                 </Box>
               }
             ></IconButton>
