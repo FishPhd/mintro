@@ -4,14 +4,15 @@ import NextLink from "next/link";
 import React from "react";
 
 interface UserCardProps {
-  name: string;
+  firstName: string;
+  lastName: string;
   img: string;
   username: string;
   tagline?: string;
 }
 
 export function UserCard(props: UserCardProps) {
-  const { name, img, username, tagline } = props;
+  const { firstName, lastName, img, username, tagline } = props;
   const src = img as string;
 
   const user_photo = src + "?tr=w-250,h-250";
@@ -46,7 +47,7 @@ export function UserCard(props: UserCardProps) {
           src={user_photo}
         />
         <Text pt={2} fontSize="2xl" fontWeight="700">
-          {name}
+          {firstName} {lastName}
         </Text>
         <Text mt="-2" pb={2} color="mintro.500" fontStyle="italic">
           {tagline}

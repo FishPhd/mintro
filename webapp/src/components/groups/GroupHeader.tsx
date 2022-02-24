@@ -95,32 +95,15 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
                   <Heading pt={1} color="dark.400" size="xs">
                     {group?.memberCount} Members
                   </Heading>
-                  {!isMember && hasPassword ? (
-                    <Flex pt={2}>
-                      <Icon
-                        alignSelf="flex-end"
-                        color="dark.200"
-                        as={RiLock2Line}
-                      />
-                      <Text
-                        pl={1}
-                        fontStyle="italic"
-                        color="dark.200"
-                        fontSize="md"
-                      >
-                        {"Secret Club"}
-                      </Text>
-                    </Flex>
-                  ) : (
-                    <Text
-                      pt={2}
-                      fontStyle="italic"
-                      color="dark.200"
-                      fontSize="md"
-                    >
-                      {group?.description}
-                    </Text>
-                  )}
+
+                  <Text
+                    pt={2}
+                    fontStyle="italic"
+                    color="dark.200"
+                    fontSize="md"
+                  >
+                    {group?.description}
+                  </Text>
                 </Stack>
 
                 <Spacer />

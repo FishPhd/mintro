@@ -78,35 +78,22 @@ export const Group: NextPage = () => {
               Members
             </Heading>
           )}
-          {!isMember && hasPassword ? (
-            <HStack pt={15} w="fit-content" alignSelf="center" mx="auto">
-              <Icon
-                alignSelf="center"
-                fontSize="xl"
-                color="dark.200"
-                as={RiLock2Line}
-              />
-              <Text fontWeight="500" color="dark.200" fontSize="2xl">
-                {"Secret Club"}
-              </Text>
-            </HStack>
-          ) : (
-            <Wrap justify="center" p={2} mb={2} spacing={5}>
-              {members &&
-                members.map((member, index: number) => (
-                  <WrapItem key={member.username + "_" + index}>
-                    <UserCard
-                      tagline={
-                        group?.creatorId == member.id ? "Creator" : undefined
-                      }
-                      name={member?.firstName ? member?.firstName : ""}
-                      img={member.profileImageUrl ? member.profileImageUrl : ""}
-                      username={member.username ? member.username : ""}
-                    />
-                  </WrapItem>
-                ))}
-            </Wrap>
-          )}
+          <Wrap justify="center" p={2} mb={2} spacing={5}>
+            {members &&
+              members.map((member, index: number) => (
+                <WrapItem key={member.username + "_" + index}>
+                  <UserCard
+                    tagline={
+                      group?.creatorId == member.id ? "Creator" : undefined
+                    }
+                    firstName={member?.firstName ? member?.firstName : ""}
+                    lastName={member?.lastName ? member?.lastName : ""}
+                    img={member.profileImageUrl ? member.profileImageUrl : ""}
+                    username={member.username ? member.username : ""}
+                  />
+                </WrapItem>
+              ))}
+          </Wrap>
         </Box>
       </Box>
     </>
