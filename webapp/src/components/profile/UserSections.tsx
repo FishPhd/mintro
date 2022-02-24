@@ -134,7 +134,10 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                       />
                     )}
 
-                    <AddEditSectionTrigger section={section} />
+                    <AddEditSectionTrigger
+                      sections={sections}
+                      section={section}
+                    />
                     <IconButton
                       aria-label="Delete Section"
                       variant="unstyled"
