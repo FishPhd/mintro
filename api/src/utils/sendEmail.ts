@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 // async..await is not allowed in global scope, must use a wrapper
-export async function sendEmail(to: string, html: string) {
+export async function sendEmail(to: string, html: string, subject: string) {
   // create reusable transporter object using the default SMTP transport
   // TODO setup OATH
   let transporter = nodemailer.createTransport({
@@ -26,9 +26,9 @@ export async function sendEmail(to: string, html: string) {
   // send mail with defined transport object
   await transporter.sendMail(
     {
-      from: `"Mintro Support"  ${process.env.SUPPORT_EMAIL}`,
+      from: `"Mintro"  ${process.env.SUPPORT_EMAIL}`,
       to, // list of receivers
-      subject: "Mintro Password Reset", // Subject line
+      subject: subject, // Subject line
       html,
     },
     function (error, response) {

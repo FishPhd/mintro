@@ -23,6 +23,7 @@ import { isAuth } from "../middleware/isAuth";
 import { validate } from "class-validator";
 import { FieldError } from "../utils/fieldError";
 import { forgotPasswordHtml } from "../utils/html/resetPassword";
+import { welcomeHtml } from "../utils/html/welcome";
 
 @ObjectType()
 class UserResponse {
@@ -138,7 +139,11 @@ export class UserResolver {
       1000 * 60 * 60 * 24 * 3 // 3 days ttl
     );
     console.log("Token created!");
-    await sendEmail(user.email as string, await forgotPasswordHtml(token));
+    await sendEmail(
+      user.email as string,
+      await forgotPasswordHtml(token),
+      "Mintro Password Reset"
+    );
 
     return true;
   }
@@ -235,6 +240,13 @@ export class UserResolver {
 
     req.session.userId = user?.id;
 
+    // Send welcome email
+    await sendEmail(
+      user.email as string,
+      await welcomeHtml(),
+      "Welcome to Mintro!"
+    );
+
     return { user };
   }
 
@@ -277,6 +289,7 @@ export class UserResolver {
       return { errors: err };
     }
     user = await User.findOne(req.session.userId);
+
     return { user };
   }
 
