@@ -23,13 +23,13 @@ export function FoundersList() {
           direction="row"
         >
           <UserCard
-            name={"Aaron"}
+            firstName={"Aaron"}
             img={"/AaronFounderPic_300x300.webp"}
             username={"aaron"}
             tagline={"CEO"}
           />
           <UserCard
-            name="Sam"
+            firstName="Sam"
             img={
               "https://ik.imagekit.io/wzbi68mgpi3/profiles/20220205-s404v-dsc00177-2-jpg"
             }

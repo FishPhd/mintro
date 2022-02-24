@@ -5,7 +5,7 @@ import React from "react";
 
 interface UserCardProps {
   firstName: string;
-  lastName: string;
+  lastName?: string;
   img: string;
   username: string;
   tagline?: string;

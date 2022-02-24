@@ -1,9 +1,6 @@
 import {
   Box,
   Heading,
-  HStack,
-  Icon,
-  Text,
   useColorModeValue,
   Wrap,
   WrapItem,
@@ -12,7 +9,6 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
-import { RiLock2Line } from "react-icons/ri";
 import { UserCard } from "../../components/general/UserCard";
 import GroupHeader from "../../components/groups/GroupHeader";
 import { NavBar } from "../../components/page/NavBar";

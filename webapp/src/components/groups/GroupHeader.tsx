@@ -2,7 +2,6 @@ import { EditIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
-  Flex,
   Heading,
   HStack,
   Icon,
@@ -13,7 +12,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
-import { RiGroup2Fill, RiLock2Line } from "react-icons/ri";
+import { RiGroup2Fill } from "react-icons/ri";
 import { Group, User } from "../../graphql/generated/graphql";
 import { JoinButton } from "../buttons/JoinButton";
 import { Card } from "../general/Card";
