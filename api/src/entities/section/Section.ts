@@ -43,6 +43,7 @@ export class Section extends BaseEntity {
   @OneToMany(() => SectionItem, (si) => si.section, {
     cascade: true,
     nullable: true,
+    orphanedRowAction: "soft-delete",
   })
   items: SectionItem[];
 

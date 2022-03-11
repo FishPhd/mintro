@@ -1,4 +1,3 @@
-@@ -0,0 +1,42 @@
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,

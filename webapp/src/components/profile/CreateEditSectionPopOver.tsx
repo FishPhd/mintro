@@ -42,6 +42,11 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
   const toast = useToast();
   console.log(section?.items);
 
+  let items = undefined;
+  if (section?.items) {
+    items = section?.items.map((a) => a.content);
+  }
+
   return (
     <>
       <Box>
@@ -53,7 +58,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                   sectionName: section.type.name
                     ? section.type.name
                     : undefined,
-                  items: section.items ? section.items : undefined,
+                  items: items ? items : undefined,
                 }
               : { sectionName: "", typeId: 0, items: [] }
           }
@@ -70,7 +75,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               await updateSection({
                 variables: {
                   id: section.id,
-                  items: values.items ? values.items : undefined,
+                  items: values.items ? values.items : [],
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "updateSection" });
@@ -84,7 +89,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               const { data: sectionResult } = await createSection({
                 variables: {
                   typeId: values.typeId ? values.typeId : -1,
-                  items: values.items ? values.items : undefined,
+                  items: values.items ? values.items : [],
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "getSectionsByUser" });
@@ -204,7 +209,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                                         value={
                                           values.items &&
                                           index < values.items.length
-                                            ? values.items[index].content
+                                            ? values.items[index]
                                             : undefined
                                         }
                                         my={2}
