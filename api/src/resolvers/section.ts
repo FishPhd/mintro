@@ -227,16 +227,29 @@ export class SectionResolver {
   ): Promise<Section | undefined> {
     const sectionItems = [];
     for (let i = 0; i < items.length; i++) {
+      console.log("here");
       const newItem = SectionItem.create({
-        content: items[i],
         sectionId: id,
+        content: items[i],
       });
       sectionItems.push(newItem);
+
+      console.log(id);
+      await getConnection()
+        .createQueryBuilder()
+        .relation(Section, "items")
+        .of(id)
+        .add(newItem);
     }
+
+    if (sectionItems == []) {
+      return;
+    }
+    console.log(sectionItems);
 
     let sectionUpdate = await getConnection().getRepository(Section).save({
       id,
-      creator_id: req.sessionID,
+      creator_id: req.session.userId,
       items: sectionItems,
     });
 

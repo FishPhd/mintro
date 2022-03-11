@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -18,7 +19,7 @@ export class SectionItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field()
+  @Field({ nullable: false })
   @Column({ unique: false })
   sectionId: number;
 
@@ -26,7 +27,10 @@ export class SectionItem extends BaseEntity {
   @Column("text", { nullable: false })
   content!: string;
 
-  @ManyToOne(() => Section, (s) => s.items)
+  @ManyToOne(() => Section, (s) => s.items, {
+    orphanedRowAction: "delete",
+  })
+  @JoinColumn([{ name: "section_id", referencedColumnName: "id" }])
   section: Section;
 
   @Field(() => String)
