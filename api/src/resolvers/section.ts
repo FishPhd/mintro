@@ -231,6 +231,7 @@ export class SectionResolver {
       const newItem = SectionItem.create({
         sectionId: id,
         content: items[i],
+        order: i,
       });
       sectionItems.push(newItem);
 

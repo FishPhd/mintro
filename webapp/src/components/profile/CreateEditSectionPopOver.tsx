@@ -75,7 +75,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
               await updateSection({
                 variables: {
                   id: section.id,
-                  items: values.items ? values.items : [],
+                  items: values?.items ? values.items : [],
                 },
                 update: (cache) => {
                   cache.evict({ fieldName: "updateSection" });
@@ -169,7 +169,7 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
                     ))}
                   </Select>
                 )}
-                {values.sectionName && values.items?.length != 0 && (
+                {values.sectionName && (
                   <FieldArray
                     name="items"
                     render={() => (

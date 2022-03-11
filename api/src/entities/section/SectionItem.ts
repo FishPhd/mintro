@@ -21,7 +21,11 @@ export class SectionItem extends BaseEntity {
 
   @Field({ nullable: false })
   @Column({ unique: false })
-  sectionId: number;
+  sectionId!: number;
+
+  @Field({ nullable: false })
+  @Column({ unique: false })
+  order!: number;
 
   @Field(() => String, { nullable: false })
   @Column("text", { nullable: false })
