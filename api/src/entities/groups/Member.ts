@@ -13,7 +13,7 @@ import { Group } from "./Group";
 
 @ObjectType()
 @Entity({ name: "members" })
-@Unique(["groupId", "userId"])
+@Unique(["groupId", "userId", "deletedAt"])
 export class Member extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
