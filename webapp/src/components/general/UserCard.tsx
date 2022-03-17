@@ -27,7 +27,9 @@ export function UserCard(props: UserCardProps) {
         px={5}
         h="100%"
         bg={"gray.50"}
-        maxW={{ base: "xs", md: "xl" }}
+        maxW={{ base: "xs" }}
+        maxH={{ base: "xs"}}
+        minH={{ base: "xs" }}
         shadow={{ md: "base" }}
       >
         <Box
@@ -46,10 +48,16 @@ export function UserCard(props: UserCardProps) {
           height={"125px"}
           src={user_photo}
         />
-        <Text pt={2} fontSize="2xl" fontWeight="700">
-          {firstName} {lastName}
-        </Text>
-        <Text mt="-2" pb={2} color="mintro.500" fontStyle="italic">
+        <Spacer />
+        <Box textAlign={"center"}>
+          <Text pt={tagline ? 2 : 0} mb={-2} fontSize="2xl"  fontWeight="700">
+            {firstName}
+          </Text>
+          <Text fontSize="2xl" fontWeight="700">
+            {lastName}
+          </Text>
+        </Box>
+        <Text mt={-1} pb={2} color="mintro.500" fontStyle="italic">
           {tagline}
         </Text>
         <Spacer />
