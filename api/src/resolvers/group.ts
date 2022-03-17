@@ -409,8 +409,9 @@ export class GroupResolver {
       .leftJoinAndSelect("user.groups", "members")
       .leftJoinAndSelect("members.group", "groups")
       .where("groups.id = :groupId", { groupId })
+      .orderBy('user.firstName', 'ASC')
+      .addOrderBy('user.lastName', 'ASC') 
       .getMany();
-    // console.log(members);
     return members;
   }
 
