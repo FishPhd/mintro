@@ -89,9 +89,9 @@ export class SectionResolver {
     let sections = await getConnection()
       .getRepository(Section)
       .find({
-        relations: ["type", "items"],
+        relations: {type: true, items: true},
         where: { creatorId: userId },
-        order: { rank: "DESC" },
+        order: { items: { rank: "DESC" } },
         take: limit,
       });
     return {
