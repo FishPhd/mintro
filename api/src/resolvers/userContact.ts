@@ -75,7 +75,7 @@ export class UserContactResolver {
     const errors = await validate(userContact);
 
     if (errors.length > 0) {
-      let contactType = await ContactType.findOneOrFail({
+      let contactType = await ContactType.findOneByOrFail({
         id: typeId,
       });
 

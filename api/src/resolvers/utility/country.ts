@@ -27,7 +27,7 @@ export class CountryResolver {
   @Query(() => Country)
   async getCountry(
     @Arg("countryId", () => Int) countryId: number
-  ): Promise<Country | undefined> {
-    return Country.findOne({ id: countryId });
+  ): Promise<Country | null> {
+    return Country.findOneBy({ id: countryId });
   }
 }

@@ -27,7 +27,7 @@ class SectionResponse {
   errors?: FieldError[];
 
   @Field(() => Section, { nullable: true })
-  section?: Section;
+  section?: Section | null;
 }
 
 @ObjectType()
@@ -89,7 +89,7 @@ export class SectionResolver {
     let sections = await getConnection()
       .getRepository(Section)
       .find({
-        relations: {type: true, items: true},
+        relations: { type: true, items: true },
         where: { creatorId: userId },
         order: { items: { rank: "DESC" } },
         take: limit,
@@ -103,8 +103,8 @@ export class SectionResolver {
   @Query(() => Section, { nullable: true })
   async getSection(
     @Arg("sectionId", () => Int) sectionId: number
-  ): Promise<Section | undefined> {
-    return Section.findOne(sectionId);
+  ): Promise<Section | null> {
+    return Section.findOneBy({ id: sectionId });
   }
 
   @Mutation(() => Section)
@@ -184,13 +184,16 @@ export class SectionResolver {
     }
 
     // Get Matching type
-    const type = await getConnection()
-      .getRepository(SectionType)
+    const type = await SectionType.getRepository()
       .createQueryBuilder("s")
       .where('"id" = :type_id', {
         type_id: typeId,
       })
       .getOne();
+
+    if (!type) {
+      return { section: null };
+    }
 
     // Parse most recent post and generate rank
     if (result[0]) {
@@ -210,7 +213,7 @@ export class SectionResolver {
 
     const section = await Section.create({
       typeId,
-      type,
+      type: type,
       items: sectionItems,
       creatorId: req.session.userId,
       rank: lexoRank.toString(),
@@ -224,7 +227,7 @@ export class SectionResolver {
     @Arg("id", () => Int) id: number,
     @Arg("items", () => [String]) items: [string],
     @Ctx() { req }: DbContext
-  ): Promise<Section | undefined> {
+  ): Promise<Section | null> {
     const sectionItems = [];
     for (let i = 0; i < items.length; i++) {
       console.log("here");
@@ -236,19 +239,18 @@ export class SectionResolver {
       sectionItems.push(newItem);
 
       console.log(id);
-      await getConnection()
-        .createQueryBuilder()
+      await Section.createQueryBuilder()
         .relation(Section, "items")
         .of(id)
         .add(newItem);
     }
 
     if (sectionItems == []) {
-      return;
+      return null;
     }
     console.log(sectionItems);
 
-    let sectionUpdate = await getConnection().getRepository(Section).save({
+    let sectionUpdate = await Section.getRepository().save({
       id,
       creator_id: req.session.userId,
       items: sectionItems,
@@ -257,11 +259,11 @@ export class SectionResolver {
     if (sectionUpdate == undefined) {
       // TODO add error
       console.log("Section could not be updated!");
-      return undefined;
+      return null;
     }
 
     return Section.findOne({
-      relations: ["type", "items"],
+      relations: { type: true, items: true },
       where: { id },
     });
   }
@@ -272,8 +274,7 @@ export class SectionResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: DbContext
   ): Promise<boolean> {
-    await getConnection()
-      .createQueryBuilder()
+    await Section.createQueryBuilder()
       .softDelete()
       .from(Section)
       .where({ id, creatorId: req.session.userId })

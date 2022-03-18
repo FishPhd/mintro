@@ -14,16 +14,14 @@ import argon2 from "argon2";
 import { FORGET_PASSWORD_PREFIX, USER_COOKIE } from "../constants";
 import { UserRegistrationInput } from "../entities/profile/UserRegistrationInput";
 import { UserProfileSetupInput } from "../entities/profile/UserProfileSetupInput";
-
-// import { validateRegistration } from "../utils/validateRegistration";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
-import { getConnection, getManager } from "typeorm";
 import { isAuth } from "../middleware/isAuth";
 import { validate } from "class-validator";
 import { FieldError } from "../utils/fieldError";
 import { forgotPasswordHtml } from "../utils/html/resetPassword";
 import { welcomeHtml } from "../utils/html/welcome";
+import { ds } from "../index";
 
 @ObjectType()
 class UserResponse {
@@ -31,19 +29,11 @@ class UserResponse {
   errors?: FieldError[];
 
   @Field(() => User, { nullable: true })
-  user?: User;
+  user?: User | null;
 }
 
 @Resolver(User)
 export class UserResolver {
-  // @FieldResolver(() => String)
-  // email(@Root() user: User, @Ctx() { req }: DbContext) {
-  //   if (req.session.userId === user.id) {
-  //     return user.email;
-  //   }
-  //   return "";
-  // }
-
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
@@ -70,7 +60,7 @@ export class UserResolver {
     }
 
     const UserIdNum = parseInt(userId);
-    const user = await User.findOne(UserIdNum);
+    const user = await User.findOneBy({ id: UserIdNum });
 
     if (!user) {
       return {
@@ -96,7 +86,7 @@ export class UserResolver {
   ): Promise<UserResponse> {
     let user;
     try {
-      user = await getConnection()
+      user = await ds
         .createQueryBuilder()
         .update(User, { profileImageUrl: imageUrl })
         .where("id = :id", { id: req.session.userId })
@@ -107,10 +97,9 @@ export class UserResolver {
           return response.raw[0];
         });
     } catch (err) {
-      // console.log(err);
       return { errors: err };
     }
-    user = await User.findOne(req.session.userId);
+    user = await User.findOneBy({ id: req.session.userId });
     return { user };
   }
 
@@ -119,12 +108,10 @@ export class UserResolver {
     @Arg("identifier") identifier: string,
     @Ctx() { redis }: DbContext
   ) {
-    const user = await User.findOne({
-      where: [
-        { email: identifier },
-        { phoneNumber: identifier },
-        { username: identifier },
-      ],
+    const user = await User.findOneBy({
+      // email: identifier,
+      // phoneNumber: identifier,
+      username: identifier,
     });
     if (!user) {
       // Email not found
@@ -149,18 +136,18 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req }: DbContext): Promise<User | undefined> {
+  async me(@Ctx() { req }: DbContext): Promise<User | null> {
     if (!req.session.userId) {
-      return undefined;
+      return null;
     }
-    return User.findOne(req.session.userId);
+    return User.findOneBy({ id: req.session.userId });
   }
 
   @Query(() => User, { nullable: true })
   async getUser(
     @Arg("username", () => String) username: string
-  ): Promise<User | undefined> {
-    return User.findOne({ username: username });
+  ): Promise<User | null> {
+    return User.findOneBy({ username: username });
   }
 
   @Query(() => [User])
@@ -209,7 +196,7 @@ export class UserResolver {
       };
     } else {
       try {
-        await getManager().save(user);
+        await User.save(user);
       } catch (err) {
         var errorType = /\(([^()]*)\)/g.exec(err.detail)?.pop();
         if (errorType === undefined) {
@@ -258,7 +245,9 @@ export class UserResolver {
   ): Promise<UserResponse> {
     let user;
     try {
-      user = await getConnection()
+      user = await (
+        await ds
+      )
         .createQueryBuilder()
         .update(User, {
           firstName:
@@ -282,13 +271,13 @@ export class UserResolver {
         .returning("*")
         .updateEntity(true)
         .execute()
-        .then((response) => {
+        .then((response: { raw: any[] }) => {
           return response.raw[0];
         });
     } catch (err) {
       return { errors: err };
     }
-    user = await User.findOne(req.session.userId);
+    user = await User.findOneBy({ id: req.session.userId });
 
     return { user };
   }
@@ -299,12 +288,11 @@ export class UserResolver {
     @Arg("password") password: string,
     @Ctx() { req }: DbContext
   ): Promise<UserResponse> {
-    const user = await User.findOne(
-      usernameOrEmail.includes("@")
-        ? {
-            where: { email: usernameOrEmail.toLowerCase() },
-          }
-        : { where: { username: usernameOrEmail.toLowerCase() } }
+    const user = await User.findOneBy(
+      // usernameOrEmail.includes("@")
+      // ? { email: "test@test" }
+      // :
+      { username: usernameOrEmail.toLowerCase() }
     );
 
     if (!user) {
