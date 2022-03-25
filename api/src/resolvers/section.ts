@@ -86,14 +86,12 @@ export class SectionResolver {
     @Arg("userId", () => Int) userId: number
   ): Promise<PaginatedSections> {
     const limit = Math.min(10, postCount);
-    let sections = await getConnection()
-      .getRepository(Section)
-      .find({
-        relations: { type: true, items: true },
-        where: { creatorId: userId },
-        order: { items: { rank: "DESC" } },
-        take: limit,
-      });
+    let sections = await Section.find({
+      relations: { type: true, items: true },
+      where: { creatorId: userId },
+      order: { items: { rank: "DESC" } },
+      take: limit,
+    });
     return {
       sections: sections.slice(0, limit),
       isEnd: sections.length !== limit + 1,
@@ -163,9 +161,7 @@ export class SectionResolver {
       };
     }
 
-    const result = await getConnection()
-      .getRepository(Section)
-      .createQueryBuilder("s")
+    const result = await Section.createQueryBuilder("s")
       .where('"creator_id" = :user_id', {
         user_id: req.session.userId,
       })
@@ -207,6 +203,7 @@ export class SectionResolver {
       const newItem = SectionItem.create({
         content: items[i],
         sectionId: type?.id,
+        rank: i,
       });
       sectionItems.push(newItem);
     }

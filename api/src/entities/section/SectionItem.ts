@@ -37,7 +37,7 @@ export class SectionItem extends BaseEntity {
   @JoinColumn([{ name: "section_id", referencedColumnName: "id" }])
   section: Section;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: false })
   @CreateDateColumn()
   createdAt: Date;
 

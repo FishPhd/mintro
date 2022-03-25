@@ -23,7 +23,7 @@ import { UserContactResolver } from "./resolvers/userContact";
 import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
-export const ds = new DataSource({
+export const defaultSource = new DataSource({
   type: "postgres",
   url: process.env.DATABASE_URL,
   logging: false,
@@ -32,13 +32,10 @@ export const ds = new DataSource({
   namingStrategy: new SnakeNamingStrategy(),
   synchronize: false,
   migrationsRun: true,
-  cli: {
-    migrationsDir: "src/migrations",
-  },
 });
 
 const main = async () => {
-  ds.initialize();
+  defaultSource.initialize();
 
   const app = express();
 

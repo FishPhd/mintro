@@ -26,16 +26,16 @@ export class Group extends BaseEntity {
   @Column({ unique: true })
   @IsAlphanumeric()
   @Length(2)
-  url: String;
+  url: string;
 
   @Field(() => String)
   @Column({ unique: true })
   @Length(2)
-  name: String;
+  name!: string;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  description: String;
+  description: string;
 
   @Field(() => String)
   @CreateDateColumn()
@@ -47,7 +47,7 @@ export class Group extends BaseEntity {
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true })
-  groupImageUrl: String;
+  groupImageUrl: string;
 
   @Field()
   @Column()

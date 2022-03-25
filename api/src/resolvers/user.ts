@@ -21,7 +21,7 @@ import { validate } from "class-validator";
 import { FieldError } from "../utils/fieldError";
 import { forgotPasswordHtml } from "../utils/html/resetPassword";
 import { welcomeHtml } from "../utils/html/welcome";
-import { ds } from "../index";
+import { defaultSource } from "../index";
 
 @ObjectType()
 class UserResponse {
@@ -86,7 +86,7 @@ export class UserResolver {
   ): Promise<UserResponse> {
     let user;
     try {
-      user = await ds
+      user = await defaultSource
         .createQueryBuilder()
         .update(User, { profileImageUrl: imageUrl })
         .where("id = :id", { id: req.session.userId })
@@ -246,7 +246,7 @@ export class UserResolver {
     let user;
     try {
       user = await (
-        await ds
+        await defaultSource
       )
         .createQueryBuilder()
         .update(User, {

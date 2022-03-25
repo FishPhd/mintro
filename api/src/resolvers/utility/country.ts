@@ -1,5 +1,4 @@
 import { Arg, Int, Query, Resolver } from "type-graphql";
-import { getConnection } from "typeorm";
 import { Country } from "../../entities/utility/Country";
 
 @Resolver(Country)
@@ -13,15 +12,7 @@ export class CountryResolver {
   async getCountryFromName(
     @Arg("countryName") countryName: string
   ): Promise<Country> {
-    const qb = await getConnection()
-      .getRepository(Country)
-      .createQueryBuilder("c")
-      .where('"name" = :countryName', {
-        countryName,
-      })
-      .getOneOrFail();
-
-    return qb;
+    return Country.findOneByOrFail({ name: countryName });
   }
 
   @Query(() => Country)

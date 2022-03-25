@@ -405,6 +405,7 @@ export type SectionItem = {
   content: Scalars['String'];
   createdAt: Scalars['String'];
   id: Scalars['Float'];
+  rank: Scalars['Float'];
   sectionId: Scalars['Float'];
   updatedAt: Scalars['String'];
 };

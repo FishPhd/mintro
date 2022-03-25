@@ -1,5 +1,5 @@
+import { defaultSource } from "../index";
 import { Arg, Int, Query, Resolver } from "type-graphql";
-import { getManager, getRepository } from "typeorm";
 import { Section } from "../entities/section/Section";
 import { SectionType } from "../entities/section/SectionType";
 
@@ -14,17 +14,14 @@ export class SectionTypeResolver {
   async getSectionType(
     @Arg("sectionTypeId", () => Int) sectionTypeId: number
   ): Promise<SectionType> {
-    let sectionTypeRepository = getRepository(SectionType);
-    const res = await sectionTypeRepository.findOne({
-      where: { id: sectionTypeId },
+    return SectionType.findOneByOrFail({
+      id: sectionTypeId,
     });
-
-    return res!;
   }
 
   @Query(() => [SectionType])
   async getDistinctSectionTypes(): Promise<SectionType[]> {
-    const result = await getManager().query(`SELECT * FROM section_types
+    const result = await defaultSource.query(`SELECT * FROM section_types
     WHERE id IN
     (SELECT MIN(id) FROM section_types where hidden = false GROUP BY type ) order by creation_date DESC`);
     return result;

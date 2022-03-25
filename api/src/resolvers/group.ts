@@ -17,7 +17,7 @@ import { DbContext } from "../types/types";
 import { User } from "../entities/profile/User";
 import { validate } from "class-validator";
 import { FieldError } from "../utils/fieldError";
-import { ds } from "../index";
+import { defaultSource } from "../index";
 
 @ObjectType()
 class GroupResponse {
@@ -69,7 +69,7 @@ export class GroupResolver {
       };
     } else {
       try {
-        await ds.manager.save(group);
+        await defaultSource.manager.save(group);
       } catch (err) {
         var errorType = /\(([^()]*)\)/g.exec(err.detail)?.pop();
         if (errorType === undefined) {
@@ -98,7 +98,7 @@ export class GroupResolver {
       }
     }
 
-    await ds
+    await defaultSource
       .createQueryBuilder()
       .relation(User, "groups")
       .of(userId)
@@ -174,7 +174,7 @@ export class GroupResolver {
     try {
       if (passwordUpdated) {
         // If user entered a new password for edit then updated
-        group = await ds
+        group = await defaultSource
           .createQueryBuilder()
           .update(Group, {
             name,
@@ -193,7 +193,7 @@ export class GroupResolver {
         console.log("query done");
       } // Otherwise ignore password
       else {
-        group = await ds
+        group = await defaultSource
           .createQueryBuilder()
           .update(Group, {
             name,
@@ -231,7 +231,7 @@ export class GroupResolver {
       };
     } else {
       try {
-        await ds.manager.save(group);
+        await defaultSource.manager.save(group);
       } catch (err) {
         var errorType = /\(([^()]*)\)/g.exec(err.detail)?.pop();
         if (errorType === undefined) {
@@ -296,7 +296,7 @@ export class GroupResolver {
         }
       }
 
-      await ds.transaction(async (transactionalEntityManager) => {
+      await defaultSource.transaction(async (transactionalEntityManager) => {
         if (group?.memberCount) {
           await transactionalEntityManager.update(
             Group,
@@ -336,21 +336,23 @@ export class GroupResolver {
   ): Promise<GroupResponse> {
     let group = await Group.findOneBy({ id: groupId });
     if (group != undefined) {
-      await ds.manager.transaction(async (transactionalEntityManager) => {
-        if (group?.memberCount) {
-          await transactionalEntityManager.update(
-            Group,
-            { id: groupId },
-            { memberCount: group?.memberCount - 1 }
-          );
-        }
+      await defaultSource.manager.transaction(
+        async (transactionalEntityManager) => {
+          if (group?.memberCount) {
+            await transactionalEntityManager.update(
+              Group,
+              { id: groupId },
+              { memberCount: group?.memberCount - 1 }
+            );
+          }
 
-        await transactionalEntityManager.softDelete(Member, {
-          groupId: groupId,
-          userId: req.session.userId,
-        });
-      });
-      await ds
+          await transactionalEntityManager.softDelete(Member, {
+            groupId: groupId,
+            userId: req.session.userId,
+          });
+        }
+      );
+      await defaultSource
         .createQueryBuilder()
         .relation(User, "groups")
         .of(req.session.userId)
@@ -364,7 +366,7 @@ export class GroupResolver {
   async getUsersGroups(
     @Ctx() { req }: DbContext
   ): Promise<Group[] | undefined> {
-    const groups = await ds
+    const groups = await defaultSource
       .getRepository(Group)
       .createQueryBuilder("group")
       .leftJoinAndSelect("group.members", "member")
@@ -378,14 +380,14 @@ export class GroupResolver {
   async getGroupByName(
     @Arg("name", () => String) name: string
   ): Promise<Group | null> {
-    return Group.findOneBy({ name: name });
+    return Group.findOneBy({ name });
   }
 
   @Query(() => Group, { nullable: true })
   async getGroupByUrl(
     @Arg("url", () => String) url: string
   ): Promise<Group | null> {
-    return Group.findOneBy({ url: url });
+    return Group.findOneBy({ url });
   }
 
   @Query(() => Group, { nullable: true })
@@ -415,7 +417,7 @@ export class GroupResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: DbContext
   ): Promise<boolean> {
-    await ds
+    await defaultSource
       .createQueryBuilder()
       .softDelete()
       .from(Group)
