@@ -50,8 +50,8 @@ export class SectionType extends BaseEntity {
   maxItems!: number;
 
   @Field(() => String)
-  @Column({ type: "date", default: () => "((CURRENT_DATE))" })
-  creationDate: string;
+  @Column({ type: "date", default: () => "CURRENT_DATE::text::date" })
+  creationDate: Date;
 
   @Field(() => String)
   @CreateDateColumn()

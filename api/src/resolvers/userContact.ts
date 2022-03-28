@@ -1,4 +1,5 @@
 import { validate } from "class-validator";
+import { defaultSource } from "../index";
 import {
   Arg,
   Ctx,
@@ -10,7 +11,6 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { getConnection, getManager } from "typeorm";
 import { UserContact } from "../entities/profile/UserContact";
 import { ContactType } from "../entities/utility/ContactType";
 import { isAuth } from "../middleware/isAuth";
@@ -75,7 +75,7 @@ export class UserContactResolver {
     const errors = await validate(userContact);
 
     if (errors.length > 0) {
-      let contactType = await ContactType.findOneOrFail({
+      let contactType = await ContactType.findOneByOrFail({
         id: typeId,
       });
 
@@ -101,17 +101,17 @@ export class UserContactResolver {
         contactExists.recover();
       }
       contactExists.input = input;
-      userContact = await getManager().save(contactExists);
+      userContact = await UserContact.save(contactExists);
       return { userContact };
     }
 
-    await getConnection()
+    await defaultSource
       .createQueryBuilder()
       .relation(ContactType, "userContacts")
       .of(typeId)
       .add(userContact);
 
-    userContact = await getManager().save(userContact);
+    userContact = await UserContact.save(userContact);
     return { userContact };
   }
 }

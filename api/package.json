@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "gen-env": "gen-env-types .env -o src/types/env.d.ts -e .",
-    "migrate:gen": "npx typeorm migration:generate -n Initial",
+    "migrate:gen": "npx typeorm migration:generate  src/migrations/migration -d ./dist/index.js",
     "migrate:create": "npx typeorm migration:create -n Initial",
     "migrate:run": "npx typeorm migration:run",
     "watch": "tsc -w",
     "build": "tsc",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js"
   },
@@ -51,7 +52,7 @@
     "reflect-metadata": "^0.1.13",
     "tsc": "^2.0.3",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.41",
+    "typeorm": "^0.3.3",
     "typeorm-naming-strategies": "^2.0.0",
     "uuid": "^8.3.2"
   },

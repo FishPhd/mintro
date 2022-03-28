@@ -14,11 +14,10 @@ import argon2 from "argon2";
 import { Member } from "../entities/groups/Member";
 import { isAuth } from "../middleware/isAuth";
 import { DbContext } from "../types/types";
-import { createQueryBuilder, getManager, getRepository } from "typeorm";
-import { getConnection } from "typeorm";
 import { User } from "../entities/profile/User";
 import { validate } from "class-validator";
 import { FieldError } from "../utils/fieldError";
+import { defaultSource } from "../index";
 
 @ObjectType()
 class GroupResponse {
@@ -26,7 +25,7 @@ class GroupResponse {
   errors?: FieldError[];
 
   @Field(() => Group, { nullable: true })
-  group?: Group;
+  group?: Group | null;
 }
 
 @Resolver(Group)
@@ -70,7 +69,7 @@ export class GroupResolver {
       };
     } else {
       try {
-        await getManager().save(group);
+        await defaultSource.manager.save(group);
       } catch (err) {
         var errorType = /\(([^()]*)\)/g.exec(err.detail)?.pop();
         if (errorType === undefined) {
@@ -99,7 +98,7 @@ export class GroupResolver {
       }
     }
 
-    await getConnection()
+    await defaultSource
       .createQueryBuilder()
       .relation(User, "groups")
       .of(userId)
@@ -119,7 +118,7 @@ export class GroupResolver {
     @Arg("groupId", () => Int) id: number,
     @Arg("password") password: string
   ): Promise<GroupResponse> {
-    const group = await Group.findOne(id);
+    const group = await Group.findOneBy({ id });
     if (!group) {
       return {
         errors: [
@@ -150,7 +149,7 @@ export class GroupResolver {
   async groupHasPassword(
     @Arg("groupId", () => Int) groupId: number
   ): Promise<Boolean> {
-    let group = await Group.findOne({ id: groupId });
+    let group = await Group.findOneBy({ id: groupId });
 
     if (group?.password) {
       return true;
@@ -170,12 +169,12 @@ export class GroupResolver {
     @Arg("password", { nullable: true }) password: string,
     @Arg("passwordUpdated") passwordUpdated: boolean
   ): Promise<GroupResponse> {
-    let group: Group | undefined;
+    let group: Group | null;
 
     try {
       if (passwordUpdated) {
         // If user entered a new password for edit then updated
-        group = await getConnection()
+        group = await defaultSource
           .createQueryBuilder()
           .update(Group, {
             name,
@@ -191,10 +190,9 @@ export class GroupResolver {
           .then((response) => {
             return response.raw[0];
           });
-        console.log("query done");
       } // Otherwise ignore password
       else {
-        group = await getConnection()
+        group = await defaultSource
           .createQueryBuilder()
           .update(Group, {
             name,
@@ -232,7 +230,7 @@ export class GroupResolver {
       };
     } else {
       try {
-        await getManager().save(group);
+        await defaultSource.manager.save(group);
       } catch (err) {
         var errorType = /\(([^()]*)\)/g.exec(err.detail)?.pop();
         if (errorType === undefined) {
@@ -261,7 +259,7 @@ export class GroupResolver {
       }
     }
     // Get group again to retrieve updated entity
-    group = await Group.findOne({ id: group?.id });
+    group = await Group.findOneBy({ id: group?.id });
     return { group };
   }
 
@@ -272,7 +270,7 @@ export class GroupResolver {
     @Arg("password", () => String, { nullable: true }) password: string,
     @Ctx() { req }: DbContext
   ): Promise<GroupResponse> {
-    let group = await Group.findOne({ id: groupId });
+    let group = await Group.findOneBy({ id: groupId });
     if (group != undefined) {
       if (group.password && !password) {
         return {
@@ -297,7 +295,7 @@ export class GroupResolver {
         }
       }
 
-      await getConnection().transaction(async (transactionalEntityManager) => {
+      await defaultSource.transaction(async (transactionalEntityManager) => {
         if (group?.memberCount) {
           await transactionalEntityManager.update(
             Group,
@@ -306,7 +304,7 @@ export class GroupResolver {
           );
         }
 
-        let existingMember = await transactionalEntityManager.find(Member, {
+        let existingMember = await transactionalEntityManager.findBy(Member, {
           groupId: groupId,
           userId: req.session.userId,
         });
@@ -335,23 +333,25 @@ export class GroupResolver {
     @Arg("groupId", () => Int) groupId: number,
     @Ctx() { req }: DbContext
   ): Promise<GroupResponse> {
-    let group = await Group.findOne({ id: groupId });
+    let group = await Group.findOneBy({ id: groupId });
     if (group != undefined) {
-      await getConnection().transaction(async (transactionalEntityManager) => {
-        if (group?.memberCount) {
-          await transactionalEntityManager.update(
-            Group,
-            { id: groupId },
-            { memberCount: group?.memberCount - 1 }
-          );
-        }
+      await defaultSource.manager.transaction(
+        async (transactionalEntityManager) => {
+          if (group?.memberCount) {
+            await transactionalEntityManager.update(
+              Group,
+              { id: groupId },
+              { memberCount: group?.memberCount - 1 }
+            );
+          }
 
-        await transactionalEntityManager.softDelete(Member, {
-          groupId: groupId,
-          userId: req.session.userId,
-        });
-      });
-      await getConnection()
+          await transactionalEntityManager.softDelete(Member, {
+            groupId: groupId,
+            userId: req.session.userId,
+          });
+        }
+      );
+      await defaultSource
         .createQueryBuilder()
         .relation(User, "groups")
         .of(req.session.userId)
@@ -365,7 +365,8 @@ export class GroupResolver {
   async getUsersGroups(
     @Ctx() { req }: DbContext
   ): Promise<Group[] | undefined> {
-    const groups = await getRepository(Group)
+    const groups = await defaultSource
+      .getRepository(Group)
       .createQueryBuilder("group")
       .leftJoinAndSelect("group.members", "member")
       .where("user_id = :id", { id: req.session.userId })
@@ -377,40 +378,34 @@ export class GroupResolver {
   @Query(() => Group, { nullable: true })
   async getGroupByName(
     @Arg("name", () => String) name: string
-  ): Promise<Group | undefined> {
-    const group = await Group.findOne({ name });
-    // console.log(group);
-    return group;
+  ): Promise<Group | null> {
+    return Group.findOneBy({ name });
   }
 
   @Query(() => Group, { nullable: true })
   async getGroupByUrl(
     @Arg("url", () => String) url: string
-  ): Promise<Group | undefined> {
-    const group = await Group.findOne({ url });
-    // console.log(group);
-    return group;
+  ): Promise<Group | null> {
+    return Group.findOneBy({ url });
   }
 
   @Query(() => Group, { nullable: true })
   async getGroupById(
     @Arg("groupId", () => Int) groupId: number
-  ): Promise<Group | undefined> {
-    const group = await Group.findOne({ id: groupId });
-    // console.log(group);
-    return group;
+  ): Promise<Group | null> {
+    return Group.findOneBy({ id: groupId });
   }
 
   @Query(() => [User], { nullable: true })
   async getGroupMembers(
     @Arg("groupId", () => Int) groupId: number
   ): Promise<User[] | undefined> {
-    const members = await createQueryBuilder(User, "user")
+    const members = await User.createQueryBuilder()
       .leftJoinAndSelect("user.groups", "members")
       .leftJoinAndSelect("members.group", "groups")
       .where("groups.id = :groupId", { groupId })
-      .orderBy('user.firstName', 'ASC')
-      .addOrderBy('user.lastName', 'ASC') 
+      .orderBy("user.firstName", "ASC")
+      .addOrderBy("user.lastName", "ASC")
       .getMany();
     return members;
   }
@@ -421,7 +416,7 @@ export class GroupResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: DbContext
   ): Promise<boolean> {
-    await getConnection()
+    await defaultSource
       .createQueryBuilder()
       .softDelete()
       .from(Group)

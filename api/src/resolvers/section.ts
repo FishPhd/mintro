@@ -14,11 +14,12 @@ import {
 } from "type-graphql";
 import { DbContext } from "../types/types";
 import { isAuth } from "../middleware/isAuth";
-import { getConnection } from "typeorm";
 import { LexoRank } from "lexorank";
 import { FieldError } from "../utils/fieldError";
 import { User } from "../entities/profile/User";
 import { SectionType } from "../entities/section/SectionType";
+import { SectionItem } from "../entities/section/SectionItem";
+import { defaultSource } from "../index";
 
 @ObjectType()
 class SectionResponse {
@@ -26,7 +27,7 @@ class SectionResponse {
   errors?: FieldError[];
 
   @Field(() => Section, { nullable: true })
-  section?: Section;
+  section?: Section | null;
 }
 
 @ObjectType()
@@ -62,7 +63,7 @@ export class SectionResolver {
     }
 
     // TODO fix this
-    const sections = await getConnection().query(
+    const sections = await defaultSource.query(
       `
     select s.*
     from sections s
@@ -85,14 +86,12 @@ export class SectionResolver {
     @Arg("userId", () => Int) userId: number
   ): Promise<PaginatedSections> {
     const limit = Math.min(10, postCount);
-    let sections = await getConnection()
-      .getRepository(Section)
-      .find({
-        relations: ["type"],
-        where: { creatorId: userId },
-        order: { rank: "DESC" },
-        take: limit,
-      });
+    let sections = await Section.find({
+      relations: { type: true, items: true },
+      where: { creatorId: userId },
+      order: { rank: "DESC", items: { rank: "ASC" } },
+    });
+
     return {
       sections: sections.slice(0, limit),
       isEnd: sections.length !== limit + 1,
@@ -102,8 +101,8 @@ export class SectionResolver {
   @Query(() => Section, { nullable: true })
   async getSection(
     @Arg("sectionId", () => Int) sectionId: number
-  ): Promise<Section | undefined> {
-    return Section.findOne(sectionId);
+  ): Promise<Section | null> {
+    return Section.findOneBy({ id: sectionId });
   }
 
   @Mutation(() => Section)
@@ -126,7 +125,7 @@ export class SectionResolver {
         : LexoRank.parse(ranks[0]).between(LexoRank.min());
     }
 
-    const result = await getConnection()
+    const result = await defaultSource
       .createQueryBuilder()
       .update(Section)
       .set({ rank: lexoRank.toString(), updatedAt: () => '"updated_at"' })
@@ -162,9 +161,7 @@ export class SectionResolver {
       };
     }
 
-    const result = await getConnection()
-      .getRepository(Section)
-      .createQueryBuilder("s")
+    const result = await Section.createQueryBuilder("s")
       .where('"creator_id" = :user_id', {
         user_id: req.session.userId,
       })
@@ -183,13 +180,16 @@ export class SectionResolver {
     }
 
     // Get Matching type
-    const type = await getConnection()
-      .getRepository(SectionType)
+    const type = await SectionType.getRepository()
       .createQueryBuilder("s")
       .where('"id" = :type_id', {
         type_id: typeId,
       })
       .getOne();
+
+    if (!type) {
+      return { section: null };
+    }
 
     // Parse most recent post and generate rank
     if (result[0]) {
@@ -197,10 +197,21 @@ export class SectionResolver {
     } else {
       lexoRank = LexoRank.middle();
     }
+
+    const sectionItems = [];
+    for (let i = 0; i < items.length; i++) {
+      const newItem = SectionItem.create({
+        content: items[i],
+        sectionId: type?.id,
+        rank: i,
+      });
+      sectionItems.push(newItem);
+    }
+
     const section = await Section.create({
       typeId,
-      type,
-      items,
+      type: type,
+      items: sectionItems,
       creatorId: req.session.userId,
       rank: lexoRank.toString(),
     }).save();
@@ -213,20 +224,40 @@ export class SectionResolver {
     @Arg("id", () => Int) id: number,
     @Arg("items", () => [String]) items: [string],
     @Ctx() { req }: DbContext
-  ): Promise<Section | undefined> {
-    let sectionUpdate = await getConnection().getRepository(Section).save({
+  ): Promise<Section | null> {
+    const sectionItems = [];
+    for (let i = 0; i < items.length; i++) {
+      const newItem = SectionItem.create({
+        sectionId: id,
+        content: items[i],
+        rank: i,
+      });
+      sectionItems.push(newItem);
+
+      await Section.createQueryBuilder()
+        .relation(Section, "items")
+        .of(id)
+        .add(newItem);
+    }
+
+    if (sectionItems == []) {
+      return null;
+    }
+
+    let sectionUpdate = await Section.getRepository().save({
       id,
-      creator_id: req.sessionID,
-      items,
+      creator_id: req.session.userId,
+      items: sectionItems,
     });
+
     if (sectionUpdate == undefined) {
       // TODO add error
       console.log("Section could not be updated!");
-      return undefined;
+      return null;
     }
 
     return Section.findOne({
-      relations: ["type"],
+      relations: { type: true, items: true },
       where: { id },
     });
   }
@@ -237,8 +268,7 @@ export class SectionResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: DbContext
   ): Promise<boolean> {
-    await getConnection()
-      .createQueryBuilder()
+    await Section.createQueryBuilder()
       .softDelete()
       .from(Section)
       .where({ id, creatorId: req.session.userId })

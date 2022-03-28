@@ -1,4 +1,3 @@
-import { ArrayNotEmpty } from "class-validator";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -7,11 +6,13 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "../profile/User";
+import { SectionItem } from "./SectionItem";
 import { SectionType } from "./SectionType";
 
 @ObjectType()
@@ -33,10 +34,17 @@ export class Section extends BaseEntity {
   @Column({ unique: false })
   typeId: number;
 
-  @Field(() => [String], { nullable: true })
-  @Column("text", { array: true, nullable: true })
-  @ArrayNotEmpty()
-  items!: [string];
+  // @Field(() => [String], { nullable: true })
+  // @Column("text", { array: true, nullable: true })
+  // @ArrayNotEmpty()
+  // items!: [string];
+
+  @Field(() => [SectionItem], { nullable: true })
+  @OneToMany(() => SectionItem, (si) => si.section, {
+    cascade: true,
+    nullable: true,
+  })
+  items: SectionItem[];
 
   @Field()
   @Column()

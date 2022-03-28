@@ -5,26 +5,39 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Section } from "./Section";
 
 @ObjectType()
 @Entity({ name: "section_items" })
-export class SectionItems extends BaseEntity {
+export class SectionItem extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field()
+  @Field({ nullable: false })
   @Column({ unique: false })
-  sectionId: number;
+  sectionId!: number;
+
+  @Field({ nullable: false })
+  @Column({ unique: false })
+  rank!: number;
 
   @Field(() => String, { nullable: false })
   @Column("text", { nullable: false })
   content!: string;
 
-  @Field(() => String)
+  @ManyToOne(() => Section, (s) => s.items, {
+    orphanedRowAction: "delete",
+  })
+  @JoinColumn([{ name: "section_id", referencedColumnName: "id" }])
+  section: Section;
+
+  @Field(() => String, { nullable: false })
   @CreateDateColumn()
   createdAt: Date;
 

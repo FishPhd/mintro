@@ -7,7 +7,6 @@ import session from "express-session";
 import Redis from "ioredis";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { createConnection } from "typeorm";
 import { USER_COOKIE, __prod__ } from "./constants";
 import { FeedbackResolver } from "./resolvers/utility/feedback";
 import { SectionResolver } from "./resolvers/section";
@@ -21,20 +20,22 @@ import { createUserLoader } from "./utils/createUserLoader";
 import { GroupResolver } from "./resolvers/group";
 import { ContactTypeResolver } from "./resolvers/utility/contactType";
 import { UserContactResolver } from "./resolvers/userContact";
+import { DataSource } from "typeorm";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+
+export const defaultSource = new DataSource({
+  type: "postgres",
+  url: process.env.DATABASE_URL,
+  logging: false,
+  entities: ["dist/entities/**/*.js"],
+  migrations: ["dist/migrations/*.js"],
+  namingStrategy: new SnakeNamingStrategy(),
+  synchronize: false,
+  migrationsRun: true,
+});
 
 const main = async () => {
-  const conn = await createConnection();
-  await conn.runMigrations();
-
-  // {
-  //   type: "postgres",
-  //   url: process.env.DATABASE_URL,
-  //   logging: true,
-  //   migrations: [path.join(__dirname, "./migrations/*")],
-  //   entities: [User, Section, Like, City, Country, State],
-  //   namingStrategy: new SnakeNamingStrategy(),
-  // }
-  // await conn.runMigrations();
+  defaultSource.initialize();
 
   const app = express();
 

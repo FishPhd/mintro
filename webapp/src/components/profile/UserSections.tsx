@@ -14,6 +14,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import {
   Section,
+  SectionItem,
   useDeleteSectionMutation,
   useUpdateSectionRankMutation,
 } from "../../graphql/generated/graphql";
@@ -186,8 +187,8 @@ export const UserSections: React.FC<UserSectionsProps> = ({
               </Stack>
 
               <Wrap justify="center" py={2} pt={4} maxW={"4xl"} mb={2}>
-                {section?.items?.map((item: string, index: number) => (
-                  <WrapItem key={item + "_" + index}>
+                {section?.items?.map((item: SectionItem, index: number) => (
+                  <WrapItem key={item.id + "_" + index}>
                     {item && (
                       <Box
                         maxW={{ base: "xs", md: "md", lg: "lg" }}
@@ -196,10 +197,10 @@ export const UserSections: React.FC<UserSectionsProps> = ({
                         rounded="3xl"
                         color="dark.500"
                         textAlign="center"
-                        key={item + "_" + index}
+                        key={item.id + "_" + index}
                         bgGradient="linear(to-tr, mintro.200, mintro.300)"
                       >
-                        {item}
+                        {item.content}
                       </Box>
                     )}
                   </WrapItem>
