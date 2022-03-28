@@ -2,6 +2,7 @@ fragment SectionItem on SectionItem {
   id
   sectionId
   content
+  rank
   createdAt
   updatedAt
 }

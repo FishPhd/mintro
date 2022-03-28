@@ -14,12 +14,12 @@ import {
 } from "type-graphql";
 import { DbContext } from "../types/types";
 import { isAuth } from "../middleware/isAuth";
-import { getConnection } from "typeorm";
 import { LexoRank } from "lexorank";
 import { FieldError } from "../utils/fieldError";
 import { User } from "../entities/profile/User";
 import { SectionType } from "../entities/section/SectionType";
 import { SectionItem } from "../entities/section/SectionItem";
+import { defaultSource } from "../index";
 
 @ObjectType()
 class SectionResponse {
@@ -63,7 +63,7 @@ export class SectionResolver {
     }
 
     // TODO fix this
-    const sections = await getConnection().query(
+    const sections = await defaultSource.query(
       `
     select s.*
     from sections s
@@ -89,9 +89,9 @@ export class SectionResolver {
     let sections = await Section.find({
       relations: { type: true, items: true },
       where: { creatorId: userId },
-      order: { items: { rank: "DESC" } },
-      take: limit,
+      order: { rank: "DESC", items: { rank: "ASC" } },
     });
+
     return {
       sections: sections.slice(0, limit),
       isEnd: sections.length !== limit + 1,
@@ -125,7 +125,7 @@ export class SectionResolver {
         : LexoRank.parse(ranks[0]).between(LexoRank.min());
     }
 
-    const result = await getConnection()
+    const result = await defaultSource
       .createQueryBuilder()
       .update(Section)
       .set({ rank: lexoRank.toString(), updatedAt: () => '"updated_at"' })
@@ -227,7 +227,6 @@ export class SectionResolver {
   ): Promise<Section | null> {
     const sectionItems = [];
     for (let i = 0; i < items.length; i++) {
-      console.log("here");
       const newItem = SectionItem.create({
         sectionId: id,
         content: items[i],
@@ -235,7 +234,6 @@ export class SectionResolver {
       });
       sectionItems.push(newItem);
 
-      console.log(id);
       await Section.createQueryBuilder()
         .relation(Section, "items")
         .of(id)
@@ -245,7 +243,6 @@ export class SectionResolver {
     if (sectionItems == []) {
       return null;
     }
-    console.log(sectionItems);
 
     let sectionUpdate = await Section.getRepository().save({
       id,

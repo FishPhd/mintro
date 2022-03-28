@@ -190,7 +190,6 @@ export class GroupResolver {
           .then((response) => {
             return response.raw[0];
           });
-        console.log("query done");
       } // Otherwise ignore password
       else {
         group = await defaultSource

@@ -210,7 +210,6 @@ export class UserResolver {
           .replace(/_/g, " ")
           .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
 
-        // console.log(errorType);
         if (err.code === "23505") {
           // duplicate id error
           return {

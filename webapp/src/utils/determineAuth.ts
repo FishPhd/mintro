@@ -28,6 +28,5 @@ export const useDetermineIfUser = (UserId: number) => {
     } else if (data?.me?.id !== UserId && !loading && !isServer()) {
       console.log("Not authorized!");
     }
-    console.log("UserId", data?.me?.id);
   }, [loading, data, UserId]);
 };

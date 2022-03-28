@@ -550,7 +550,7 @@ export type GroupResponseFragment = (
 
 export type SectionItemFragment = (
   { __typename?: 'SectionItem' }
-  & Pick<SectionItem, 'id' | 'sectionId' | 'content' | 'createdAt' | 'updatedAt'>
+  & Pick<SectionItem, 'id' | 'sectionId' | 'content' | 'rank' | 'createdAt' | 'updatedAt'>
 );
 
 export type SectionSnippetFragment = (
@@ -1339,6 +1339,7 @@ export const SectionItemFragmentDoc = gql`
   id
   sectionId
   content
+  rank
   createdAt
   updatedAt
 }

@@ -40,8 +40,6 @@ export const CreateSectionPopOver: React.FC<CreateSectionPopOverProps> = ({
   const { data: { getDistinctSectionTypes: distinctTypes } = {} } =
     useGetDistinctSectionTypesQuery();
   const toast = useToast();
-  console.log(section?.items);
-
   let items = undefined;
   if (section?.items) {
     items = section?.items.map((a) => a.content);
