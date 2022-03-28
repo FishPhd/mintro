@@ -200,12 +200,14 @@ export class SectionResolver {
 
     const sectionItems = [];
     for (let i = 0; i < items.length; i++) {
-      const newItem = SectionItem.create({
-        content: items[i],
-        sectionId: type?.id,
-        rank: i,
-      });
-      sectionItems.push(newItem);
+      if (items[i] != "") {
+        const newItem = SectionItem.create({
+          content: items[i],
+          sectionId: type?.id,
+          rank: i,
+        });
+        sectionItems.push(newItem);
+      }
     }
 
     const section = await Section.create({
@@ -227,17 +229,19 @@ export class SectionResolver {
   ): Promise<Section | null> {
     const sectionItems = [];
     for (let i = 0; i < items.length; i++) {
-      const newItem = SectionItem.create({
-        sectionId: id,
-        content: items[i],
-        rank: i,
-      });
-      sectionItems.push(newItem);
+      if (items[i] != "") {
+        const newItem = SectionItem.create({
+          sectionId: id,
+          content: items[i],
+          rank: i,
+        });
+        sectionItems.push(newItem);
 
-      await Section.createQueryBuilder()
-        .relation(Section, "items")
-        .of(id)
-        .add(newItem);
+        await Section.createQueryBuilder()
+          .relation(Section, "items")
+          .of(id)
+          .add(newItem);
+      }
     }
 
     if (sectionItems == []) {
