@@ -400,13 +400,10 @@ export class GroupResolver {
   async getGroupMembers(
     @Arg("groupId", () => Int) groupId: number
   ): Promise<User[] | undefined> {
-    const members = await User.createQueryBuilder()
-      .leftJoinAndSelect("user.groups", "members")
-      .leftJoinAndSelect("members.group", "groups")
-      .where("groups.id = :groupId", { groupId })
-      .orderBy("user.firstName", "ASC")
-      .addOrderBy("user.lastName", "ASC")
-      .getMany();
+    const members = await User.find({
+      where: { groups: { group: { id: groupId } } },
+    });
+
     return members;
   }
 
